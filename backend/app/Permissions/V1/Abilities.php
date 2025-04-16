@@ -4,13 +4,16 @@ namespace App\Permissions\V1;
 
 use App\Models\User;
 
-class Abilities {
-
+class Abilities
+{
     public const CreateTicket = 'ticket:create';
+
     public const UpdateTicket = 'ticket:update';
+
     public const DeleteTicket = 'ticket:delete';
 
     public const UpdateOwnTicket = 'ticket:own:update';
+
     public const DeleteOwnTicket = 'ticket:own:delete';
 
     public static function getAbilities(User $user)
@@ -19,15 +22,14 @@ class Abilities {
             return [
                 self::CreateTicket,
                 self::DeleteTicket,
-                self::UpdateTicket
+                self::UpdateTicket,
             ];
         } else {
             return [
                 self::CreateTicket,
                 self::DeleteOwnTicket,
-                self::UpdateOwnTicket
+                self::UpdateOwnTicket,
             ];
         }
     }
-
 }

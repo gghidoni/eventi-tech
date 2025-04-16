@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -17,23 +16,23 @@ class RoleSeeder extends Seeder
             [
                 'id' => Role::USER,
                 'title' => 'User',
-                'slug' => 'user'
+                'slug' => 'user',
             ],
             [
                 'id' => Role::ORGANIZER,
                 'title' => 'Organizer',
-                'slug' => 'organizer'
+                'slug' => 'organizer',
             ],
             [
                 'id' => Role::SPEAKER,
                 'title' => 'Speaker',
-                'slug' => 'speaker'
+                'slug' => 'speaker',
             ],
             [
                 'id' => Role::ADMIN,
                 'title' => 'Admin',
-                'slug' => 'admin'
-            ]
+                'slug' => 'admin',
+            ],
         ];
 
         Role::insert($roles);
