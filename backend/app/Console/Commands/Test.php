@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class Test extends Command
 {
@@ -26,6 +27,11 @@ class Test extends Command
      */
     public function handle()
     {
+
+        $file = Storage::get('comuni.json');
+        $items = json_decode($file, true);
+
+        dd($items);
 
         dd(User::find(1)->avatar);
 

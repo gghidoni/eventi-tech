@@ -12,16 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_metas', function (Blueprint $table) {
+        Schema::create('communities', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->string('org_name')->nullable();
+            $table->string('name');
+            $table->string('slug');
+            $table->text('description');
             $table->string('website')->nullable();
+            $table->string('logo')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('instagram')->nullable();
             $table->string('facebook')->nullable();
-            $table->string('avatar')->nullable();
-            $table->string('logo')->nullable();
+            $table->string('phone')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_metas');
+        Schema::dropIfExists('communities');
     }
 };

@@ -6,8 +6,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserMeta;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
-use Illuminate\Support\Str;
 
 
 
@@ -18,91 +16,59 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
 
-        $techCompanies = [
-            'PHP Verona',
-            'Laravel Italia',
-            'JS Pisa',
-            'React Roma',
-            'Vue Milano',
-            'WordPress Firenze',
-            'Symfony Torino',
-            'DevOps Napoli',
-            'Docker Bologna',
-            'Python Palermo',
-            'Angular Bari',
-            'Tech Meetup Genova',
-            'AI Torino',
-            'Data Science Milano',
-            'Flutter Venezia',
-            'C++ Trento',
-            'Java Ancona',
-            'Ruby Bari',
-            'Node.js Lecce',
-            'Next.js Cagliari',
-        ];
 
         $users = [
             [
                 'name' => 'Andrea Rossi',
-                'email' => 'user@email.it',
-                'roles' => ['user']
-            ],
-            [
-                'name' => 'Azienda srl',
-                'email' => 'organizer1@email.it',
-                'roles' => ['organizer']
-            ],
-            [
-                'name' => 'Marco Bianchi',
-                'email' => 'user+organizer@email.it',
-                'roles' => ['user', 'organizer']
-            ],
-            [
-                'name' => 'Gianni Ghidoni',
-                'email' => 'admin@email.it',
-                'roles' => ['admin']
-            ],
-            [
-                'name' => 'Organization',
-                'email' => 'organizer2@email.it',
-                'roles' => ['organizer']
-            ],
-        ];
-
-        foreach ($users as $user) {
-            $userModel = User::create([
-                'name' => $user['name'],
-                'email' => $user['email'],
+                'email' => 'andrea.rossi@email.it',
+                'website' => 'www.andrearossi.it',
+                'linkedin' => 'https://linkedin.com/in/andrear',
+                'facebook' => 'https://facebook.com/andrear',
+                'instagram' => 'https://instagram.com/andrear',
+                'is_admin' => false,
                 'password' => bcrypt('password'),
                 'updated_at' => now(),
                 'created_at' => now(),
-            ]);
+            ],
+            [
+                'name' => 'Marco Bianchi',
+                'email' => 'marco.bianchi@email.it',
+                'website' => 'www.marcobianchi.it',
+                'linkedin' => 'https://linkedin.com/in/marcob',
+                'facebook' => 'https://facebook.com/marcob',
+                'instagram' => 'https://instagram.com/marcob',
+                'is_admin' => false,
+                'password' => bcrypt('password'),
+                'updated_at' => now(),
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'Anna Verdi',
+                'email' => 'anna.verdi@email.it',
+                'website' => 'www.annav.it',
+                'linkedin' => 'https://linkedin.com/in/annav',
+                'facebook' => 'https://facebook.com/annav',
+                'instagram' => 'https://instagram.com/annav',
+                'is_admin' => false,
+                'password' => bcrypt('password'),
+                'updated_at' => now(),
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'Gianni Ghidoni',
+                'email' => 'gianni.ghidoni@email.it',
+                'website' => 'www.giannighidoni.it',
+                'linkedin' => 'https://linkedin.com/in/giannig',
+                'facebook' => 'https://facebook.com/giannig',
+                'instagram' => 'https://instagram.com/giannig',
+                'is_admin' => true,
+                'password' => bcrypt('password'),
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]
+        ];
 
-            $roles = Role::whereIn('slug', $user['roles'])->get();
-
-            $userModel->roles()->attach($roles);
-
-
-            $userMeta = [
-                'user_id' => $userModel->id,
-                'website' => 'www' . Str::slug($userModel->name) . '.it',
-                'facebook' => 'https://facebook.com/' . $faker->userName,
-                'instagram' => 'https://instagram.com/' . $faker->userName,
-                'linkedin' => 'https://linkedin.com/in/' . $faker->userName,
-            ];
-
-            if (in_array('organizer', $user['roles'])) {
-                $org_name = $techCompanies[array_rand($techCompanies)];
-                $website = 'https://www.' . Str::slug($org_name) . '.it';
-                $userMeta['org_name'] = $org_name;
-                $userMeta['website'] = $website;
-            }
-
-            UserMeta::create($userMeta);
-        }
-
-
+        User::insert($users);
     }
 }
