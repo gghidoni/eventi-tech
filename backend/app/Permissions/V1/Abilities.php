@@ -24,12 +24,11 @@ class Abilities
                 self::DeleteTicket,
                 self::UpdateTicket,
             ];
-        } else {
-            return [
-                self::CreateTicket,
-                self::DeleteOwnTicket,
-                self::UpdateOwnTicket,
-            ];
         }
+        return [
+            self::CreateTicket,
+            self::DeleteOwnTicket,
+            self::UpdateOwnTicket,
+        ];
     }
 }

@@ -8,12 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Role extends Model
 {
     public const USER = 1;
-
     public const ADMIN = 2;
-
     public const ORGANIZER = 3;
-
-    public const SPEAKER = 4;
 
     public function users(): BelongsToMany
     {

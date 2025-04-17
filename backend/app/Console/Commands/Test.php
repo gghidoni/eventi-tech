@@ -26,6 +26,15 @@ class Test extends Command
      */
     public function handle()
     {
+
+        dd(User::find(1)->avatar);
+
+        $u =         User::whereHas('roles', function($ru) {
+            $ru->whereSlug('organizer');
+        })->get();
+
+        dd($u);
+
         dd(User::find(1)->hasRole('user'));
     }
 }

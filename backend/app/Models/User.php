@@ -4,9 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -50,6 +53,15 @@ class User extends Authenticatable
 
     /**
      * Get roles
+     * @return HasOne
+     */
+    public function user_metas(): HasOne
+    {
+        return $this->hasOne(UserMeta::class);
+    }
+
+    /**
+     * Get roles
      * @return BelongsToMany
      */
     public function roles(): BelongsToMany
@@ -64,13 +76,20 @@ class User extends Authenticatable
      */
     public function hasRoles($roles)
     {
-        foreach ($roles as $role) {
-            if ($this->hasRole($role)) {
-                return true;
-            }
-        }
+        return $this->whereAs('roles', function($role) use ($roles) {
+            $role->whereIn('slug', $roles);
+        })->exists();
 
-        return false;
+
+
+
+        // foreach ($roles as $role) {
+        //     if ($this->hasRole($role)) {
+        //         return true;
+        //     }
+        // }
+
+        // return false;
     }
 
     /**
@@ -87,5 +106,15 @@ class User extends Authenticatable
         }
 
         return in_array($role, $roles);
+    }
+
+    public function getAvatarAttribute(): String
+    {
+        if ($this->user_metas->avatar) {
+            return Storage::url($this->avatar);
+        } else {
+            $name = urlencode($this->name);
+            return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
+        }
     }
 }

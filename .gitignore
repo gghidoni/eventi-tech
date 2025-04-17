@@ -53,6 +53,7 @@ crontab
 /backend/.vscode
 /backend/.zed
 /backend/Dockerfile
+/backend/rector.php
 
 /nginx
 docker-compose.yml

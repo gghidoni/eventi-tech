@@ -24,11 +24,6 @@ class RoleSeeder extends Seeder
                 'slug' => 'organizer',
             ],
             [
-                'id' => Role::SPEAKER,
-                'title' => 'Speaker',
-                'slug' => 'speaker',
-            ],
-            [
                 'id' => Role::ADMIN,
                 'title' => 'Admin',
                 'slug' => 'admin',
