@@ -45,6 +45,9 @@ class AuthController extends Controller
             'Authenticated',
             [
                 'token' => $user->createToken('Api token for '.$user->email, Abilities::getAbilities($user), now()->addHours(4))->plainTextToken,
+                'user' => [
+                    'name' => $user->name
+                ],
             ]
         );
     }

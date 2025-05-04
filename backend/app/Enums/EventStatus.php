@@ -6,6 +6,6 @@ enum EventStatus: string
 {
     case Pending = 'pending';
     case Active = 'activated';
-    case Terminate = 'terminated';
+    case Terminated = 'terminated';
     case Rejected = 'rejected';
 }
