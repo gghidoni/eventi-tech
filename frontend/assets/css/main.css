@@ -1,2 +1,42 @@
 @import "tailwindcss";
 
+:root {
+     --white: #C1C9CF;
+     --cyan: #72B7C0;
+     --pink: #F19CBA;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.text-white {
+    color: var(--white);
+}
+
+.text-cyan {
+    color: var(--cyan);
+}
+
+.text-pink {
+    color: var(--pink);
+}
+
+.input-et {
+    @apply w-full pr-10 pl-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm text-gray-300;
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+    transition: all 0.4s ease;
+}
+
+.fade-slide-enter-from {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.fade-slide-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}

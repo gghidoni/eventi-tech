@@ -19,4 +19,12 @@ export default defineNuxtConfig({
   devServer: {
     port: 5173
   },
+
+  modules: ['@nuxtjs/google-fonts'],
+  googleFonts: {
+    families: {
+      'JetBrains+Mono': [400, 500, 700],
+    },
+    display: 'swap',
+  },
 })
