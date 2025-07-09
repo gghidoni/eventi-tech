@@ -23,12 +23,24 @@
                 <li>
                     <NuxtLink to="/contact" @click="closeMenu">contatti</NuxtLink>
                 </li>
-                <li>
-                    <NuxtLink to="/login" @click="closeMenu">Login</NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="/logout" @click="closeMenu">Logout</NuxtLink>
-                </li>
+                <!-- Menu per utenti autenticati -->
+                <template v-if="isAuthenticated">
+                    <li>
+                        <span class="user-info">
+                            Ciao, {{ user.name || user.email }}
+                        </span>
+                    </li>
+                    <li>
+                        <button @click="handleLogout" class="logout-btn">Logout</button>
+                    </li>
+                </template>
+
+                <!-- Menu per utenti non autenticati -->
+                <template v-else>
+                    <li>
+                        <NuxtLink to="/login" @click="closeMenu">Login</NuxtLink>
+                    </li>
+                </template>
             </ul>
         </div>
     </div>
@@ -36,6 +48,15 @@
 
 <script setup>
 import { ref } from 'vue'
+
+const { isAuthenticated, user, logout } = useAuth()
+
+const emit = defineEmits(['closeMenu'])
+
+const handleLogout = () => {
+  logout()
+  closeMenu()
+}
 
 const isOpen = ref(false)
 const toggleMenu = () => {

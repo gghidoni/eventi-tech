@@ -17,6 +17,7 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
+        $basePosterUrl = config('app.url') . '/storage/posters/';
         $events = [
             [
                 'community_id' => 1, // ID per "Java Ancona"
@@ -27,7 +28,7 @@ class EventSeeder extends Seeder
                 'start_date' => now()->addDays(5),
                 'end_date' => now()->addDays(5)->addHours(4),
                 'website' => 'www.javaancora.it',
-                'poster' => 'java_spring_boot_workshop.jpg',
+                'poster' => 'java_spring_boot_workshop.jpeg',
                 'tickets_url' => 'www.javaancora.it/tickets',
                 'cfp_url' => 'www.javaancora.it/cfp'
             ],
@@ -53,7 +54,7 @@ class EventSeeder extends Seeder
                 'start_date' => now()->addDays(20),
                 'end_date' => now()->addDays(20)->addHours(3),
                 'website' => 'www.wordpressfirenze.it',
-                'poster' => 'gutenberg_blocks_workshop.jpg',
+                'poster' => 'gutenberg_blocks_workshop.jpeg',
                 'tickets_url' => 'www.wordpressfirenze.it/tickets',
                 'cfp_url' => 'www.wordpressfirenze.it/cfp'
             ],
@@ -66,7 +67,7 @@ class EventSeeder extends Seeder
                 'start_date' => now()->addDays(15),
                 'end_date' => now()->addDays(15)->addHours(3),
                 'website' => 'www.phpverona.it',
-                'poster' => 'php_81_migration.jpg',
+                'poster' => 'php_81_migration.jpeg',
                 'tickets_url' => 'www.phpverona.it/tickets',
                 'cfp_url' => 'www.phpverona.it/cfp'
             ],
@@ -79,7 +80,7 @@ class EventSeeder extends Seeder
                 'start_date' => now()->addDays(30),
                 'end_date' => now()->addDays(30)->addHours(3),
                 'website' => 'www.reactroma.it',
-                'poster' => 'redux_state_management.jpg',
+                'poster' => 'redux_state_management.jpeg',
                 'tickets_url' => 'www.reactroma.it/tickets',
                 'cfp_url' => 'www.reactroma.it/cfp'
             ],
@@ -87,12 +88,12 @@ class EventSeeder extends Seeder
                 'community_id' => 3, // ID per "Wordpress Meetup Firenze"
                 'title' => 'Introduzione a Kubernetes e Docker',
                 'description' => 'Un seminario per imparare a utilizzare Docker e Kubernetes per la gestione dei container in produzione.',
-                'status' => EventStatus::Terminate,
+                'status' => EventStatus::Terminated,
                 'type' => EventType::Hybrid,
                 'start_date' => now()->addDays(25),
                 'end_date' => now()->addDays(25)->addHours(5),
                 'website' => 'www.devopsnapoli.it',
-                'poster' => 'kubernetes_docker_workshop.jpg',
+                'poster' => 'kubernetes_docker_workshop.jpeg',
                 'tickets_url' => 'www.devopsnapoli.it/tickets',
                 'cfp_url' => 'www.devopsnapoli.it/cfp'
             ]
@@ -113,7 +114,9 @@ class EventSeeder extends Seeder
                     'start_date' => $eventData['start_date'],
                     'end_date' => $eventData['end_date'],
                     'website' => $eventData['website'],
-                    'poster' => $eventData['poster'],
+                    'poster' => $eventData['poster']
+                        ? $basePosterUrl . $eventData['poster']
+                        : null,
                     'tickets_url' => $eventData['tickets_url'],
                     'cfp_url' => $eventData['cfp_url'],
                 ]);

@@ -6,8 +6,17 @@
      --pink: #F19CBA;
 }
 
+@theme {
+    --color-pink: color: var(--pink);
+    --color-white: color: var(--white);
+}
+
 body {
   font-family: 'JetBrains Mono', monospace;
+}
+
+.font-anta {
+    font-family: 'Anta';
 }
 
 .text-white {
