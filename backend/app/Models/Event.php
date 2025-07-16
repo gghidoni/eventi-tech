@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Http\Filters\V1\QueryFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Laravel\Scout\Searchable;
 
 class Event extends Model
 {
+
+    use Searchable;
+
     protected $fillable = [
         'community_id',
         'title',
@@ -25,6 +29,15 @@ class Event extends Model
         'tickets_url',
         'cfp_url'
     ];
+
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        $array['title'] = $this->title;
+        $array['description'] = $this->description;
+        // $array['city'] = $this->address_book->city->name;
+        return $array;
+    }
 
     public function community(): BelongsTo
     {

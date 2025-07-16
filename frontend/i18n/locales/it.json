@@ -1,0 +1,9 @@
+{
+  "event": {
+    "type": {
+      "in_person": "in presenza",
+      "online": "online",
+      "hybrid": "ibrido"
+    }
+  }
+}

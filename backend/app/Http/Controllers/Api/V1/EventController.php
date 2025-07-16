@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\EventStatus;
 use App\Http\Controllers\Api\V1\ApiController;
 use App\Http\Resources\V1\EventResource;
 use App\Models\Event;
@@ -13,6 +14,6 @@ class EventController extends ApiController
 
     public function index(EventFilter $filters)
     {
-        return EventResource::collection(Event::filter($filters)->paginate());
+        return EventResource::collection(Event::filter($filters)->whereStatus(EventStatus::Active)->paginate(10));
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Filters\V1;
 
+use App\Models\Event;
+use Illuminate\Support\Facades\Log;
+
 class EventFilter extends QueryFilter
 {
     protected $sortable = [
@@ -12,7 +15,7 @@ class EventFilter extends QueryFilter
 
     public function include($value)
     {
-        return $this->builder->with($value);
+        return $this->builder->with(explode(',', $value));
     }
 
     public function status($value)
@@ -22,8 +25,7 @@ class EventFilter extends QueryFilter
 
     public function title($value)
     {
-        $likeStr = str_replace('*', '%', $value);
-
+        $likeStr = '%' . str_replace('*', '%', $value) . '%';
         return $this->builder->where('title', 'like', $likeStr);
     }
 
@@ -36,5 +38,21 @@ class EventFilter extends QueryFilter
         }
 
         return $this->builder->whereDate('created_at', $value);
+    }
+
+    public function search($value)
+    {
+        $results = Event::search($value)->get();
+
+        $ids = $results->pluck('id')->toArray();
+
+        Log::debug($results);
+
+        if (count($ids) === 0) {
+            // Nessun risultato: forza query a non tornare nulla
+            return $this->builder->whereRaw('0 = 1');
+        }
+
+        return $this->builder->whereIn('id', $ids);
     }
 }

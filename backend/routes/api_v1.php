@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AddressBookController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\EventController;
 use Illuminate\Http\Client\Request;
@@ -13,6 +14,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
 });
 
 Route::apiResource('events', EventController::class);
+
+Route::get('/address_book', [AddressBookController::class, 'search']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);

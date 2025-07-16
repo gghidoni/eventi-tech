@@ -38,7 +38,10 @@ class EventResource extends JsonResource
             //         ]
             //     ]
             // ],
-            'includes' => new CommunityResource($this->whenLoaded('community')),
+            'includes' => [
+                'community' => new CommunityResource($this->whenLoaded('community')),
+                'address' => new AddressBookResource( $this->whenLoaded('address_book'))
+            ],
         ];
     }
 }
