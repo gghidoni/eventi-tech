@@ -35,7 +35,11 @@ class Event extends Model
         $array = $this->toArray();
         $array['title'] = $this->title;
         $array['description'] = $this->description;
-        // $array['city'] = $this->address_book->city->name;
+        $array['city_id'] = $this->address_book->city_id;
+        $array['province_id'] = $this->address_book->province_id;
+        $array['region_id'] = $this->address_book->region_id;
+        $array['start_date'] = $this->start_date;
+        $array['end_date'] = $this->end_date;
         return $array;
     }
 

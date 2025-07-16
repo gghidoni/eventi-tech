@@ -29,7 +29,9 @@ class Test extends Command
     public function handle()
     {
 
-        $a = Event::search('laravel')->get();
+        $a = Event::whereHas('address_book', function ($q) {
+            $q->where('province_id', 59);
+        })->get();
 
         dd($a);
     }

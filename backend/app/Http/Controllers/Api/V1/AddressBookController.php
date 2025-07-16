@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\V1\CityResource;
+use App\Http\Resources\V1\ProvinceResource;
+use App\Http\Resources\V1\RegionResource;
 use App\Models\AddressBook\City;
 use App\Models\AddressBook\Province;
+use App\Models\AddressBook\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Meilisearch\Client;
@@ -15,26 +19,28 @@ class AddressBookController extends ApiController
         $query = $request->get('query');
         $results = [];
 
-        $provinces = Province::search($query)->take(5)->get()->toArray();
-        // Log::debug($provinces);
+        $cities = CityResource::collection(City::search($query)->take(5)->get())->resolve();
+        Log::debug($cities);
+        $provinces = ProvinceResource::collection(Province::search($query)->take(3)->get())->resolve();
+        $regions = RegionResource::collection(Region::search($query)->take(2)->get())->resolve();
 
-        $cities = City::search($query)->take(5)->get()->toArray();
+        if ($cities) {
+            $results[] = $cities[0];
+            array_shift($cities);
+        }
+        if ($provinces) {
+            $results[] = $provinces[0];
+            array_shift($provinces);
+        }
+        if ($regions) {
+            $results[] = $regions[0];
+            array_shift($regions);
+        }
 
-        // Log::debug($cities);
-        // Log::debug(array_shift($cities));
+        if ($cities && count($cities) > 0) $results = array_merge($results, $cities);
+        if ($provinces && count($provinces) > 0) $results = array_merge($results, $provinces);
+        if ($regions && count($regions) > 0) $results = array_merge($results, $regions);
 
-
-
-        $results[] = $cities[0];
-        $results[] = $provinces[0];
-        array_shift($cities);
-        array_shift($provinces);
-
-
-        $results = array_merge($results, $cities, $provinces);
-
-
-
-        Log::debug($results);
+        return $this->success('Ricerca riuscita', $results);
     }
 }

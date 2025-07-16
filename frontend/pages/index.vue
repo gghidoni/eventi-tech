@@ -1,12 +1,12 @@
 <template>
     <div class="container mx-auto py-8 px-6 flex flex-col">
         <h1 class="basis-full text-3xl text-gray-300">scopri, <span class="text-cyan">partecipa</span>, connettiti!</h1>
-        <Search v-model="query" />
+        <Search v-model:search="query" v-model:selectedLocation="selectedLocation" />
 
         <div class="mt-10">
             <div v-if="loading" class="text-gray-400">Caricamento...</div>
             <div v-else-if="events.length == 0">
-                <span>Nessun evento trovato...</span>
+                <span class="text-white">Nessun evento trovato, prova ad ampliare i tuoi criteri di ricerca...</span>
             </div>
             <div v-else>
                 <EventMiniCard v-for="event in events" :event="event" />
@@ -42,6 +42,7 @@ const error = ref('')
 const events = ref([])
 const { $apiFetch } = useNuxtApp()
 const query = ref('')
+const selectedLocation = ref(null)
 let debounceTimeout = null
 const pagination = ref({})
 
@@ -54,15 +55,41 @@ watch(query, (val) => {
     if (debounceTimeout) clearTimeout(debounceTimeout)
     debounceTimeout = setTimeout(() => {
         if (val.length > 2) {
-            search(val)
+            let location = getLocationQuery()
+            search(val, location)
         } else {
-            fetchEvents()
+            let location = getLocationQuery()
+            if (location) {
+                search(null, location)
+            } else {
+                fetchEvents()
+            }
+
         }
-    }, 1000)
+    }, 500)
 })
 
-const search = async (str) => {
-    fetchEvents('&filter[search]=' + str);
+watch(selectedLocation, (val) => {
+    let location = getLocationQuery()
+    search(query.value, location)
+})
+
+function getLocationQuery() {
+    if (selectedLocation.value) {
+        return {
+            field: selectedLocation.value.type + '_id',
+            id: selectedLocation.value.id
+        }
+    }
+    return null
+}
+
+const search = async (query = null, location = null) => {
+    let params = '';
+    if (query) params += '&filter[search]=' + query;
+    if (location) params += '&filter[location]=' + location.field + ',' + location.id;
+    console.log(params);
+    fetchEvents(params);
 }
 
 const goToPage = (page) => {
@@ -88,8 +115,6 @@ const fetchEvents = async (params = '') => {
 
         events.value = response.data
         loading.value = false;
-
-        console.log(response);
     } catch (err) {
         console.error('Login failed:', err)
     }

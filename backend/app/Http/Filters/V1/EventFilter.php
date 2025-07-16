@@ -46,13 +46,25 @@ class EventFilter extends QueryFilter
 
         $ids = $results->pluck('id')->toArray();
 
-        Log::debug($results);
-
         if (count($ids) === 0) {
             // Nessun risultato: forza query a non tornare nulla
             return $this->builder->whereRaw('0 = 1');
         }
 
         return $this->builder->whereIn('id', $ids);
+    }
+
+    public function location($value)
+    {
+        $field = explode(',', $value)[0];
+        $id = explode(',', $value)[1];
+
+        if (!in_array($field, ['province_id', 'city_id', 'region_id'])) {
+            return $this->builder;
+        }
+
+        return $this->builder->whereHas('address_book', function ($q) use ($field, $id) {
+            $q->where($field, $id);
+        });
     }
 }

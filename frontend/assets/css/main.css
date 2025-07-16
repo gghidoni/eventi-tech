@@ -1,14 +1,10 @@
 @import "tailwindcss";
 
-:root {
-     --white: #C1C9CF;
-     --cyan: #72B7C0;
-     --pink: #F19CBA;
-}
-
 @theme {
-    --color-pink: color: var(--pink);
-    --color-white: color: var(--white);
+    --color-pink: #F19CBA;
+    --color-white: #C1C9CF;
+    --color-background: #2B2B2B;
+    --color-cyan: #72B7C0;
 }
 
 body {
@@ -19,20 +15,8 @@ body {
     font-family: 'Anta';
 }
 
-.text-white {
-    color: var(--white);
-}
-
-.text-cyan {
-    color: var(--cyan);
-}
-
-.text-pink {
-    color: var(--pink);
-}
-
 .input-et {
-    @apply w-full pr-10 pl-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm text-gray-300;
+    @apply w-full pr-10 pl-3 py-2.5 border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm text-gray-300;
 }
 
 .fade-slide-enter-active,
@@ -49,3 +33,45 @@ body {
     opacity: 0;
     transform: translateY(-10px);
 }
+
+.multiselect, .multiselect__input, .multiselect__tags{
+  @apply !bg-background
+}
+
+.multiselect__input {
+    @apply !placeholder-gray-500 !text-sm !text-white
+}
+
+.multiselect__tags {
+    @apply !border !border-gray-400
+}
+
+.multiselect__content-wrapper {
+    @apply !bg-background !text-white !border !border-gray-400
+}
+
+.multiselect__option--highlight {
+  @apply !bg-cyan !text-gray-900
+}
+
+.multiselect__option--highlight .option-type{
+  @apply !text-gray-800
+}
+
+.multiselect__option--highlight:hover {
+    @apply !bg-cyan
+}
+
+.multiselect__single {
+    @apply !bg-background !m-0 !text-sm
+}
+
+.multiselect__option {
+    @apply !text-sm
+}
+
+/* .multiselect__option--selected {
+    @apply !bg-cyan
+} */
+
+

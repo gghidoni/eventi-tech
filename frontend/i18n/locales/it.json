@@ -5,5 +5,12 @@
       "online": "online",
       "hybrid": "ibrido"
     }
+  },
+  "location": {
+    "type": {
+      "city": "comune",
+      "province": "provincia",
+      "region": "regione"
+    }
   }
 }

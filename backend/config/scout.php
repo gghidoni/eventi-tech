@@ -2,6 +2,7 @@
 
 use App\Models\AddressBook\City;
 use App\Models\AddressBook\Province;
+use App\Models\AddressBook\Region;
 use App\Models\Event;
 
 return [
@@ -145,7 +146,7 @@ return [
         'key' => env('MEILI_MASTER_KEY'),
         'index-settings' => [
             Event::class => [
-                'filterableAttributes' => ['id', 'title', 'status', 'description', 'type', 'start_date', 'end_date'],
+                'filterableAttributes' => ['id', 'title', 'status', 'description', 'type', 'start_date', 'end_date', ],
                 'sortableAttributes'   => ['id', 'title', 'status', 'description', 'type', 'start_date', 'end_date', 'created_at']
             ],
             City::class => [
@@ -153,6 +154,10 @@ return [
                 'sortableAttributes'   => ['id', 'name']
             ],
             Province::class => [
+                'filterableAttributes' => ['id', 'name'],
+                'sortableAttributes'   => ['id', 'name']
+            ],
+            Region::class => [
                 'filterableAttributes' => ['id', 'name'],
                 'sortableAttributes'   => ['id', 'name']
             ]
