@@ -9,6 +9,7 @@
 
 body {
   font-family: 'JetBrains Mono', monospace;
+  @apply text-gray-300
 }
 
 .font-anta {
@@ -16,34 +17,31 @@ body {
 }
 
 .input-et {
-    @apply w-full pr-10 pl-3 py-2.5 border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm text-gray-300;
+    @apply w-full pr-10 pl-3 h-[36px] border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm;
 }
 
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-    transition: all 0.4s ease;
-}
-
-.fade-slide-enter-from {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-
-.fade-slide-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
+.placeholder {
+    @apply !text-gray-500
 }
 
 .multiselect, .multiselect__input, .multiselect__tags{
-  @apply !bg-background
+  @apply !bg-background !h-[36px] !min-h-[36px] !p-0 !m-0
 }
 
 .multiselect__input {
-    @apply !placeholder-gray-500 !text-sm !text-white
+    @apply !placeholder-gray-500 !text-sm !text-gray-300 
 }
 
 .multiselect__tags {
-    @apply !border !border-gray-400
+    @apply !border !border-gray-400 !flex !items-center !pl-3 !overflow-hidden
+}
+
+.multiselect__single {
+    @apply !pl-0
+}
+
+.multiselect__placeholder {
+    @apply !m-0 !p-0
 }
 
 .multiselect__content-wrapper {

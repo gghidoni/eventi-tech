@@ -1,9 +1,9 @@
 <template>
     <div class="container mx-auto py-8 px-6 flex flex-col">
-        <h1 class="basis-full text-3xl text-gray-300">scopri, <span class="text-cyan">partecipa</span>, connettiti!</h1>
-        <Search v-model:search="query" v-model:selectedLocation="selectedLocation" />
+        <h1 class="basis-full text-2xl text-gray-300">scopri, <span class="text-cyan">partecipa</span>, connettiti!</h1>
+        <Search v-model:search="query" v-model:selectedLocation="selectedLocation" v-model:selectedType="selectedType" />
 
-        <div class="mt-10">
+        <div class="mt-8">
             <div v-if="loading" class="text-gray-400">Caricamento...</div>
             <div v-else-if="events.length == 0">
                 <span class="text-white">Nessun evento trovato, prova ad ampliare i tuoi criteri di ricerca...</span>
@@ -43,6 +43,7 @@ const events = ref([])
 const { $apiFetch } = useNuxtApp()
 const query = ref('')
 const selectedLocation = ref(null)
+const selectedType = ref('')
 let debounceTimeout = null
 const pagination = ref({})
 
