@@ -52,7 +52,7 @@
 
         <div class="relative max-w-sm mt-4 text-gray-300">
             <select class="appearance-none input-et pr-10 has-[option.placeholder:checked]:text-gray-500" name="" id="" v-model="selectedType">
-                <option disabled selected value="" class="placeholder">in presenza?</option>
+                <option disabled selected value="" class="placeholder">in presenza o online?</option>
                 <option value="online">online</option>
                 <option value="in_person">in presenza</option>
                 <option value="ibrido">ibrido</option>
@@ -63,13 +63,8 @@
             </div>
         </div>
 
-
-
-
-
         <!-- <p class="text-cyan mt-6 flex items-center underline text-sm">Scopri tutti gli eventi <img class="ml-3 w-3"
                 src="/icons/right.svg" alt=""></p> -->
-
 
     </div>
 </template>

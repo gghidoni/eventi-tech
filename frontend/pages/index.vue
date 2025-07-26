@@ -4,7 +4,7 @@
         <Search v-model:search="query" v-model:selectedLocation="selectedLocation" v-model:selectedType="selectedType" />
 
         <div class="mt-8">
-            <div v-if="loading" class="text-gray-400">Caricamento...</div>
+            <Spinner v-if="loading" />
             <div v-else-if="events.length == 0">
                 <span class="text-white">Nessun evento trovato, prova ad ampliare i tuoi criteri di ricerca...</span>
             </div>
@@ -35,6 +35,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Search from '../components/Search.vue'
+import Spinner from '../components/Spinner.vue'
 import EventMiniCard from '~/components/EventMiniCard.vue'
 
 const loading = ref(true)
@@ -89,7 +90,6 @@ const search = async (query = null, location = null) => {
     let params = '';
     if (query) params += '&filter[search]=' + query;
     if (location) params += '&filter[location]=' + location.field + ',' + location.id;
-    console.log(params);
     fetchEvents(params);
 }
 
