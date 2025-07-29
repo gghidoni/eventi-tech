@@ -27,7 +27,12 @@ class EventResource extends JsonResource
                 'endDate' => $this->end_date,
                 'website' => $this->website,
                 'poster' => $this->poster,
-                'ticketsUrl' => $this->tickets_url
+                'ticketsUrl' => $this->tickets_url,
+                'cfpUrl' => $this->cfp_url
+            ],
+            'relationships' => [
+                'community' => new CommunityResource($this->community),
+                'address' => new AddressBookResource( $this->address_book)
             ],
             // 'relationships' => [
             //     'community' => [
@@ -38,10 +43,10 @@ class EventResource extends JsonResource
             //         ]
             //     ]
             // ],
-            'includes' => [
-                'community' => new CommunityResource($this->whenLoaded('community')),
-                'address' => new AddressBookResource( $this->whenLoaded('address_book'))
-            ],
+            // 'includes' => [
+            //     'community' => new CommunityResource($this->whenLoaded('community')),
+            //     'address' => new AddressBookResource( $this->whenLoaded('address_book'))
+            // ],
         ];
     }
 }

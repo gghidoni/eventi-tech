@@ -18,7 +18,8 @@ class CommunityResource extends JsonResource
             'type' => 'community',
             'id' => $this->id,
             'attributes' => [
-                'name' => $this->name
+                'name' => $this->name,
+                'logo' => $this->logo
             ]
         ];
     }

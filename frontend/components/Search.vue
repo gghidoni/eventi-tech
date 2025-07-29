@@ -3,7 +3,7 @@
         <div class="relative max-w-sm text-gray-300">
             <input type="text" placeholder="titolo, argomento..." class="input-et" v-model="search" />
             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none mb-1">
-                <img src="/icons/lente.svg" alt="" class="w-5">
+                <img src="/icons/lente-cyan.svg" alt="" class="w-5">
             </div>
         </div>
 
@@ -15,7 +15,7 @@
                 :options="locations" placeholder="dove?">
                 <template #caret>
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none ">
-                        <img src="/icons/location.svg" alt="" class="w-3.5">
+                        <img src="/icons/location-cyan.svg" alt="" class="w-3.5">
                     </div>
                 </template>
                 <template #option="{ option }">
@@ -59,12 +59,12 @@
                 <option value="all">tutti</option>
             </select>
             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none mr-1">
-                <img class="w-3.5" src="/icons/arrow-down.svg" alt="">
+                <img class="w-3.5" src="/icons/arrow-down-cyan.svg" alt="">
             </div>
         </div>
 
         <!-- <p class="text-cyan mt-6 flex items-center underline text-sm">Scopri tutti gli eventi <img class="ml-3 w-3"
-                src="/icons/right.svg" alt=""></p> -->
+                src="/icons/right-cyan.svg" alt=""></p> -->
 
     </div>
 </template>

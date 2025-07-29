@@ -14,14 +14,14 @@
                 <div v-if="pagination && pagination.lastPage > 1" class="flex gap-5 mt-6 justify-center">
                     <button :disabled="!pagination.links.prev" @click="goToPage(pagination.currentPage - 1)"
                         class="text-cyan mt-6 flex items-center underline text-sm">
-                        <img class="mr-2 w-3" src="/icons/left.svg" alt="">
+                        <img class="mr-2 w-3" src="/icons/left-cyan.svg" alt="">
                         Precedente
                     </button>
 
                     <button :disabled="!pagination.links.next" @click="goToPage(pagination.currentPage + 1)"
                         class="text-cyan mt-6 flex items-center underline text-sm">
                         Successivo
-                        <img class="ml-2 w-3" src="/icons/right.svg" alt="">
+                        <img class="ml-2 w-3" src="/icons/right-cyan.svg" alt="">
                     </button>
                 </div>
 
@@ -104,7 +104,7 @@ const fetchEvents = async (params = '') => {
     error.value = '';
 
     try {
-        const response = await $apiFetch('/events?include=community,address_book' + params, {
+        const response = await $apiFetch('/events?' + params, {
             method: 'GET'
         })
 
