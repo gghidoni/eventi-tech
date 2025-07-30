@@ -26,7 +26,7 @@ class EventResource extends JsonResource
                 'startDate' => $this->start_date,
                 'endDate' => $this->end_date,
                 'website' => $this->website,
-                'poster' => $this->poster,
+                'poster' => asset('storage/' . $this->poster),
                 'ticketsUrl' => $this->tickets_url,
                 'cfpUrl' => $this->cfp_url
             ],
