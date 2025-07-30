@@ -33,6 +33,11 @@
                     <li>
                         <button @click="handleLogout" class="logout-btn">Logout</button>
                     </li>
+                    <li>
+                        <NuxtLink to="http://127.0.0.1:8083/dashboard" target="_blank">
+                            Vai al pannello Filament
+                        </NuxtLink>
+                    </li>
                 </template>
 
                 <!-- Menu per utenti non autenticati -->
@@ -54,8 +59,8 @@ const { isAuthenticated, user, logout } = useAuth()
 const emit = defineEmits(['closeMenu'])
 
 const handleLogout = () => {
-  logout()
-  closeMenu()
+    logout()
+    closeMenu()
 }
 
 const isOpen = ref(false)
