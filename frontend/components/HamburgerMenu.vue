@@ -17,23 +17,23 @@
                 <li>
                     <NuxtLink to="/" @click="closeMenu">home</NuxtLink>
                 </li>
-                <li>
+                <li class="mt-2">
                     <NuxtLink to="/about" @click="closeMenu">eventi</NuxtLink>
                 </li>
-                <li>
+                <li class="mt-2">
                     <NuxtLink to="/contact" @click="closeMenu">contatti</NuxtLink>
                 </li>
                 <!-- Menu per utenti autenticati -->
                 <template v-if="isAuthenticated">
-                    <li>
+                    <li class="mt-2">
                         <span class="user-info">
-                            Ciao, {{ user.name || user.email }}
+                            Ciao, {{ user.attributes.name || user.attributes.email }}
                         </span>
                     </li>
-                    <li>
+                    <li class="mt-2">
                         <button @click="handleLogout" class="logout-btn">Logout</button>
                     </li>
-                    <li>
+                    <li class="mt-2">
                         <NuxtLink to="http://127.0.0.1:8083/dashboard" target="_blank">
                             Vai al pannello Filament
                         </NuxtLink>
@@ -42,8 +42,11 @@
 
                 <!-- Menu per utenti non autenticati -->
                 <template v-else>
-                    <li>
-                        <NuxtLink to="/login" @click="closeMenu">Login</NuxtLink>
+                    <li class="mt-2">
+                        <NuxtLink to="/login" @click="closeMenu">login</NuxtLink>
+                    </li>
+                    <li class="mt-2">
+                        <NuxtLink to="/register" @click="closeMenu">registrati</NuxtLink>
                     </li>
                 </template>
             </ul>

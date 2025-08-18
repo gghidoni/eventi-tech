@@ -1,8 +1,21 @@
 import { defineNuxtPlugin } from '#app'
- 
+import type { $Fetch } from 'ofetch'
+
+declare module '#app' {
+  interface NuxtApp {
+    $apiFetch: $Fetch
+  }
+}
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $apiFetch: $Fetch
+  }
+}
+
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
-  const token = useCookie('token')
+  const token = useCookie<string | null>('token')
 
   const apiFetch = $fetch.create({
     baseURL: config.public.apiBaseUrl,

@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     port: 5173
   },
 
-  modules: ['@nuxtjs/google-fonts', '@nuxtjs/i18n',],
+  modules: ['@nuxtjs/google-fonts', '@nuxtjs/i18n', '@nuxt/ui'],
   googleFonts: {
     families: {
       'JetBrains+Mono': [400, 500, 700],
@@ -41,4 +41,6 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false
     }
   },
+
+
 })

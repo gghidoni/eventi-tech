@@ -1,10 +1,24 @@
 @import "tailwindcss";
+@import "@nuxt/ui";
 
 @theme {
     --color-pink: #F19CBA;
     --color-white: #C1C9CF;
     --color-background: #2B2B2B;
     --color-cyan: #72B7C0;
+    --color-green: #72c0a0;
+}
+
+:root {
+  --ui-primary: #72B7C0;
+  --ui-secondary: #F19CBA;
+  --ui-neutral: #C1C9CF;
+  --ui-text: #C1C9CF;
+  /* --ui-success: var(--ui-color-success-500); */
+  --ui-success: #72c0a0;
+  --ui-info: var(--ui-color-info-500);
+  --ui-warning: var(--ui-color-warning-500);
+  --ui-error: #F19CBA;
 }
 
 body {
@@ -68,8 +82,5 @@ body {
     @apply !text-sm
 }
 
-/* .multiselect__option--selected {
-    @apply !bg-cyan
-} */
 
 

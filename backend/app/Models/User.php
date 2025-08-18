@@ -61,9 +61,9 @@ class User extends Authenticatable implements FilamentUser
     }
    
 
-    public function getAvatarAttribute(): String
+    public function getAvatarImgAttribute(): String
     {
-        if ($this->user_metas->avatar) {
+        if ($this->avatar) {
             return Storage::url($this->avatar);
         } else {
             $name = urlencode($this->name);

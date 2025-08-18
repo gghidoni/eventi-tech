@@ -1,87 +1,113 @@
 <template>
-  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img class="mx-auto h-10 w-auto"
-        src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
-      <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <h2 class="mt-10 text-center text-2xl/9 font-bold">Accedi</h2>
+        </div>
+
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
+            <UAlert v-if="error" color="error" variant="soft" :title="error"
+                :close-button="{ icon: 'i-heroicons-x-mark-20-solid', color: 'gray', variant: 'link' }"
+                @close="error = ''" class="mb-4" />
+
+
+            <UForm :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
+                <UFormField label="email" name="email">
+                    <UInput v-model="state.email" class="w-full" :ui="customInputUI" />
+                </UFormField>
+
+                <UFormField label="password" name="password">
+                    <UInput v-model="state.password" :type="showPassword ? 'text' : 'password'" class="w-full"
+                        :ui="customPasswordInputUI">
+                        <template #trailing>
+                            <UButton color="neutral" variant="link" size="sm"
+                                :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                                :aria-label="showPassword ? 'Hide password' : 'Show password'" :aria-pressed="showPassword"
+                                aria-controls="password" @click="showPassword = !showPassword" />
+                        </template>
+                    </UInput>
+                </UFormField>
+
+                <UButton type="submit" class="text-background mt-4">
+                    login
+                    <img class="ml-3 w-3" src="/icons/right-black.svg" alt="">
+                </UButton>
+            </UForm>
+
+        </div>
     </div>
-
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="#" method="POST" @submit.prevent="handleLogin">
-        <div>
-          <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
-          <div class="mt-2">
-            <input type="email" v-model="email" name="email" id="email" autocomplete="email" required
-              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-          </div>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
-            <div class="text-sm">
-              <!-- <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a> -->
-            </div>
-          </div>
-          <div class="mt-2">
-            <input type="password" v-model="password" name="password" id="password" autocomplete="current-password"
-              required
-              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-          </div>
-        </div>
-
-        <div>
-          <button type="submit"
-            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign
-            in</button>
-        </div>
-      </form>
-    </div>
-  </div>
 </template>
 
-<script setup>
-const email = ref('')
-const password = ref('')
+<script setup lang="ts">
+
+import type { FormError, FormSubmitEvent } from '@nuxt/ui'
+
+
 const loading = ref(false)
 const error = ref('')
+const { customInputUI, customPasswordInputUI } = useCustomUI()
 
 const { $apiFetch } = useNuxtApp()
 const { token, user } = useAuth()
 
+const state = reactive({
+    email: undefined,
+    password: undefined
+})
+
+const showPassword = ref(false)
+const togglePassword = () => {
+    console.log('sdsds');
+    showPassword.value = !showPassword.value
+}
+
+const validate = (state: any): FormError[] => {
+    const errors = []
+    if (!state.email) errors.push({ name: 'email', message: 'campo obbligatorio' })
+    if (!state.password) errors.push({ name: 'password', message: 'campo obbligatorio' })
+    return errors
+}
+
+async function onSubmit(event: FormSubmitEvent<typeof state>) {
+    handleLogin()
+    //   toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
+    console.log(event.data)
+}
+
+
 // Redirect se già autenticato
 onMounted(() => {
-  const { isAuthenticated } = useAuth()
-  if (isAuthenticated.value) {
-    navigateTo('/')
-  }
+    const { isAuthenticated } = useAuth()
+    if (isAuthenticated.value) {
+        navigateTo('/')
+    }
 })
 
 const handleLogin = async () => {
-  loading.value = true
-  error.value = ''
+    loading.value = true
+    error.value = ''
 
-  try {
-    const response = await $apiFetch('/login', {
-      method: 'POST',
-      body: {
-        email: email.value,
-        password: password.value
-      }
-    })
+    try {
+        const response = await $apiFetch('/login', {
+            method: 'POST',
+            body: {
+                email: state.email,
+                password: state.password
+            }
+        })
 
-    token.value = response.data.token
-    user.value = response.data.user
+        token.value = response.data.token
+        user.value = response.data.user
 
-    console.log('Login successful:', user.value)
+        console.log('Login successful:', user.value)
 
-    await navigateTo('/')
+        await navigateTo('/')
 
-  } catch (err) {
-    console.error('Login failed:', err)
-    error.value = 'Credenziali errate o errore di rete'
-  } finally {
-    loading.value = false
-  }
+    } catch (err) {
+        console.error('Login failed:', err)
+        error.value = 'Credenziali errate'
+    } finally {
+        loading.value = false
+    }
 }
 </script>

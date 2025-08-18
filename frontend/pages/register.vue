@@ -1,44 +1,170 @@
 <template>
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img class="mx-auto h-10 w-auto"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
-            <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign up to your account</h2>
+            <h2 class="mt-10 text-center text-2xl/9 font-bold">Registrati</h2>
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="#" method="POST">
-                <div>
-                    <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
-                    <div class="mt-2">
-                        <input type="email" name="email" id="email" autocomplete="email" required
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                    </div>
-                </div>
 
-                <div>
-                    <div class="flex items-center justify-between">
-                        <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
-                        <div class="text-sm">
-                            <!-- <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a> -->
-                        </div>
-                    </div>
-                    <div class="mt-2">
-                        <input type="password" name="password" id="password" autocomplete="current-password" required
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                    </div>
-                </div>
+            <UAlert v-if="error" color="error" variant="soft" :title="error"
+                :close-button="{ icon: 'i-heroicons-x-mark-20-solid', color: 'gray', variant: 'link' }"
+                @close="error = ''" class="mb-4" />
 
-                <div>
-                    <button type="submit"
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign
-                        up</button>
-                </div>
-            </form>
+            <!-- Aggiungi ref al form per poterlo controllare -->
+            <UForm ref="form" :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
+                <UFormField label="nome" name="name">
+                    <UInput v-model="state.name" class="w-full" :ui="customInputUI" />
+                </UFormField>
+                <UFormField label="email" name="email">
+                    <UInput v-model="state.email" class="w-full" :ui="customInputUI" />
+                </UFormField>
+
+                <UFormField label="password" name="password">
+                    <UInput v-model="state.password" :type="showPassword ? 'text' : 'password'" class="w-full"
+                        :ui="customPasswordInputUI">
+                        <template #trailing>
+                            <UButton color="neutral" variant="link" size="sm"
+                                :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                                :aria-label="showPassword ? 'Hide password' : 'Show password'"
+                                :aria-pressed="showPassword" aria-controls="password"
+                                @click="showPassword = !showPassword" />
+                        </template>
+                    </UInput>
+                </UFormField>
+
+                <UFormField label="conferma password" name="confirmPassword">
+                    <UInput v-model="state.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
+                        class="w-full" :ui="customPasswordInputUI">
+                        <template #trailing>
+                            <UButton color="neutral" variant="link" size="sm"
+                                :icon="showConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                                :aria-label="showConfirmPassword ? 'Hide password' : 'Show password'"
+                                :aria-pressed="showConfirmPassword" aria-controls="password"
+                                @click="showConfirmPassword = !showConfirmPassword" />
+                        </template>
+                    </UInput>
+                </UFormField>
+
+                <UButton type="submit" class="text-background mt-4" :loading="loading">
+                    registrati
+                    <img class="ml-3 w-3" src="/icons/right-black.svg" alt="">
+                </UButton>
+            </UForm>
+
         </div>
     </div>
 </template>
 
-<script setup>
-//
+<script setup lang="ts">
+import type { FormError, FormSubmitEvent, FormErrorEvent } from '@nuxt/ui'
+
+const loading = ref(false)
+const error = ref('')
+const { customInputUI, customPasswordInputUI } = useCustomUI()
+
+const { $apiFetch } = useNuxtApp()
+const { token, user } = useAuth()
+
+// Ref per il form
+const form = ref()
+
+const state = reactive({
+    name: undefined,
+    email: undefined,
+    password: undefined,
+    confirmPassword: undefined
+})
+
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
+
+const backendErrors = reactive<FormError[]>([])
+
+watch(state, () => {
+  backendErrors.splice(0)
+}, { deep: true })
+
+
+const validate = (state: any): FormError[] => {
+    // const errors: FormError[] = []
+    // backendErrors.splice(0, backendErrors.length)
+    const errors = []
+    if (!state.name) errors.push({ name: 'name', message: 'campo obbligatorio' })
+    if (!state.email) errors.push({ name: 'email', message: 'campo obbligatorio' })
+    if (!state.password) errors.push({ name: 'password', message: 'campo obbligatorio' })
+    if (!state.confirmPassword) errors.push({ name: 'confirmPassword', message: 'campo obbligatorio' })
+    if (state.password !== state.confirmPassword) errors.push({ name: 'confirmPassword', message: 'le password non coincidono' })
+
+    errors.push(...backendErrors)
+
+    return errors
+}
+
+async function onSubmit(event: FormSubmitEvent<typeof state>) {
+    console.log('invio!')
+    await handleRegister()
+    console.log(event.data)
+}
+
+async function onError(event: FormErrorEvent) {
+    if (event?.errors?.[0]?.id) {
+        const element = document.getElementById(event.errors[0].id)
+        element?.focus()
+        element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+}
+
+const handleRegister = async () => {
+    backendErrors.splice(0, backendErrors.length)
+    loading.value = true
+    error.value = ''
+
+    try {
+        const response = await $apiFetch('/register', {
+            method: 'POST',
+            body: {
+                name: state.name,
+                email: state.email,
+                password: state.password
+            }
+        })
+
+        token.value = response.data.token
+        user.value = response.data.user
+
+        console.log('Register successful:', user.value)
+        await navigateTo('/')
+
+    } catch (err: any) {
+        console.log('Registration failed:', err.data)
+
+        if (err.data?.errors) {
+            // Aggiungi gli errori dal backend
+            Object.entries(err.data.errors).forEach(([field, messages]) => {
+                (messages as string[]).forEach((message) => {
+                    backendErrors.push({ name: field, message })
+                })
+            })
+
+            // IMPORTANTE: Forza la validazione per mostrare gli errori
+            await nextTick()
+            if (form.value) {
+                form.value.validate()
+            }
+        } else {
+            error.value = err.data?.message || 'Errore durante la registrazione'
+        }
+
+        console.log('Backend errors:', backendErrors)
+    } finally {
+        loading.value = false
+    }
+}
+
+onMounted(() => {
+    const { isAuthenticated } = useAuth()
+    if (isAuthenticated.value) {
+        navigateTo('/')
+    }
+})
 </script>
