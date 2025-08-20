@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto py-8 px-6 flex flex-col">
+    <div class="page">
         <h1 class="basis-full text-2xl text-gray-300">scopri, <span class="text-cyan">partecipa</span>, connettiti!</h1>
         <Search v-model:search="query" v-model:selectedLocation="selectedLocation" v-model:selectedType="selectedType" />
 

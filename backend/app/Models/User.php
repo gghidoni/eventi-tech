@@ -59,7 +59,7 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
-   
+
 
     public function getAvatarImgAttribute(): String
     {
@@ -71,7 +71,7 @@ class User extends Authenticatable implements FilamentUser
         }
     }
 
-    
+
     /**
      * Relationship Community
      * 
@@ -80,6 +80,16 @@ class User extends Authenticatable implements FilamentUser
     public function communities(): HasMany
     {
         return $this->hasMany(Community::class);
+    }
+
+    /**
+     * Relationship Bookmarks
+     * 
+     * @return BelongsToMany
+     */
+    public function bookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class);
     }
 
     public function canAccessPanel(Panel $panel): bool

@@ -29,6 +29,8 @@ class Test extends Command
     public function handle()
     {
 
+        dd(User::find(1)->bookmarks->pluck('id'));
+
         $a = Event::whereHas('address_book', function ($q) {
             $q->where('province_id', 59);
         })->get();

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponses;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiController extends Controller
 {

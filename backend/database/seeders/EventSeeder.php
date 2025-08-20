@@ -17,7 +17,7 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        $basePosterUrl = config('app.url') . '/storage/posters/';
+        $basePosterUrl = 'posters/';
         $events = [
             [
                 'community_id' => 1, // ID per "Java Ancona"

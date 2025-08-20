@@ -82,5 +82,17 @@ body {
     @apply !text-sm
 }
 
+.router-link-active {
+  @apply font-extrabold underline;
+}
+
+.page {
+    @apply container mx-auto py-8 px-6 flex flex-col
+}
+
+.page-title {
+    @apply text-3xl text-white
+}
+
 
 

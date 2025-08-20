@@ -26,6 +26,9 @@ class UserResource extends JsonResource
                 'linkedin' => $this->linkedin,
                 'instagram' => $this->instagram,
                 'facebook' => $this->facebook
+            ],
+            'relationships' => [
+                'bookmarks' => $this->bookmarks->pluck('id')
             ]
         ];
     }

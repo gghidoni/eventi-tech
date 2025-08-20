@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AddressBookController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\EventController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::post('/events/{eventId}/toggle-bookmark', [EventController::class, 'toggleBookmark']);
 });
 
 Route::apiResource('events', EventController::class);

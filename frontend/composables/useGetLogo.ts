@@ -1,5 +1,4 @@
 export function getLogo(url: string | null, name: string): string {
-    console.log(url);
     if (url && url.trim() !== '') {
         return url
     }

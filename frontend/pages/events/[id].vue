@@ -22,9 +22,7 @@
                         alt="" class="rounded-full w-7 border border-cyan">
                     <span class="text-sm font-anta">{{ event.relationships.community.attributes.name }}</span>
                 </div>
-                <div>
-                    <img src="/icons/heart-pink-empty.svg" alt="" class="w-6">
-                </div>
+                <BookmarkButton v-if="event" :eventId="event.id" />  
             </div>
             <div class="flex space-x-2 mt-3">
                 <img src="/icons/clock-pink.svg" alt="" class="w-5">
@@ -57,20 +55,18 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Spinner from '../components/Spinner.vue'
+
 const { $apiFetch } = useNuxtApp()
-
-
-
+const { isAuthenticated, user, logout } = useAuth()
 const route = useRoute()
 const event = ref(Object)
 const loading = ref(true)
-
+const isBookmark = ref(false)
 
 
 onMounted(async () => {
     const id = route.params.id
     fetchEvent(id);
-    console.log(id);
 })
 
 const fetchEvent = async (id) => {
@@ -78,11 +74,11 @@ const fetchEvent = async (id) => {
         const response = await $apiFetch('/events/' + id)
         event.value = response.data
         loading.value = false
-        console.log(event.value)
     } catch (error) {
         console.log(error)
     }
 }
+
 
 function getUrl(url) {
     if (url.includes('https://')) return url

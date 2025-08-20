@@ -6,29 +6,32 @@ use App\Models\User;
 
 class Abilities
 {
-    public const CreateTicket = 'ticket:create';
+    public const CreateEvent = 'event:create';
 
-    public const UpdateTicket = 'ticket:update';
+    public const UpdateEvent = 'event:update';
 
-    public const DeleteTicket = 'ticket:delete';
+    public const DeleteEvent = 'event:delete';
 
-    public const UpdateOwnTicket = 'ticket:own:update';
+    public const UpdateOwnEvent = 'event:own:update';
 
-    public const DeleteOwnTicket = 'ticket:own:delete';
+    public const DeleteOwnEvent = 'event:own:delete';
+
+    public const ToggleBookmark = 'bookmark:toggle';
 
     public static function getAbilities(User $user)
     {
         if ($user->is_admin) {
             return [
-                self::CreateTicket,
-                self::DeleteTicket,
-                self::UpdateTicket,
+                self::CreateEvent,
+                self::DeleteEvent,
+                self::UpdateEvent,
             ];
         }
         return [
-            self::CreateTicket,
-            self::DeleteOwnTicket,
-            self::UpdateOwnTicket,
+            self::CreateEvent,
+            self::DeleteOwnEvent,
+            self::UpdateOwnEvent,
+            self::ToggleBookmark,
         ];
     }
 }
