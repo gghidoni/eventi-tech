@@ -44,14 +44,10 @@ class EventController extends ApiController
                 $bookmarks = $user->bookmarks->pluck('id');
 
                 return $this->success('Bookmark rimosso', $bookmarks);
-            } else {
-                $user->bookmarks()->attach($event->id);
-                $bookmarks = $user->bookmarks->pluck('id');
-
-                return $this->success('Bookmark aggiunto', $bookmarks);
             }
-
-            return $this->success('Bookmark toggled successfully', $bookmarks);
+            $user->bookmarks()->attach($event->id);
+            $bookmarks = $user->bookmarks->pluck('id');
+            return $this->success('Bookmark aggiunto', $bookmarks);
         } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             return $this->error('Forbidden: '.$e->getMessage(), 403);
         } catch (ModelNotFoundException $e) {

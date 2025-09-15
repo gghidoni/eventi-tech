@@ -9,7 +9,7 @@ abstract class QueryFilter
 {
     protected $builder;
 
-    protected $request;
+    protected \Illuminate\Http\Request $request;
 
     protected $sortable = [];
 

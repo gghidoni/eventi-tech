@@ -18,10 +18,6 @@ class EventPolicy
 
     public function toggleBookmark(User $user, Event $event)
     {
-        if ($user->tokenCan(Abilities::ToggleBookmark)) {
-            return true;
-        }
-
-        return false;
+        return $user->tokenCan(Abilities::ToggleBookmark);
     }
 }

@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
         return $request->user();
     });
     Route::post('/events/{eventId}/toggle-bookmark', [EventController::class, 'toggleBookmark']);
-    Route::prefix('users')->group(function () {
+    Route::prefix('users')->group(function (): void {
         Route::get('/bookmarks', [UserController::class, 'getBookmarks']);
     });
 });

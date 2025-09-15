@@ -27,7 +27,7 @@ class InsertCityProvinceRegion extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $file = Storage::get('comuni.json');
         $items = json_decode($file, true);

@@ -83,7 +83,7 @@ class AuthController extends Controller
      *
      * @response 200 {}
      */
-    public function logout(Request $request)
+    public function logout(Request $request): void
     {
         $request->user()->currentAccessToken()->delete();
     }

@@ -62,11 +62,9 @@ class User extends Authenticatable implements FilamentUser
     {
         if ($this->avatar) {
             return Storage::url($this->avatar);
-        } else {
-            $name = urlencode($this->name);
-
-            return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
         }
+        $name = urlencode($this->name);
+        return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
     }
 
     /**
@@ -87,10 +85,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        if ($panel->getId() == 'admin') {
+        if ($panel->getId() === 'admin') {
             return $this->is_admin;
         }
-        if ($panel->getId() == 'community') {
+        if ($panel->getId() === 'community') {
             return $this->communities()->exists();
         }
 

@@ -20,7 +20,7 @@ class Abilities
 
     public const ShowOwnBookmarks = 'user:show-bookmarks';
 
-    public static function getAbilities(User $user)
+    public static function getAbilities(User $user): array
     {
         if ($user->is_admin) {
             return [

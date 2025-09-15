@@ -25,12 +25,12 @@ class Test extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
 
         dd(User::find(1)->bookmarks->pluck('id'));
 
-        $a = Event::whereHas('address_book', function ($q) {
+        $a = Event::whereHas('address_book', function ($q): void {
             $q->where('province_id', 59);
         })->get();
 

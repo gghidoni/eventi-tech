@@ -63,7 +63,7 @@ class EventFilter extends QueryFilter
             return $this->builder;
         }
 
-        return $this->builder->whereHas('address_book', function ($q) use ($field, $id) {
+        return $this->builder->whereHas('address_book', function ($q) use ($field, $id): void {
             $q->where($field, $id);
         });
     }
