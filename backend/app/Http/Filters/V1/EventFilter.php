@@ -9,8 +9,8 @@ use App\Models\Event;
 class EventFilter extends QueryFilter
 {
     protected $sortable = [
-        'title' => 'title',
-        'status' => 'status',
+        'title'     => 'title',
+        'status'    => 'status',
         'createdAt' => 'created_at',
     ];
 

@@ -17,13 +17,13 @@ class AddressBookResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'type' => 'address_book',
-            'id' => $this->id,
+            'type'       => 'address_book',
+            'id'         => $this->id,
             'attributes' => [
                 'address_line' => $this->address_line,
-                'city' => [
+                'city'         => [
                     'name' => $this->city->name,
-                    'cap' => $this->city->cap,
+                    'cap'  => $this->city->cap,
                 ],
                 'province' => [
                     'name' => $this->province->name,

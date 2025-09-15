@@ -39,27 +39,27 @@ class InsertCityProvinceRegion extends Command
         foreach ($items as $item) {
             if (! Region::whereName($item['denominazione_regione'])->exists()) {
                 Region::create([
-                    'name' => $item['denominazione_regione'],
+                    'name'       => $item['denominazione_regione'],
                     'updated_at' => now(),
                     'created_at' => now(),
                 ]);
             }
             if (! Province::whereName($item['denominazione_provincia'])->exists()) {
                 Province::create([
-                    'name' => $item['denominazione_provincia'],
-                    'code' => $item['sigla_provincia'],
-                    'region_id' => Region::whereName($item['denominazione_regione'])->first()->id,
+                    'name'       => $item['denominazione_provincia'],
+                    'code'       => $item['sigla_provincia'],
+                    'region_id'  => Region::whereName($item['denominazione_regione'])->first()->id,
                     'updated_at' => now(),
                     'created_at' => now(),
                 ]);
             }
             if (! City::whereName($item['denominazione_ita'])->exists()) {
                 City::create([
-                    'name' => $item['denominazione_ita'],
-                    'cap' => $item['cap'],
+                    'name'        => $item['denominazione_ita'],
+                    'cap'         => $item['cap'],
                     'province_id' => Province::whereName($item['denominazione_provincia'])->first()->id,
-                    'updated_at' => now(),
-                    'created_at' => now(),
+                    'updated_at'  => now(),
+                    'created_at'  => now(),
                 ]);
             }
 
