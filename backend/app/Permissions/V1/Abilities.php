@@ -18,6 +18,8 @@ class Abilities
 
     public const ToggleBookmark = 'bookmark:toggle';
 
+    public const ShowOwnBookmarks = 'user:show-bookmarks';
+
     public static function getAbilities(User $user)
     {
         if ($user->is_admin) {
@@ -32,6 +34,7 @@ class Abilities
             self::DeleteOwnEvent,
             self::UpdateOwnEvent,
             self::ToggleBookmark,
+            self::ShowOwnBookmarks,
         ];
     }
 }

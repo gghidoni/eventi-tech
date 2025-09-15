@@ -1,7 +1,6 @@
 <template>
     <div>
-        <img v-if="!isBookmark && !loading" src="/icons/heart-pink-empty.svg" alt="" class="w-6" @click="toggleBookmark()">
-        <img v-else src="/icons/heart-pink-fill.svg" alt="" class="w-6" @click="toggleBookmark()">
+        <img src="/icons/close-pink.svg" alt="" @click="leftBookmark()">
     </div>
 </template>
 
@@ -18,7 +17,7 @@ const props = defineProps({
 })
 const loading = ref(false)
 
-const toggleBookmark = async () => {
+const leftBookmark = async () => {
     try {
         if (!isAuthenticated.value) return navigateTo('/login')
         const response = await $apiFetch('/events/' + props.eventId + '/toggle-bookmark/', {
@@ -37,10 +36,5 @@ const toggleBookmark = async () => {
         console.log(e)
     }
 }
-
-const isBookmark = computed(() => {
-    if (!user.value || !user.value.relationships?.bookmarks) return false
-    return user.value.relationships.bookmarks.includes(props.eventId)
-})
 
 </script>
