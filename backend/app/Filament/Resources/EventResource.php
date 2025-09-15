@@ -7,7 +7,6 @@ use App\Enums\EventType;
 use App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\EventResource\RelationManagers;
 use App\Models\Event;
-use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -18,8 +17,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EventResource extends Resource
 {
@@ -47,7 +44,7 @@ class EventResource extends Resource
                     Select::make('region_id')->relationship('region', 'name')->required(),
                     TextInput::make('address_line')->required()->maxLength(255),
                 ]),
-                FileUpload::make('poster')->disk('public')->directory('posters')->visibility('public')->image()->openable()->previewable(true)
+                FileUpload::make('poster')->disk('public')->directory('posters')->visibility('public')->image()->openable()->previewable(true),
             ]);
     }
 
@@ -58,7 +55,7 @@ class EventResource extends Resource
                 TextColumn::make('title')->searchable(),
                 TextColumn::make('status')->sortable(),
                 TextColumn::make('start_date')->sortable(),
-                TextColumn::make('end_date')->sortable()
+                TextColumn::make('end_date')->sortable(),
             ])
             ->filters([
                 //
@@ -76,16 +73,16 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AddressBookRelationManager::class
+            RelationManagers\AddressBookRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEvents::route('/'),
+            'index'  => Pages\ListEvents::route('/'),
             'create' => Pages\CreateEvent::route('/create'),
-            'edit' => Pages\EditEvent::route('/{record}/edit'),
+            'edit'   => Pages\EditEvent::route('/{record}/edit'),
         ];
     }
 }

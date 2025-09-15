@@ -36,7 +36,7 @@ class AuthController extends Controller
     {
         $request->validated($request->all());
 
-        if (! Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return $this->error('Credenziali non valide', 401);
         }
 
@@ -46,34 +46,33 @@ class AuthController extends Controller
             'Authenticated',
             [
                 'token' => $user->createToken('Api token for '.$user->email, Abilities::getAbilities($user), now()->addHours(4))->plainTextToken,
-                'user' => new UserResource($user),
-            ]
+                'user'  => new UserResource($user),
+            ],
         );
     }
 
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:50',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|max:255|min:8'
+            'name'     => 'required|string|max:50',
+            'email'    => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|max:255|min:8',
         ]);
 
-       $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-       ]);
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
 
-       return $this->ok(
+        return $this->ok(
             'Registered',
             [
                 'token' => $user->createToken('Api token for '.$user->email, Abilities::getAbilities($user), now()->addHours(4))->plainTextToken,
-                'user' => new UserResource($user),
-            ]
+                'user'  => new UserResource($user),
+            ],
         );
     }
-    
 
     /**
      * Logout

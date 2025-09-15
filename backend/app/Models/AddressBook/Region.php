@@ -7,7 +7,6 @@ use Laravel\Scout\Searchable;
 
 class Region extends Model
 {
-
     use Searchable;
 
     protected $fillable = [

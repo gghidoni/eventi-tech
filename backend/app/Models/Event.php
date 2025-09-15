@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
+use App\Http\Filters\V1\QueryFilter;
 use App\Models\AddressBook\AddressBook;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Http\Filters\V1\QueryFilter;
-use Illuminate\Database\Eloquent\Builder;
 use Laravel\Scout\Searchable;
 
 class Event extends Model
 {
-
     use Searchable;
 
     protected $fillable = [
@@ -27,7 +26,7 @@ class Event extends Model
         'website',
         'poster',
         'tickets_url',
-        'cfp_url'
+        'cfp_url',
     ];
 
     public function toSearchableArray()
@@ -40,6 +39,7 @@ class Event extends Model
         $array['region_id'] = $this->address_book->region_id;
         $array['start_date'] = $this->start_date;
         $array['end_date'] = $this->end_date;
+
         return $array;
     }
 

@@ -40,7 +40,7 @@ abstract class QueryFilter
                 $sa = substr($sa, 1);
             }
 
-            if (! in_array($sa, $this->sortable) && ! array_key_exists($sa, $this->sortable)) {
+            if (!in_array($sa, $this->sortable) && !array_key_exists($sa, $this->sortable)) {
                 continue;
             }
 

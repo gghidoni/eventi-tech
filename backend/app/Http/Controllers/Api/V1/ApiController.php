@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponses;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiController extends Controller
 {
@@ -16,17 +14,17 @@ class ApiController extends Controller
 
     // protected $policyClass;
 
-    public function __construct()  
-	{  
-	    // Gate::guessPolicyNamesUsing(function () {  
-	    //     return $this->policyClass;  
-	    // });  
-	}
+    public function __construct()
+    {
+        // Gate::guessPolicyNamesUsing(function () {
+        //     return $this->policyClass;
+        // });
+    }
 
     public function include(string $relationship): bool
     {
         $param = request()->get('include');
-        if (! isset($param)) {
+        if (!isset($param)) {
             return false;
         }
 

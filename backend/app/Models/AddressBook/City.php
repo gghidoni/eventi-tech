@@ -13,7 +13,7 @@ class City extends Model
     protected $fillable = [
         'name',
         'cap',
-        'province_id'
+        'province_id',
     ];
 
     public function toSearchableArray()

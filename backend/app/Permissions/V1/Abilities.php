@@ -29,6 +29,7 @@ class Abilities
                 self::UpdateEvent,
             ];
         }
+
         return [
             self::CreateEvent,
             self::DeleteOwnEvent,

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             AddressBookSeeder::class,
             EventSeeder::class,
-            EventTagSeeder::class
+            EventTagSeeder::class,
         ]);
     }
 }

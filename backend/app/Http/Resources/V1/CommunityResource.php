@@ -15,12 +15,12 @@ class CommunityResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'type' => 'community',
-            'id' => $this->id,
+            'type'       => 'community',
+            'id'         => $this->id,
             'attributes' => [
                 'name' => $this->name,
-                'logo' => $this->logo
-            ]
+                'logo' => $this->logo,
+            ],
         ];
     }
 }

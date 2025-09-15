@@ -3,13 +3,12 @@
 namespace App\Http\Filters\V1;
 
 use App\Models\Event;
-use Illuminate\Support\Facades\Log;
 
 class EventFilter extends QueryFilter
 {
     protected $sortable = [
-        'title' => 'title',
-        'status' => 'status',
+        'title'     => 'title',
+        'status'    => 'status',
         'createdAt' => 'created_at',
     ];
 
@@ -25,7 +24,8 @@ class EventFilter extends QueryFilter
 
     public function title($value)
     {
-        $likeStr = '%' . str_replace('*', '%', $value) . '%';
+        $likeStr = '%'.str_replace('*', '%', $value).'%';
+
         return $this->builder->where('title', 'like', $likeStr);
     }
 

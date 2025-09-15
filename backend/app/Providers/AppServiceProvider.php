@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use App\Models\Event;
 use App\Models\User;
 use App\Policies\V1\EventPolicy;
 use App\Policies\V1\UserPolicy;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

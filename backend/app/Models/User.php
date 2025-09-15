@@ -3,17 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -34,7 +32,7 @@ class User extends Authenticatable implements FilamentUser
         'facebook',
         'linkedin',
         'instagram',
-        'is_admin'
+        'is_admin',
     ];
 
     /**
@@ -56,26 +54,23 @@ class User extends Authenticatable implements FilamentUser
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
-
-    public function getAvatarImgAttribute(): String
+    public function getAvatarImgAttribute(): string
     {
         if ($this->avatar) {
             return Storage::url($this->avatar);
         } else {
             $name = urlencode($this->name);
+
             return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
         }
     }
 
-
     /**
      * Relationship Community
-     * 
-     * @return hasMany
      */
     public function communities(): HasMany
     {
@@ -84,8 +79,6 @@ class User extends Authenticatable implements FilamentUser
 
     /**
      * Relationship Bookmarks
-     * 
-     * @return BelongsToMany
      */
     public function bookmarks(): BelongsToMany
     {
@@ -94,8 +87,13 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        if ($panel->getId() == 'admin') return $this->is_admin;
-        if ($panel->getId() == 'community') return $this->communities()->exists();
+        if ($panel->getId() == 'admin') {
+            return $this->is_admin;
+        }
+        if ($panel->getId() == 'community') {
+            return $this->communities()->exists();
+        }
+
         return true;
     }
 }

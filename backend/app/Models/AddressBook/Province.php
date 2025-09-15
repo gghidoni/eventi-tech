@@ -9,11 +9,11 @@ use Laravel\Scout\Searchable;
 class Province extends Model
 {
     use Searchable;
-    
+
     protected $fillable = [
         'name',
         'code',
-        'region_id'
+        'region_id',
     ];
 
     public function region(): BelongsTo

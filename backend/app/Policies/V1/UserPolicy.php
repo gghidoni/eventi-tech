@@ -15,9 +15,12 @@ class UserPolicy
         //
     }
 
-        public function showBookmarks(User $user)
+    public function showBookmarks(User $user)
     {
-        if ($user->tokenCan(Abilities::ShowOwnBookmarks)) return true;
+        if ($user->tokenCan(Abilities::ShowOwnBookmarks)) {
+            return true;
+        }
+
         return false;
     }
 }

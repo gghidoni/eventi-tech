@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class Test extends Command
 {

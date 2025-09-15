@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Community extends Model
 {
-
     protected $fillable = [
         'user_id',
         'name',
@@ -18,17 +17,14 @@ class Community extends Model
         'linkedin',
         'instagram',
         'description',
-        'phone'
+        'phone',
     ];
-    
+
     /**
      * Relationship User
-     * 
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
 }

@@ -10,7 +10,6 @@ use App\Models\AddressBook\Province;
 use App\Models\AddressBook\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Meilisearch\Client;
 
 class AddressBookController extends ApiController
 {
@@ -37,9 +36,15 @@ class AddressBookController extends ApiController
             array_shift($regions);
         }
 
-        if ($cities && count($cities) > 0) $results = array_merge($results, $cities);
-        if ($provinces && count($provinces) > 0) $results = array_merge($results, $provinces);
-        if ($regions && count($regions) > 0) $results = array_merge($results, $regions);
+        if ($cities && count($cities) > 0) {
+            $results = array_merge($results, $cities);
+        }
+        if ($provinces && count($provinces) > 0) {
+            $results = array_merge($results, $provinces);
+        }
+        if ($regions && count($regions) > 0) {
+            $results = array_merge($results, $regions);
+        }
 
         return $this->success('Ricerca riuscita', $results);
     }

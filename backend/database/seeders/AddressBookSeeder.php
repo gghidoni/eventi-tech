@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\AddressBook\AddressBook;
-use App\Models\AddressBook\Region;
-use App\Models\AddressBook\Province;
 use App\Models\AddressBook\City;
+use App\Models\AddressBook\Province;
+use App\Models\AddressBook\Region;
+use Illuminate\Database\Seeder;
 
 class AddressBookSeeder extends Seeder
 {
@@ -28,10 +28,10 @@ class AddressBookSeeder extends Seeder
 
             // Creazione dell'address book
             AddressBook::create([
-                'address_line' => 'Via ' . fake()->streetName() . ' ' . fake()->buildingNumber(), // Genera un indirizzo casuale
-                'region_id' => $region->id,
-                'province_id' => $province->id,
-                'city_id' => $city->id,
+                'address_line' => 'Via '.fake()->streetName().' '.fake()->buildingNumber(), // Genera un indirizzo casuale
+                'region_id'    => $region->id,
+                'province_id'  => $province->id,
+                'city_id'      => $city->id,
             ]);
         }
     }

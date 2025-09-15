@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Event;
 use App\Models\Tag;
+use Illuminate\Database\Seeder;
 
 class EventTagSeeder extends Seeder
 {

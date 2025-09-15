@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'reset' => 'La tua password è stata reimpostata.',
-    'sent' => 'Ti abbiamo inviato via email il link per reimpostare la password.',
+    'reset'     => 'La tua password è stata reimpostata.',
+    'sent'      => 'Ti abbiamo inviato via email il link per reimpostare la password.',
     'throttled' => 'Attendi prima di riprovare.',
-    'token' => 'Questo token per il reset della password non è valido.',
-    'user' => "Non esiste un utente con quell'indirizzo email.",
+    'token'     => 'Questo token per il reset della password non è valido.',
+    'user'      => "Non esiste un utente con quell'indirizzo email.",
 
 ];
