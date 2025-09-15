@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\AddressBook\AddressBook;
@@ -29,9 +31,9 @@ class AddressBookSeeder extends Seeder
             // Creazione dell'address book
             AddressBook::create([
                 'address_line' => 'Via '.fake()->streetName().' '.fake()->buildingNumber(), // Genera un indirizzo casuale
-                'region_id'    => $region->id,
-                'province_id'  => $province->id,
-                'city_id'      => $city->id,
+                'region_id' => $region->id,
+                'province_id' => $province->id,
+                'city_id' => $city->id,
             ]);
         }
     }

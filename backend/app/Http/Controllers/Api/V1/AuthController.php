@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
@@ -36,7 +38,7 @@ class AuthController extends Controller
     {
         $request->validated($request->all());
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (! Auth::attempt($request->only('email', 'password'))) {
             return $this->error('Credenziali non valide', 401);
         }
 
@@ -46,7 +48,7 @@ class AuthController extends Controller
             'Authenticated',
             [
                 'token' => $user->createToken('Api token for '.$user->email, Abilities::getAbilities($user), now()->addHours(4))->plainTextToken,
-                'user'  => new UserResource($user),
+                'user' => new UserResource($user),
             ],
         );
     }
@@ -54,14 +56,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:50',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'name' => 'required|string|max:50',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|max:255|min:8',
         ]);
 
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
 
@@ -69,7 +71,7 @@ class AuthController extends Controller
             'Registered',
             [
                 'token' => $user->createToken('Api token for '.$user->email, Abilities::getAbilities($user), now()->addHours(4))->plainTextToken,
-                'user'  => new UserResource($user),
+                'user' => new UserResource($user),
             ],
         );
     }

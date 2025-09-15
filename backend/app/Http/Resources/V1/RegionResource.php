@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
@@ -15,8 +17,8 @@ class RegionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'type'       => 'region',
-            'id'         => $this->id,
+            'type' => 'region',
+            'id' => $this->id,
             'attributes' => [
                 'name' => $this->name,
             ],

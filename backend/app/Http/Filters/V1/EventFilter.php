@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Filters\V1;
 
 use App\Models\Event;
@@ -7,8 +9,8 @@ use App\Models\Event;
 class EventFilter extends QueryFilter
 {
     protected $sortable = [
-        'title'     => 'title',
-        'status'    => 'status',
+        'title' => 'title',
+        'status' => 'status',
         'createdAt' => 'created_at',
     ];
 
@@ -59,7 +61,7 @@ class EventFilter extends QueryFilter
         $field = explode(',', $value)[0];
         $id = explode(',', $value)[1];
 
-        if (!in_array($field, ['province_id', 'city_id', 'region_id'])) {
+        if (! in_array($field, ['province_id', 'city_id', 'region_id'])) {
             return $this->builder;
         }
 

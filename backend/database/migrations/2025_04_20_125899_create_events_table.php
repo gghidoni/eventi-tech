@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\EventStatus;
 use App\Enums\EventType;
 use App\Models\AddressBook\AddressBook;

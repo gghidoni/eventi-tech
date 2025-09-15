@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\AddressBook\City;
 use App\Models\AddressBook\Province;
 use App\Models\AddressBook\Region;

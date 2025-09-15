@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
@@ -15,24 +17,24 @@ class EventResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'type'       => 'event',
-            'id'         => $this->id,
+            'type' => 'event',
+            'id' => $this->id,
             'attributes' => [
-                'title'       => $this->title,
+                'title' => $this->title,
                 'description' => $this->description,
-                'type'        => $this->type,
-                'status'      => $this->status,
-                'createdAt'   => $this->created_at,
-                'startDate'   => $this->start_date,
-                'endDate'     => $this->end_date,
-                'website'     => $this->website,
-                'poster'      => $this->poster ? asset('storage/'.$this->poster ?? 'posters/no-poster.png') : asset('storage/posters/no-poster.png'),
-                'ticketsUrl'  => $this->tickets_url,
-                'cfpUrl'      => $this->cfp_url,
+                'type' => $this->type,
+                'status' => $this->status,
+                'createdAt' => $this->created_at,
+                'startDate' => $this->start_date,
+                'endDate' => $this->end_date,
+                'website' => $this->website,
+                'poster' => $this->poster ? asset('storage/'.$this->poster ?? 'posters/no-poster.png') : asset('storage/posters/no-poster.png'),
+                'ticketsUrl' => $this->tickets_url,
+                'cfpUrl' => $this->cfp_url,
             ],
             'relationships' => [
                 'community' => new CommunityResource($this->community),
-                'address'   => new AddressBookResource($this->address_book),
+                'address' => new AddressBookResource($this->address_book),
             ],
             // 'relationships' => [
             //     'community' => [

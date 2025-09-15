@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\EventStatus;
@@ -47,6 +49,7 @@ class EventController extends ApiController
             }
             $user->bookmarks()->attach($event->id);
             $bookmarks = $user->bookmarks->pluck('id');
+
             return $this->success('Bookmark aggiunto', $bookmarks);
         } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             return $this->error('Forbidden: '.$e->getMessage(), 403);

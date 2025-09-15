@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Enums\EventStatus;
@@ -80,9 +82,9 @@ class EventResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListEvents::route('/'),
+            'index' => Pages\ListEvents::route('/'),
             'create' => Pages\CreateEvent::route('/create'),
-            'edit'   => Pages\EditEvent::route('/{record}/edit'),
+            'edit' => Pages\EditEvent::route('/{record}/edit'),
         ];
     }
 }
