@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
 
+/**
+ * @property \App\Models\AddressBook\Region $region
+ */
 class Province extends Model
 {
     use Searchable;
