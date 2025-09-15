@@ -36,13 +36,13 @@ class AddressBookController extends ApiController
             array_shift($regions);
         }
 
-        if ($cities && count($cities) > 0) {
+        if ($cities) {
             $results = array_merge($results, $cities);
         }
-        if ($provinces && count($provinces) > 0) {
+        if ($provinces) {
             $results = array_merge($results, $provinces);
         }
-        if ($regions && count($regions) > 0) {
+        if ($regions) {
             $results = array_merge($results, $regions);
         }
 
