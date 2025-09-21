@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property \App\Models\AddressBook\City $city
- * @property \App\Models\AddressBook\Province $province
- * @property \App\Models\AddressBook\Region $region
+ * @property City $city
+ * @property Province $province
+ * @property Region $region
  */
 class AddressBook extends Model
 {
