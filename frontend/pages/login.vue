@@ -41,21 +41,22 @@
 <script setup lang="ts">
 
 import type { FormError, FormSubmitEvent } from '@nuxt/ui'
+import { ref, onMounted } from 'vue'
 
 
-const loading = ref(false)
-const error = ref('')
+const loading = ref<boolean>(false)
+const error = ref<string>('')
 const { customInputUI, customPasswordInputUI } = useCustomUI()
 
 const { $apiFetch } = useNuxtApp()
 const { token, user } = useAuth()
 
-const state = reactive({
+const state = reactive<{ email: string, password: string }>({
     email: undefined,
     password: undefined
 })
 
-const showPassword = ref(false)
+const showPassword = ref<boolean>(false)
 const togglePassword = () => {
     console.log('sdsds');
     showPassword.value = !showPassword.value

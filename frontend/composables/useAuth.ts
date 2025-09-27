@@ -1,22 +1,25 @@
-// composables/useAuth.js
+// composables/useAuth.ts
+import { computed } from 'vue'
+import { useRuntimeConfig, useCookie, navigateTo } from '#app'
+
 export const useAuth = () => {
   const config = useRuntimeConfig()
-  const tokenExpirySeconds = parseInt(config.public.tokenExpirySeconds)
+  const tokenExpirySeconds: number = parseInt(config.public.tokenExpirySeconds as string, 10)
 
-  const token = useCookie('token', {
+  const token = useCookie<string | null>('token', {
     maxAge: tokenExpirySeconds,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
   })
 
-  const user = useCookie('user', {
+  const user = useCookie<string | null>('user', {
     maxAge: tokenExpirySeconds,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
   })
 
   // Computed per verificare se l'utente è autenticato
-  const isAuthenticated = computed(() => {
+  const isAuthenticated = computed<boolean>(() => {
     return !!(token.value && user.value)
   })
 

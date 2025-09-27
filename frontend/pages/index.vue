@@ -32,27 +32,35 @@
     </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 import Search from '../components/Search.vue'
 import Spinner from '../components/Spinner.vue'
 import EventMiniCard from '~/components/EventMiniCard.vue'
+import type { ApiResponse } from '~/types/api'
+import type { Event } from '~/types/events'
+import type { Pagination } from '~/types/pagination'
 
-const loading = ref(true)
-const error = ref('')
-const events = ref([])
+const loading = ref<boolean>(true)
+const error = ref<string>('')
+const events = ref<Event[]>([])
 const { $apiFetch } = useNuxtApp()
-const query = ref('')
-const selectedLocation = ref(null)
-const selectedType = ref('')
-let debounceTimeout = null
-const pagination = ref({})
+const query = ref<string>('')
+const selectedLocation = ref<any>(null)
+const selectedType = ref<string>('')
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null
+const pagination = ref<Pagination|null>({})
 
 onMounted(() => {
     fetchEvents()
 })
 
-watch(query, (val) => {
+type Location = {
+    field: string;
+    id: number;
+}
+
+watch(query, (val: string) => {
 
     if (debounceTimeout) clearTimeout(debounceTimeout)
     debounceTimeout = setTimeout(() => {
@@ -71,12 +79,12 @@ watch(query, (val) => {
     }, 500)
 })
 
-watch(selectedLocation, (val) => {
+watch(selectedLocation, (val: Location) => {
     let location = getLocationQuery()
     search(query.value, location)
 })
 
-function getLocationQuery() {
+function getLocationQuery(): Location | null {
     if (selectedLocation.value) {
         return {
             field: selectedLocation.value.type + '_id',
@@ -86,25 +94,25 @@ function getLocationQuery() {
     return null
 }
 
-const search = async (query = null, location = null) => {
+const search = async (query: string | null = null, location: Location | null = null) => {
     let params = '';
     if (query) params += '&filter[search]=' + query;
     if (location) params += '&filter[location]=' + location.field + ',' + location.id;
     fetchEvents(params);
 }
 
-const goToPage = (page) => {
+const goToPage = (page: number) => {
     const params = `&filter[search]=${query.value}&page=${page}`
     fetchEvents(params)
 }
 
 
-const fetchEvents = async (params = '') => {
+const fetchEvents = async (params = ''): Promise<void> => {
     loading.value = true;
     error.value = '';
 
     try {
-        const response = await $apiFetch('/events?' + params, {
+        const response = await $apiFetch<ApiResponse<Event>>('/events?' + params, {
             method: 'GET'
         })
 
