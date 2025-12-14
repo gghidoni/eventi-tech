@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressBookController;
+use App\Http\Controllers\AuthController;
 use App\Livewire\Counter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,9 +16,11 @@ Route::get('/', function () {
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
 
 
-Route::get('/pippo', function () {
-    return view('pippo');
+Route::get('/login', function () {
+    return view('login');
 });
+
+// Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

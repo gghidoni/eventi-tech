@@ -11,7 +11,7 @@
             <a href="/">
                 <img src="/images/logo.png" alt="Logo" class="w-24">
             </a>
-            {{-- TODO Inserire menu --}}
+            <livewire:hamburger-menu />
         </div>
     </nav>
 

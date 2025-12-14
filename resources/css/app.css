@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../../vendor/livewire/flux/dist/flux.css";
+@import "./fonts.css";
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -11,6 +12,9 @@
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
+
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    --font-anta: "Anta", ui-sans-serif, system-ui, sans-serif;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -47,7 +51,6 @@
     --ui-error: #f19cba;
 }
 
-
 @layer theme {
     .dark {
         --color-accent: var(--color-white);
@@ -63,6 +66,11 @@
     ::backdrop,
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
+    }
+
+    body {
+        font-family: "JetBrains Mono", monospace;
+        @apply text-gray-300;
     }
 }
 
@@ -80,36 +88,25 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-
-body {
-  font-family: 'JetBrains Mono', monospace;
-  @apply text-gray-300
-}
-
 .font-anta {
-    font-family: 'Anta';
+    font-family: "Anta";
 }
 
 .input-et {
-    @apply w-full pr-10 pl-3 h-[40px] border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm;
+    @apply w-full pr-10 pl-3 h-[40px] border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm!;
 }
 
-
 .page {
-    @apply container mx-auto py-8 px-6 flex flex-col
+    @apply container mx-auto py-8 px-6 flex flex-col;
 }
 
 .page-title {
-    @apply text-3xl text-white
+    @apply text-3xl text-white;
 }
 
 .las-bg-white {
-    background-color: #2b2b2b!important;
+    background-color: #2b2b2b !important;
 }
-
-
-
-
 
 /* \[:where(&)\]:size-4 {
     @apply size-4;

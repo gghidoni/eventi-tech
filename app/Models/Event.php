@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Http\Filters\V1\QueryFilter;
+use App\Enums\EventStatus;
 use App\Models\AddressBook\AddressBook;
-use Illuminate\Database\Eloquent\Attributes\Scope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
 class Event extends Model
@@ -49,6 +50,11 @@ class Event extends Model
         return $array;
     }
 
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', EventStatus::Active->value);
+    }
+
     public function community(): BelongsTo
     {
         return $this->belongsTo(Community::class);
@@ -62,6 +68,19 @@ class Event extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function getPosterImgAttribute(): string
+    {
+        if ($this->poster) {
+            return asset('storage/' . $this->poster);
+        }
+        return 'https://robohash.org/' . $this->id;
+    }
+
+    public function getFormattedStartDateAttribute(): string
+    {
+        return Carbon::parse($this->start_date)->format('d/m/Y');
     }
 
     // #[Scope]

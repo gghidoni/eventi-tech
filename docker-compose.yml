@@ -63,6 +63,8 @@ services:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-masterKey123}  # chiave master
     ports:
       - "7700:7700"
+    volumes:
+    - eventi-tech-meili-data:/meili_data
     networks:
       - eventi-tech-net
     restart: unless-stopped
@@ -73,4 +75,6 @@ networks:
 
 volumes:
   eventi-tech-postgres:
+    driver: local
+  eventi-tech-meili-data:
     driver: local
