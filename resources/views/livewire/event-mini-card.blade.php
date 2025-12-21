@@ -20,21 +20,28 @@ new class extends Component {
 
     public function toggleBookmark(ToggleBookmarkAction $action)
     {
+        // Utente non loggato
         if (!auth()->check()) {
             return redirect('/login');
-        } else {
-            try {
-                $action->execute(auth()->user(), $this->event->id);
-                $this->isBookmarked = !$this->isBookmarked;
-                $this->menuOpen = false;
-
-                $message = $this->isBookmarked ? 'evento aggiunto ai preferiti' : 'evento rimosso dai preferiti';
-                $this->dispatch('messageSent', message: $message, success: true);
-            } catch (\Throwable $th) {
-                $message = 'Si è verificato un errore';
-                $this->dispatch('messageSent', message: $message, success: false);
-            }
         }
+
+        // Utente loggato ma NON verificato
+        if (!Auth::user()->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+        try {
+            $action->execute(auth()->user(), $this->event->id);
+            $this->isBookmarked = !$this->isBookmarked;
+            $this->menuOpen = false;
+
+            $message = $this->isBookmarked ? 'evento aggiunto ai preferiti' : 'evento rimosso dai preferiti';
+            $this->dispatch('messageSent', message: $message, success: true);
+        } catch (\Throwable $th) {
+            $message = 'Si è verificato un errore';
+            $this->dispatch('messageSent', message: $message, success: false);
+        }
+
     }
 
     public function mount()

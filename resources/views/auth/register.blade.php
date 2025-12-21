@@ -1,4 +1,4 @@
-<x-layouts.base :title="__('Register')">
+<x-layouts.base :title="__('Register')" isDashboard="false">
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 class="mt-10 text-center text-2xl/9 font-bold">Registrati</h2>
@@ -18,7 +18,7 @@
 
                 {{-- Nome --}}
                 <div>
-                    <label for="name" class="block text-sm font-medium">Nome</label>
+                    <label for="name" class="block text-sm font-medium mb-1">Nome</label>
                     <input id="name" name="name" type="text" value="{{ old('name') }}" class="input-et"
                         required>
                     @error('name')
@@ -28,7 +28,7 @@
 
                 {{-- Email --}}
                 <div>
-                    <label for="email" class="block text-sm font-medium">Email</label>
+                    <label for="email" class="block text-sm font-medium mb-1">Email</label>
                     <input id="email" name="email" type="email" value="{{ old('email') }}" class="input-et"
                         required>
                     @error('email')
@@ -38,7 +38,7 @@
 
                 {{-- Password --}}
                 <div>
-                    <label for="password" class="block text-sm font-medium">Password</label>
+                    <label for="password" class="block text-sm font-medium mb-1">Password</label>
                     <div class="relative">
                         <input id="password" name="password" :type="showPassword ? 'text' : 'password'"
                             class="input-et" required>
@@ -56,7 +56,7 @@
 
                 {{-- Conferma Password --}}
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium">Conferma Password</label>
+                    <label for="password_confirmation" class="block text-sm font-medium mb-1">Conferma Password</label>
                     <div class="relative">
                         <input id="password_confirmation" name="password_confirmation"
                             :type="showConfirm ? 'text' : 'password'" class="input-et" required>
@@ -76,7 +76,7 @@
                 <div class="mt-10">
                     <button type="submit"
                         class="w-full flex items-center justify-center bg-accent text-background px-4 py-2 rounded-md hover:bg-accent/90 mt-4">
-                        Registrati
+                        registrati
                         <img class="ml-3 w-3" src="/icons/right-black.svg" alt="">
                     </button>
                 </div>
@@ -85,7 +85,7 @@
             {{-- Link a login --}}
             <p class="mt-4 text-center text-sm text-gray-600">
                 Hai già un account?
-                <a href="/login" class="text-accent hover:underline">Accedi</a>
+                <a href="/login" class="text-accent hover:underline">accedi</a>
             </p>
 
         </div>

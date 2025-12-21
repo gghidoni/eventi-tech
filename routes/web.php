@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Livewire\Counter;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -14,43 +15,35 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
+// EVENTS
 Route::prefix('events')->group(function () {
-    // Route::get('/', [EventController::class, 'index'])->name('events.index');
     Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
 });
-
 
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
 
 
-Route::get('/login', function () {
-    return view('auth.login');
-});
-
-Route::get('/register', function () {
-    return view('auth.register');
-});
-
-
-
+// AUTH
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/thanks-register', [AuthController::class, 'thanksRegister'])->name('thanks-register');
 
 // Quando utente non è verificato e visita rotte verified
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', [AuthController::class, 'verificationNotice'])->middleware('auth')->name('verification.notice');
 
 // Link di ritorno da mail di verifica
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-
-    return redirect('/');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'redirectEmailVerification'])->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    // DASHBOARD
     Route::prefix('dashboard')->group(function () {
-        Route::get('bookmarks', function () {
-            return view('bookmarks');
-        });
+        Route::get('bookmarks', [DashboardController::class, 'bookmarks'])->name('dashboard.bookmarks');
+        Route::get('communities', [DashboardController::class, 'communities'])->name('dashboard.communities');
+
+        // COMMUNITY
+        Route::get('my-events', [DashboardController::class, 'myEvents'])->name('dashboard.my-events');
+        Route::get('create-event', [DashboardController::class, 'createEvent'])->name('dashboard.create-event');
     });
 });
 

@@ -1,4 +1,4 @@
-<x-layouts.base :title="$event->title">
+<x-layouts.base :title="$event->title" isDashboard="false">
     <div class="container mx-auto py-8 px-6 flex flex-col">
         <div>
             <h1 class="text-3xl font-anta text-cyan">{{ $event->title }}</h1>
@@ -16,9 +16,8 @@
             <img src="{{$event->poster_img}}" alt="" class="w-full rounded-md flex-shrink-0 mt-3 bg-gray-700">
             <div class="flex justify-between mt-3 items-center">
                 <div class="flex items-center space-x-1.5">
-                    {{-- TODO: logo community --}}
-                    <img src="/"
-                        alt="" class="rounded-full w-7 border border-cyan">
+                    <img src="{{ $event->community->logo_img}}"
+                        alt="" class="rounded-full w-7">
                     <span class="text-sm font-anta">{{ $event->community->name }}</span>
                 </div>
                 {{-- <BookmarkButton v-if="event" :eventId="event.id" /> --}}

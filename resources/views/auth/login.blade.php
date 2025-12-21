@@ -1,4 +1,4 @@
-<x-layouts.base :title="__('Login')">
+<x-layouts.base :title="__('Login')" isDashboard="false">
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 class="mt-10 text-center text-2xl/9 font-bold">Accedi</h2>
@@ -26,7 +26,7 @@
                 @csrf
 
                 <div>
-                    <label for="email" class="block text-sm font-medium">Email</label>
+                    <label for="email" class="block text-sm font-medium mb-1">Email</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" required
                         class="input-et" />
                     @error('email')
@@ -35,7 +35,7 @@
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-medium">Password</label>
+                    <label for="password" class="block text-sm font-medium mb-1">Password</label>
                     <input type="password" id="password" name="password" required
                         class="input-et" />
                     @error('password')
@@ -49,11 +49,17 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full flex items-center justify-center bg-accent text-background px-4 py-2 rounded-md hover:bg-accent/90 mt-4">
-                    Login
+                    class="w-full flex items-center justify-center bg-accent text-background px-4 py-2 rounded-md hover:bg-accent/90 mt-8">
+                    login
                     <img class="ml-3 w-3" src="/icons/right-black.svg" alt="">
                 </button>
             </form>
+
+            {{-- Link a login --}}
+            <p class="mt-4 text-center text-sm text-gray-600">
+                Non sei ancora registrato?
+                <a href="/register" class="text-accent hover:underline">registrati</a>
+            </p>
 
             {{-- <div class="mt-4 text-center">
                 <a href="{{ route('password.request') }}" class="text-sm text-accent hover:underline">
