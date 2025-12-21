@@ -41,13 +41,11 @@ new class extends Component {
             @if (!$isDashboard)
                 <ul class="text-xl flex flex-col mt-6">
                     <li>
-                        <a href="/" wire:click="closeMenu">home</a>
+                        <x-menu-item icon="home-white" label="home" url="/" />
                     </li>
                     <li class="mt-2">
-                        <a href="/about" wire:click="closeMenu">eventi</a>
-                    </li>
-                    <li class="mt-2">
-                        <a href="/dashboard/bookmarks" wire:click="closeMenu">preferiti</a>
+                        <x-menu-item icon="heart-white" label="preferiti"
+                            url="{{ auth()->check() ? 'dashboard/bookmarks' : 'login' }}" />
                     </li>
                 </ul>
             @else
@@ -57,8 +55,8 @@ new class extends Component {
                                 src="/icons/home-white.svg" alt=""><span>home</span></a>
                     </li>
                     <li>
-                        <a class="flex space-x-2 items-center" href="/dashboard/bookmarks" wire:click="closeMenu"><img
-                                src="/icons/heart-white.svg" alt=""><span>preferiti</span></a>
+                        <a class="flex space-x-2 items-center" href="/"><img src="/icons/heart-white.svg"
+                                alt=""><span>preferiti</span></a>
                     </li>
                     <li>
                         <a class="flex space-x-2 items-center" href="/" wire:click="closeMenu"><img
@@ -83,26 +81,25 @@ new class extends Component {
                             <span class="user-info text-pink">
                                 {{ $user->name }}
                             </span>
-                        </li>
-                        <li class="mt-2">
                             <form method="POST" action="/logout">
                                 @csrf
-                                <button type="submit" class="cursor-pointer">
-                                    logout
+                                <button type="submit" class="cursor-pointer flex items-center text-xl">
+                                    <img src="/icons/logout-2-white.svg" alt="" class="!w-4 ml-2">
                                 </button>
                             </form>
                         </li>
+                       
                     </ul>
                 </div>
             @else
                 <!-- Menu per utenti non autenticati -->
                 <div>
-                    <ul class="mt-9 text-cyan">
+                    <ul class="mt-9">
                         <li class="mt-2">
-                            <a href="/login" wire:click="closeMenu">login</a>
+                            <x-menu-item icon="login-white" label="login" url="/login" />
                         </li>
                         <li class="mt-2">
-                            <a href="/register" wire:click="closeMenu">registrati</a>
+                            <x-menu-item icon="register-white" label="registrati" url="/register" />
                         </li>
                     </ul>
                 </div>

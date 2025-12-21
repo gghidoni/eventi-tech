@@ -83,6 +83,23 @@ class Event extends Model
         return Carbon::parse($this->start_date)->format('d/m/Y');
     }
 
+    public function getFormattedDatetimeStartAttribute(): string
+    {
+        return Carbon::parse($this->start_date)->format('d/m/Y H:i');
+    }
+
+    public function getFormattedDatetimeEndAttribute(): string
+    {
+        return Carbon::parse($this->end_date)->format('d/m/Y H:i');
+    }
+
+    public function getPublicUrlAttribute(): string
+    {
+        return '/events/'.$this->id;
+    }
+
+
+
     // #[Scope]
     // protected function filter(Builder $builder, QueryFilter $filters)
     // {

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Community::class);
             $table->string('title')->index();
             $table->enum('status', array_column(EventStatus::cases(), 'value'))->index();
-            $table->string('description');
+            $table->text('description');
             $table->enum('type', array_column(EventType::cases(), 'value'))->index();
             $table->foreignIdFor(AddressBook::class);
             $table->datetime('start_date')->index();

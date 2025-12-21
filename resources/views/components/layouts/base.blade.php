@@ -16,7 +16,8 @@
     </nav>
 
     <section class="main-content pt-[72px]">
-		{{$slot}}
+        <livewire:messages />
+        {{ $slot }}
     </section>
 
     @fluxScripts
