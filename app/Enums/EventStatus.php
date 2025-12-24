@@ -7,7 +7,7 @@ namespace App\Enums;
 enum EventStatus: string
 {
     case Pending = 'pending';
-    case Active = 'activated';
-    case Terminated = 'terminated';
-    case Rejected = 'rejected';
+    case Active = 'active';
+    case Terminate = 'terminate';
+    case Reject = 'reject';
 }

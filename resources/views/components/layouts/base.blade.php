@@ -11,7 +11,7 @@
             <a href="/">
                 <img src="/images/logo.png" alt="Logo" class="w-24">
             </a>
-            <livewire:hamburger-menu isDashboard="{{$isDashboard}}" />
+            <livewire:hamburger-menu />
         </div>
     </nav>
 

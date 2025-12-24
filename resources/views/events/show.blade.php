@@ -1,4 +1,4 @@
-<x-layouts.base :title="$event->title" isDashboard="false">
+<x-layouts.base :title="$event->title">
     <div class="container mx-auto py-8 px-6 flex flex-col">
         <div>
             <h1 class="text-3xl font-anta text-cyan">{{ $event->title }}</h1>

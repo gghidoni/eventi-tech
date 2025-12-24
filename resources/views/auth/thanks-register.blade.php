@@ -1,4 +1,4 @@
-<x-layouts.base :title="__('Grazie per esserti registrato')" isDashboard="false">
+<x-layouts.base :title="__('Grazie per esserti registrato')">
     <div class="flex flex-col gap-6 mt-14 page">
         <flux:text class="text-center">
             {{ __('Grazie per esserti registrato!') }}

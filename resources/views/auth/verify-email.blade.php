@@ -1,4 +1,4 @@
-<x-layouts.base :title="__('Verifica il tuo indirizzo email')" isDashboard="false">
+<x-layouts.base :title="__('Verifica il tuo indirizzo email')">
     <div class="flex flex-col gap-6 mt-14 page">
         <flux:text class="text-center">
             {{ __('Per favore verifica il tuo indirizzo email cliccando sul link che ti abbiamo appena inviato.') }}

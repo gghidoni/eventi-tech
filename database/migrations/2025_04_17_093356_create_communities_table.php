@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\CommunityStatus;
 
 return new class extends Migration
 {
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->string('name');
             $table->string('slug');
+            $table->enum('status', array_column(CommunityStatus::cases(), 'value'))->index()->default(CommunityStatus::Pending->value);
             $table->text('description');
             $table->string('website')->nullable();
             $table->string('logo')->nullable();

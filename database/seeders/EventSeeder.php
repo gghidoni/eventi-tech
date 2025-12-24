@@ -62,7 +62,7 @@ class EventSeeder extends Seeder
                 'community_id' => 1, // ID per "Java Ancona"
                 'title'        => 'PHP 8.1: Novità e Migrazione',
                 'description'  => 'Partecipa a questo incontro per scoprire le novità introdotte in PHP 8.1 e come migrare le tue applicazioni.',
-                'status'       => EventStatus::Rejected,
+                'status'       => EventStatus::Reject,
                 'type'         => EventType::InPerson,
                 'start_date'   => now()->addDays(15),
                 'end_date'     => now()->addDays(15)->addHours(3),
@@ -88,7 +88,7 @@ class EventSeeder extends Seeder
                 'community_id' => 3, // ID per "Wordpress Meetup Firenze"
                 'title'        => 'Introduzione a Kubernetes e Docker',
                 'description'  => 'Un seminario per imparare a utilizzare Docker e Kubernetes per la gestione dei container in produzione.',
-                'status'       => EventStatus::Terminated,
+                'status'       => EventStatus::Terminate,
                 'type'         => EventType::Hybrid,
                 'start_date'   => now()->addDays(25),
                 'end_date'     => now()->addDays(25)->addHours(5),
@@ -166,7 +166,7 @@ class EventSeeder extends Seeder
                 'community_id' => 3, // ID per "Wordpress Meetup Firenze"
                 'title'        => 'Introduzione a Kubernetes e Docker',
                 'description'  => 'Un seminario per imparare a utilizzare Docker e Kubernetes per la gestione dei container in produzione. Altro testo per il seminario. Un seminario per imparare a utilizzare Docker e Kubernetes per la gestione dei container in produzione.',
-                'status'       => EventStatus::Rejected,
+                'status'       => EventStatus::Reject,
                 'type'         => EventType::Hybrid,
                 'start_date'   => now()->addDays(35),
                 'end_date'     => now()->addDays(35)->addHours(5),
@@ -179,7 +179,7 @@ class EventSeeder extends Seeder
                 'community_id' => 1, // ID per "Java Ancona"
                 'title'        => 'Java 17: Novità e Migrazione',
                 'description'  => 'Partecipa a questo incontro per scoprire le novità introdotte in Java 17 e come migrare le tue applicazioni.',
-                'status'       => EventStatus::Terminated,
+                'status'       => EventStatus::Terminate,
                 'type'         => EventType::InPerson,
                 'start_date'   => now()->addDays(30),
                 'end_date'     => now()->addDays(30)->addHours(3),
