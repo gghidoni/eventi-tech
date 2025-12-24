@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Event;
+use Exception;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Log;
@@ -33,10 +34,11 @@ class EventsSearch extends Component
 
         if ($this->location) {
             $locationData = json_decode($this->location, true);
-            match ($locationData['type']) {
-                'comune'    => $field = 'city_id',
-                'provincia' => $field = 'province_id',
-                'regione'   => $field = 'region_id',
+            $field = match ($locationData['type']) {
+                'comune'    => 'city_id',
+                'provincia' => 'province_id',
+                'regione'   => 'region_id',
+                default     => throw new Exception('Tipo di location non valido'),
             };
             $events = $events->whereHas('address_book', function ($q) use ($field, $locationData) {
                 $q->where($field, $locationData['id']);

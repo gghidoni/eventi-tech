@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
 
+
 class Event extends Model
 {
     use HasFactory;
@@ -40,9 +41,9 @@ class Event extends Model
         $array = $this->toArray();
         $array['title'] = $this->title;
         $array['description'] = $this->description;
-        $array['city_id'] = $this->address_book->city_id;
-        $array['province_id'] = $this->address_book->province_id;
-        $array['region_id'] = $this->address_book->region_id;
+        $array['city_id'] = $this->address_book?->city_id;
+        $array['province_id'] = $this->address_book?->province_id;
+        $array['region_id'] = $this->address_book?->region_id;
         $array['start_date'] = $this->start_date;
         $array['end_date'] = $this->end_date;
 
