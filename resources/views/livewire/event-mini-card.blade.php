@@ -31,9 +31,13 @@ new class extends Component {
         }
 
         try {
-            $action->execute(auth()->user(), $this->event->id);
-            $this->isBookmarked = !$this->isBookmarked;
+            $isBookmarked = $action->execute(auth()->user(), $this->event->id);
+            $this->isBookmarked = $isBookmarked;
             $this->menuOpen = false;
+
+            if (!$this->isBookmarked) {
+                $this->dispatch('bookmarkUpdated');
+            }
 
             $message = $this->isBookmarked ? 'evento aggiunto ai preferiti' : 'evento rimosso dai preferiti';
             $this->dispatch('messageSent', message: $message, success: true);
@@ -53,11 +57,6 @@ new class extends Component {
 ?>
 
 <div class="flex pt-2 mb-5 w-full">
-    @if (session('success'))
-        <div class="bg-green-100 text-green-800 p-2 rounded">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0">
         <!--- h-28??? -->

@@ -29,10 +29,6 @@ class EventsSearch extends Component
 
     public function render()
     {
-        \Log::info('=== START RENDER ===');
-        \Log::info('Query: ' . $this->query);
-        \Log::info('Location: ' . $this->location);
-
         $events = Event::query();
 
         if ($this->location) {
@@ -50,14 +46,10 @@ class EventsSearch extends Component
         $searchIds = [];
         if (strlen($this->query) > 2) {
             $searchIds = Event::search($this->query)->get()->pluck('id')->toArray();
-            \Log::info('Search IDs: ' . implode(',', $searchIds));
             $events = $events->whereIn('id', $searchIds);
-            \Log::info('Events: ' . $events->get());
         }
 
-        \Log::info('=== END RENDER ===');
-
-        $events = $events->with('address_book.city', 'address_book.province')->get();
+        $events = $events->with('address_book.city', 'address_book.province')->paginate(8);
 
         return view('livewire.events-search', [
             'events' => $events,
