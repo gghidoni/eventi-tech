@@ -4,9 +4,6 @@ use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
-use App\Livewire\Counter;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -21,7 +18,6 @@ Route::prefix('events')->group(function () {
 });
 
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
-
 
 // AUTH
 Route::get('/login', [AuthController::class, 'login'])->name('login');

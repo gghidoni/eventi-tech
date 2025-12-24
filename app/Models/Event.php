@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
 class Event extends Model
@@ -73,9 +72,10 @@ class Event extends Model
     public function getPosterImgAttribute(): string
     {
         if ($this->poster) {
-            return asset('storage/' . $this->poster);
+            return asset('storage/'.$this->poster);
         }
-        return 'https://robohash.org/' . $this->id;
+
+        return 'https://robohash.org/'.$this->id;
     }
 
     public function getFormattedStartDateAttribute(): string
@@ -97,8 +97,6 @@ class Event extends Model
     {
         return '/events/'.$this->id;
     }
-
-
 
     // #[Scope]
     // protected function filter(Builder $builder, QueryFilter $filters)

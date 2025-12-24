@@ -2,8 +2,8 @@
 
 namespace App\Actions\Fortify;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 
@@ -13,16 +13,16 @@ class AuthenticateUser
     {
         $request->validate([
             Fortify::username() => 'required|email',
-            'password' => 'required',
+            'password'          => 'required',
         ], [
-            'email.required' => 'Inserisci la tua email',
+            'email.required'    => 'Inserisci la tua email',
             'password.required' => 'Inserisci la password',
         ]);
 
-         // Tentativo di autenticazione
+        // Tentativo di autenticazione
         if (!Auth::attempt(
             $request->only(Fortify::username(), 'password'),
-            $request->boolean('remember')
+            $request->boolean('remember'),
         )) {
             throw ValidationException::withMessages([
                 Fortify::username() => ['Le credenziali fornite non corrispondono.'],

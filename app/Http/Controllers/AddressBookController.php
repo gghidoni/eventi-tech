@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AddressBook\City;
 use App\Models\AddressBook\Province;
 use App\Models\AddressBook\Region;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AddressBookController extends Controller
 {
@@ -24,21 +24,21 @@ class AddressBookController extends Controller
             return [
                 'value' => json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $city->name]),
                 'label' => $city->name,
-                'id' => $city->id,
+                'id'    => $city->id,
             ];
         })->toArray();
         $provinces = Province::search($query)->take(3)->get()->map(function ($province) {
             return [
                 'value' => json_encode(['type' => 'provincia', 'id' => $province->id, 'name' => $province->name]),
                 'label' => $province->name,
-                'id' => $province->id,
+                'id'    => $province->id,
             ];
         })->toArray();
         $regions = Region::search($query)->take(2)->get()->map(function ($region) {
             return [
                 'value' => json_encode(['type' => 'regione', 'id' => $region->id, 'name' => $region->name]),
                 'label' => $region->name,
-                'id' => $region->id,
+                'id'    => $region->id,
             ];
         })->toArray();
 

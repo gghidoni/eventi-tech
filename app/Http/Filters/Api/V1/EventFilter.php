@@ -16,7 +16,7 @@ class EventFilter extends QueryFilter
 
     public function include($value)
     {
-        return $this->builder->with(explode(',', $value)); 
+        return $this->builder->with(explode(',', $value));
     }
 
     public function status($value)
@@ -61,7 +61,7 @@ class EventFilter extends QueryFilter
         $field = explode(',', $value)[0];
         $id = explode(',', $value)[1];
 
-        if (! in_array($field, ['province_id', 'city_id', 'region_id'])) {
+        if (!in_array($field, ['province_id', 'city_id', 'region_id'])) {
             return $this->builder;
         }
 

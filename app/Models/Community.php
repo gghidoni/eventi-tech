@@ -34,7 +34,7 @@ class Community extends Model
         return $this->belongsTo(User::class);
     }
 
-        protected function getLogoImgAttribute(): string
+    protected function getLogoImgAttribute(): string
     {
         if ($this->avatar) {
             return Storage::url($this->logo);

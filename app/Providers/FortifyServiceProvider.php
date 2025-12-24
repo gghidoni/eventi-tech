@@ -39,7 +39,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::authenticateUsing(new AuthenticateUser());
+        Fortify::authenticateUsing(new AuthenticateUser);
     }
 
     /**
