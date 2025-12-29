@@ -12,6 +12,19 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
+Route::get('/debug-lang', function () {
+    $locale = app()->getLocale();
+    $targetPath = lang_path($locale . '/validation.php');
+    
+    return [
+        '1. Locale Corrente' => $locale,
+        '2. Percorso dove Laravel cerca' => $targetPath,
+        '3. Il file esiste davvero?' => file_exists($targetPath) ? 'SÌ' : 'NO',
+        '4. Test Traduzione' => __('validation.required', ['attribute' => 'nome']),
+        '5. Cartella lang di root esiste?' => is_dir(base_path('lang')) ? 'SÌ' : 'NO',
+    ];
+});
+
 // EVENTS
 Route::prefix('events')->group(function () {
     Volt::route('/{event}', 'events.show')->name('events.show');

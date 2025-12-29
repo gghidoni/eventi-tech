@@ -93,7 +93,11 @@ select:focus[data-flux-control] {
 }
 
 .input-et {
-    @apply w-full pr-10 pl-3 h-[40px] border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm!;
+    @apply w-full pr-10 pl-3 h-[40px] border border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm!;
+}
+
+.textarea-et {
+    @apply w-full pr-10 pl-3 border border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm!;
 }
 
 .page {
