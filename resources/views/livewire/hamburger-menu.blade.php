@@ -69,7 +69,7 @@ new class extends Component {
                             url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />
                     </li>
                     <li>
-                        <x-menu-item icon="users-white" label="community" url="{{ route('dashboard.communities') }}" />
+                        <x-menu-item icon="users-white" label="community" url="{{ route('dashboard.communities.index') }}" />
                     </li>
                     <li>
                         <x-menu-item icon="calendar-white" label="i miei eventi"

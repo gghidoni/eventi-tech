@@ -14,7 +14,7 @@ Route::get('/', function () {
 
 // EVENTS
 Route::prefix('events')->group(function () {
-    Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
+    Volt::route('/{event}', 'events.show')->name('events.show');
 });
 
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
@@ -41,8 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         Route::prefix('communities')->group(function () {
             // Route::get('/', [DashboardController::class, 'communities'])->name('dashboard.communities');
-            Volt::route('/', 'dashboard.communities')->name('dashboard.communities');
-            Volt::route('create', 'dashboard.communities-create')->name('dashboard.communities.create');
+            Volt::route('/', 'dashboard.communities.index')->name('dashboard.communities.index');
+            Volt::route('create', 'dashboard.communities.create')->name('dashboard.communities.create');
         });
 
         // COMMUNITY
