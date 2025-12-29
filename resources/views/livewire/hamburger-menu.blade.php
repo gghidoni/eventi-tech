@@ -49,6 +49,11 @@ new class extends Component {
                     <li>
                         <x-menu-item icon="home-white" label="home" url="/" />
                     </li>
+                    @if (auth()->check())
+                        <li class="mt-2">
+                            <x-menu-item icon="dashboard-white" label="dashboard" url="/" />
+                        </li>
+                    @endif
                     <li class="mt-2">
                         <x-menu-item icon="heart-white" label="preferiti"
                             url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />

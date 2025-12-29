@@ -10,9 +10,4 @@ class DashboardController extends Controller
     {
         return view('dashboard.bookmarks');
     }
-
-    public function communities(): View
-    {
-        return view('dashboard.communities');
-    }
 }

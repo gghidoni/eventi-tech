@@ -34,8 +34,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // DASHBOARD
     Route::prefix('dashboard')->group(function () {
-        Route::get('bookmarks', [DashboardController::class, 'bookmarks'])->name('dashboard.bookmarks');
-        Route::get('communities', [DashboardController::class, 'communities'])->name('dashboard.communities');
+        Volt::route('bookmarks', 'dashboard.bookmarks')->name('dashboard.bookmarks');
+
+        Volt::route('communities', 'dashboard.communities')
+            ->name('dashboard.communities');
+        
+        Route::prefix('communities')->group(function () {
+            // Route::get('/', [DashboardController::class, 'communities'])->name('dashboard.communities');
+            Volt::route('/', 'dashboard.communities')->name('dashboard.communities');
+            Volt::route('create', 'dashboard.communities-create')->name('dashboard.communities.create');
+        });
 
         // COMMUNITY
         Route::get('my-events', [DashboardController::class, 'myEvents'])->name('dashboard.my-events');

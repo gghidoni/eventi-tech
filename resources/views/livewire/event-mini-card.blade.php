@@ -58,14 +58,14 @@ new class extends Component {
 
 <div class="flex pt-2 mb-5 w-full">
 
-    <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0">
+    <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
         <!--- h-28??? -->
         <img src="{{ $event->poster_img }}" alt="" class="h-28 rounded-md bg-gray-700" />
 
     </a>
 
     <div class="flex flex-col justify-between pl-2.5 pr-2 w-full">
-        <a href="{{ $event->public_url }}">
+        <a href="{{ $event->public_url }}" wire:navigate>
             <div class="flex flex-col">
                 <span class="text-[9px] text-white opacity-70">{{ trans('titles.event.type.' . $event->type) }}</span>
                 <h3 class="text-pink font-anta leading-[18px]">{{ $event->title }}</h3>
@@ -93,7 +93,7 @@ new class extends Component {
                 wire:click.outside="closeMenu">
                 <div class="py-1">
                     <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
-                        href="{{ $event->public_url }}">
+                        href="{{ $event->public_url }}" wire:navigate>
                         Apri
                     </a>
                     @if (!$isBookmarked)

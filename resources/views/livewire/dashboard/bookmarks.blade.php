@@ -7,11 +7,13 @@ use Livewire\Attributes\On;
 new class extends Component {
     use WithPagination;
 
-    #[On('bookmarkUpdated')]
-    public function refreshBookmarks()
+    public function rendering($view)
     {
-
+        $view->layout('components.layouts.base', ['title' => __('Eventi preferiti')]);
     }
+
+    #[On('bookmarkUpdated')]
+    public function refreshBookmarks() {}
 
     public function with()
     {
@@ -32,7 +34,7 @@ new class extends Component {
     @endif
     <div class="mt-8">
         @foreach ($events as $event)
-            <livewire:event-mini-card :event="$event" wire:key="{{$event->id}}" />
+            <livewire:event-mini-card :event="$event" wire:key="{{ $event->id }}" />
         @endforeach
     </div>
 
