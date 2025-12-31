@@ -20,7 +20,7 @@
         {{ $slot }}
     </section>
 
-    @fluxScripts
+    {{-- @fluxScripts --}}
     @stack('scripts')
 </body>
 

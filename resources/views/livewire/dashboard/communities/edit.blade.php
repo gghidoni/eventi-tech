@@ -1,10 +1,10 @@
 <?php
 
 use Livewire\Volt\Component;
-use Livewire\Attributes\Validate;
 use App\Models\Community;
-use App\Actions\CreateCommunity;
 use Livewire\WithFileUploads;
+use App\Actions\UpdateCommunity;
+use Livewire\Attributes\Validate;
 
 new class extends Component {
     use WithFileUploads;
@@ -31,25 +31,35 @@ new class extends Component {
     public string $phone = '';
 
     #[Validate(['nullable', 'image', 'max:1024'])]
-    public $logo = '';
+    public $logo;
+
+    public Community $community;
+
+    public function mount(Community $community)
+    {
+        $this->community = $community;
+
+        $this->fill($this->community->only(['name', 'description', 'website', 'linkedin', 'instagram', 'facebook', 'phone']));
+    }
 
     public function rendering($view)
     {
-        $view->layout('components.layouts.base', ['title' => __('Community')]);
+        $view->layout('components.layouts.base', ['title' => $this->community->name]);
     }
 
-    public function save(CreateCommunity $action)
+    public function save(UpdateCommunity $action)
     {
         $data = $this->validate();
 
         if ($this->logo) {
-            
             $data['logo'] = $this->logo->store('communities/logos', 'public');
+        } else {
+            unset($data['logo']);
         }
 
-        $action->execute($data);
+        $action->execute($this->community, $data);
 
-        return redirect()->route('dashboard.communities.index')->with('message', 'Community creata con successo, attendi l\'approvazione');
+        return redirect()->route('dashboard.communities.index')->with('message', 'Community aggiornata con successo!');
     }
 }; ?>
 
@@ -134,8 +144,7 @@ new class extends Component {
                         </span>
 
                         {{-- Input REALE nascosto --}}
-                        <input type="file" id="logo" wire:model="logo" class="hidden"
-                            accept="image/*" />
+                        <input type="file" id="logo" wire:model="logo" class="hidden" accept="image/*" />
                     </label>
                 </div>
 
@@ -143,6 +152,9 @@ new class extends Component {
                 <div class="shrink-0">
                     @if ($logo)
                         <img src="{{ $logo->temporaryUrl() }}"
+                            class="size-16 rounded-full object-cover border border-gray-600">
+                    @elseif ($community->logo_img)
+                        <img src="{{ $community->logo_img }}"
                             class="size-16 rounded-full object-cover border border-gray-600">
                     @else
                         <div
@@ -164,7 +176,7 @@ new class extends Component {
         </div>
 
         <button type="submit" class="flex items-center space-x-2 text-cyan underline mt-6">
-            <span>crea</span>
+            <span>salva</span>
             <img src="/icons/right-cyan.svg" alt="">
         </button>
     </form>

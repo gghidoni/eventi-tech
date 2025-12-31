@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\CommunityStatus;
 use App\Notifications\VerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -49,6 +50,19 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password'          => 'hashed',
+        ];
+    }
+
+    /**
      * Relationship Community
      */
     public function communities(): HasMany
@@ -64,18 +78,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Event::class);
     }
 
-    // public function canAccessPanel(Panel $panel): bool
-    // {
-    //     if ($panel->getId() === 'admin') {
-    //         return $this->is_admin;
-    //     }
-    //     if ($panel->getId() === 'community') {
-    //         return $this->communities()->exists();
-    //     }
-
-    //     return true;
-    // }
-
     protected function getAvatarImgAttribute(): string
     {
         if ($this->avatar) {
@@ -86,21 +88,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-        ];
-    }
-
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
     }
+
+    public function getHasActiveCommunityAttribute(): bool
+    {
+        return $this->communities()->where('status', CommunityStatus::Active->value)->exists();
+    }
 }
+ 

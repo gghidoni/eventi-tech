@@ -30,8 +30,13 @@ new class extends Component {
             <div class="absolute right-0 top-7.5 mt-1 w-48 bg-white rounded-md shadow-lg z-10"
                 wire:click.outside="closeMenu">
                 <div class="py-1">
-                    <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer" href="">
+                    <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        href="{{ $community->public_url }}">
                         Apri
+                    </a>
+                    <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        href="{{ $community->edit_url }}">
+                        Modifica
                     </a>
                 </div>
             </div>

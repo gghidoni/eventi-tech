@@ -36,9 +36,9 @@ new class extends Component {
     t: null,
     arm() {
         clearTimeout(this.t);
-        this.t = setTimeout(() => this.$wire.hide(), 2000);
+        this.t = setTimeout(() => this.$wire.hide(), 4000);
     }
-}" x-init="$watch('$wire.show', v => v ? arm() : clearTimeout(t))">
+}" x-init="if ($wire.show) arm(); $watch('$wire.show', v => v ? arm() : clearTimeout(t))">
     <div x-cloak x-show="$wire.show" x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 translate-y-2 scale-95"
         x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-200"

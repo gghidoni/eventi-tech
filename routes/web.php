@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Middleware\IsMyCommunity;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -12,22 +13,13 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('/debug-lang', function () {
-    $locale = app()->getLocale();
-    $targetPath = lang_path($locale . '/validation.php');
-    
-    return [
-        '1. Locale Corrente' => $locale,
-        '2. Percorso dove Laravel cerca' => $targetPath,
-        '3. Il file esiste davvero?' => file_exists($targetPath) ? 'SÌ' : 'NO',
-        '4. Test Traduzione' => __('validation.required', ['attribute' => 'nome']),
-        '5. Cartella lang di root esiste?' => is_dir(base_path('lang')) ? 'SÌ' : 'NO',
-    ];
-});
-
 // EVENTS
 Route::prefix('events')->group(function () {
     Volt::route('/{event}', 'events.show')->name('events.show');
+});
+
+Route::prefix('communities')->group(function () {
+    Volt::route('/{community}', 'communities.show')->name('communities.show');
 });
 
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
@@ -47,19 +39,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // DASHBOARD
     Route::prefix('dashboard')->group(function () {
+        Volt::route('/', 'dashboard.index')->name('dashboard.index');
         Volt::route('bookmarks', 'dashboard.bookmarks')->name('dashboard.bookmarks');
 
         Volt::route('communities', 'dashboard.communities')
             ->name('dashboard.communities');
         
         Route::prefix('communities')->group(function () {
-            // Route::get('/', [DashboardController::class, 'communities'])->name('dashboard.communities');
             Volt::route('/', 'dashboard.communities.index')->name('dashboard.communities.index');
             Volt::route('create', 'dashboard.communities.create')->name('dashboard.communities.create');
+            Volt::route('edit/{community}', 'dashboard.communities.edit')->name('dashboard.communities.edit')->middleware(IsMyCommunity::class);
+            Volt::route('events', 'dashboard.communities.events')->name('dashboard.communities.events');
         });
 
         // COMMUNITY
-        Route::get('my-events', [DashboardController::class, 'myEvents'])->name('dashboard.my-events');
         Route::get('create-event', [DashboardController::class, 'createEvent'])->name('dashboard.create-event');
     });
 });

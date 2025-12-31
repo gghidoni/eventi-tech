@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
-class ToggleBookmarkAction
+class ToggleBookmark
 {
     public function execute(User $user, int $eventId): bool
     {

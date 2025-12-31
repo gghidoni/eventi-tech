@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Volt\Component;
-use App\Actions\ToggleBookmarkAction;
+use App\Actions\ToggleBookmark;
 
 new class extends Component {
     public \App\Models\Event $event;
@@ -18,7 +18,7 @@ new class extends Component {
         $this->menuOpen = false;
     }
 
-    public function toggleBookmark(ToggleBookmarkAction $action)
+    public function toggleBookmark(ToggleBookmark $action)
     {
         // Utente non loggato
         if (!auth()->check()) {
@@ -64,15 +64,15 @@ new class extends Component {
 
     </a>
 
-    <div class="flex flex-col justify-between pl-2.5 pr-2 w-full">
+    <div class="flex flex-col justify-between pl-2.5 pr-2 w-full pb-1">
         <a href="{{ $event->public_url }}" wire:navigate>
             <div class="flex flex-col">
                 <span class="text-[9px] text-white opacity-70">{{ trans('titles.event.type.' . $event->type) }}</span>
-                <h3 class="text-pink font-anta leading-[18px]">{{ $event->title }}</h3>
+                <h3 class="text-pink font-anta leading-[18px] line-clamp-2" title="{{ $event->title }}">{{ $event->title }}</h3>
             </div>
         </a>
         <div class="">
-            <div class="flex items-center">
+            <div class="flex items-center mb-0.5">
                 <img src="/icons/calendar-cyan.svg" alt="" class="!w-3 mr-2" />
                 <span class="text-white font-anta text-xs">{{ $event->formatted_start_date }}</span>
             </div>
@@ -85,7 +85,7 @@ new class extends Component {
             </div>
         </div>
     </div>
-    <div class="relative flex flex-col justify-between">
+    <div class="relative flex flex-col justify-between pb-1">
         <img src="/icons/kebab-white.svg" class="w-7 cursor-pointer pt-2" alt="event menu" wire:click="openMenu">
 
         @if ($menuOpen)

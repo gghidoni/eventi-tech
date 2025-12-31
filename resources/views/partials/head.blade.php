@@ -10,9 +10,12 @@
 <link rel="preconnect" href="https://fonts.bunny.net">
 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
+<script src="{{ asset('js/async-select.js') }}" defer></script>
+
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
-@livewireStyles
-@fluxAppearance
+
 @asyncSelectStyles
-@livewireStyles
+
+{{-- NB: stile livewire già incluso nel pacchetto @asyncSelectStyles --}}
+{{-- @livewireStyles --}}

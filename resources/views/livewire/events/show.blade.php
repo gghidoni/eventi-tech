@@ -8,7 +8,6 @@ new class extends Component {
 
     public function mount(Event $event)
     {
-        // Qui facciamo il caricamento delle relazioni (Eager Loading)
         $this->event = $event->load(['community', 'address_book.city', 'address_book.province', 'address_book.region']);
     }
 
@@ -34,10 +33,10 @@ new class extends Component {
         </div>
         <img src="{{ $event->poster_img }}" alt="" class="w-full rounded-md flex-shrink-0 mt-3 bg-gray-700">
         <div class="flex justify-between mt-3 items-center">
-            <div class="flex items-center space-x-1.5">
+            <a class="flex items-center space-x-1.5" href="{{ $event->community->public_url }}" wire:navigate>
                 <img src="{{ $event->community->logo_img }}" alt="" class="rounded-full w-7">
                 <span class="text-sm font-anta">{{ $event->community->name }}</span>
-            </div>
+            </a>
             {{-- <BookmarkButton v-if="event" :eventId="event.id" /> --}}
         </div>
         <div class="flex space-x-2 mt-3">

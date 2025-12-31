@@ -51,7 +51,8 @@ new class extends Component {
                     </li>
                     @if (auth()->check())
                         <li class="mt-2">
-                            <x-menu-item icon="dashboard-white" label="dashboard" url="/" />
+                            <x-menu-item icon="dashboard-white" label="dashboard"
+                                url="{{ route('dashboard.index') }}" />
                         </li>
                     @endif
                     <li class="mt-2">
@@ -65,15 +66,19 @@ new class extends Component {
                         <x-menu-item icon="home-white" label="home" url="/" />
                     </li>
                     <li>
+                        <x-menu-item icon="dashboard-white" label="dashboard" url="{{ route('dashboard.index') }}" />
+                    </li>
+                    <li>
                         <x-menu-item icon="heart-white" label="preferiti"
                             url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />
                     </li>
                     <li>
-                        <x-menu-item icon="users-white" label="community" url="{{ route('dashboard.communities.index') }}" />
+                        <x-menu-item icon="users-white" label="community"
+                            url="{{ route('dashboard.communities.index') }}" />
                     </li>
                     <li>
                         <x-menu-item icon="calendar-white" label="i miei eventi"
-                            url="{{ route('dashboard.my-events') }}" />
+                            url="{{ route('dashboard.communities.events') }}" />
                     </li>
                     <li>
                         <x-menu-item icon="plus-white" label="nuovo evento"
