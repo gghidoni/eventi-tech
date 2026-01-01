@@ -3,7 +3,6 @@
 use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EventController;
 use App\Http\Middleware\IsMyCommunity;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -44,7 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Volt::route('communities', 'dashboard.communities')
             ->name('dashboard.communities');
-        
+
         Route::prefix('communities')->group(function () {
             Volt::route('/', 'dashboard.communities.index')->name('dashboard.communities.index');
             Volt::route('create', 'dashboard.communities.create')->name('dashboard.communities.create');

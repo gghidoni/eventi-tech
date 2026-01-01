@@ -50,19 +50,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-        ];
-    }
-
-    /**
      * Relationship Community
      */
     public function communities(): HasMany
@@ -78,16 +65,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Event::class);
     }
 
-    protected function getAvatarImgAttribute(): string
-    {
-        if ($this->avatar) {
-            return Storage::url($this->avatar);
-        }
-        $name = urlencode($this->name);
-
-        return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
-    }
-
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
@@ -97,5 +74,27 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->communities()->where('status', CommunityStatus::Active->value)->exists();
     }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password'          => 'hashed',
+        ];
+    }
+
+    protected function getAvatarImgAttribute(): string
+    {
+        if ($this->avatar) {
+            return Storage::url($this->avatar);
+        }
+        $name = urlencode($this->name);
+
+        return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
+    }
 }
- 

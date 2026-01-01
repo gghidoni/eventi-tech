@@ -40,6 +40,16 @@ class Community extends Model
         return $this->hasMany(Event::class);
     }
 
+    public function getPublicUrlAttribute(): string
+    {
+        return url('/communities/'.$this->id);
+    }
+
+    public function getEditUrlAttribute(): string
+    {
+        return url('/dashboard/communities/edit/'.$this->id);
+    }
+
     protected function getLogoImgAttribute(): string
     {
         if ($this->logo) {
@@ -48,15 +58,5 @@ class Community extends Model
         $name = urlencode($this->name);
 
         return "https://ui-avatars.com/api/?name={$name}&background=random&color=fff";
-    }
-
-    public function getPublicUrlAttribute(): string
-    {
-        return url('/communities/' . $this->id);
-    }
-
-    public function getEditUrlAttribute(): string
-    {
-        return url('/dashboard/communities/edit/' . $this->id);
     }
 }

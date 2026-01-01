@@ -12,9 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Storage;
-
+use Laravel\Scout\Searchable;
 
 class Event extends Model
 {
@@ -77,7 +76,7 @@ class Event extends Model
             return Storage::disk('posters')->url($this->poster);
         }
 
-        return 'https://robohash.org/' . $this->id . '?set=set1&size=1000x1000';
+        return 'https://robohash.org/'.$this->id.'?set=set1&size=1000x1000';
     }
 
     public function getPosterMobileImgAttribute(): string
@@ -86,7 +85,7 @@ class Event extends Model
             return Storage::disk('posters')->url($this->poster_mobile);
         }
 
-        return $this->poster ? $this->getPosterImgAttribute() : 'https://robohash.org/' . $this->id . '?set=set1&size=400x400';
+        return $this->poster ? $this->getPosterImgAttribute() : 'https://robohash.org/'.$this->id.'?set=set1&size=400x400';
     }
 
     public function getPosterThumbImgAttribute(): string
@@ -95,7 +94,7 @@ class Event extends Model
             return Storage::disk('posters')->url($this->poster_thumb);
         }
 
-        return $this->poster ? $this->getPosterImgAttribute() : 'https://robohash.org/' . $this->id . '?set=set1&size=150x150';
+        return $this->poster ? $this->getPosterImgAttribute() : 'https://robohash.org/'.$this->id.'?set=set1&size=150x150';
     }
 
     public function getFormattedStartDateAttribute(): string
@@ -115,7 +114,7 @@ class Event extends Model
 
     public function getPublicUrlAttribute(): string
     {
-        return '/events/' . $this->id;
+        return '/events/'.$this->id;
     }
 
     // #[Scope]

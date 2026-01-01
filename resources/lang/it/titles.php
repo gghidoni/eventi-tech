@@ -13,8 +13,8 @@ return [
     ],
     'community' => [
         'status' => [
-            CommunityStatus::Active->value => 'attiva',
-            CommunityStatus::Pending->value => 'in sospeso',
+            CommunityStatus::Active->value   => 'attiva',
+            CommunityStatus::Pending->value  => 'in sospeso',
             CommunityStatus::Rejected->value => 'rifiutata',
         ],
     ],

@@ -181,18 +181,18 @@ return [
     */
 
     'attributes' => [
-        'name' => 'nome',
-        'email' => 'indirizzo email',
-        'password' => 'password',
-        'description' => 'descrizione',
-        'website' => 'sito web',
-        'linkedin' => 'linkedin',
-        'instagram' => 'instagram',
-        'facebook' => 'facebook',
-        'phone' => 'telefono',
-        'logo' => 'logo',
+        'name'                  => 'nome',
+        'email'                 => 'indirizzo email',
+        'password'              => 'password',
+        'description'           => 'descrizione',
+        'website'               => 'sito web',
+        'linkedin'              => 'linkedin',
+        'instagram'             => 'instagram',
+        'facebook'              => 'facebook',
+        'phone'                 => 'telefono',
+        'logo'                  => 'logo',
         'password_confirmation' => 'conferma password',
-        'title' => 'titolo',
+        'title'                 => 'titolo',
     ],
 
 ];

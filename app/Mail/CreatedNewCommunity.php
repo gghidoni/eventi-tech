@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Models\Community;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -42,8 +41,8 @@ class CreatedNewCommunity extends Mailable
         return new Content(
             view: 'emails.communities.created',
             with: [
-                'community' => $this->community
-            ]
+                'community' => $this->community,
+            ],
         );
     }
 
