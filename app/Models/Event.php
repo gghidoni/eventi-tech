@@ -76,7 +76,8 @@ class Event extends Model
             return Storage::disk('posters')->url($this->poster);
         }
 
-        return 'https://robohash.org/'.$this->id.'?set=set1&size=1000x1000';
+        $num = ($this->id % 9) + 1;
+        return Storage::disk('posters')->url("placeholder-{$num}.webp");
     }
 
     public function getPosterMobileImgAttribute(): string
@@ -85,7 +86,8 @@ class Event extends Model
             return Storage::disk('posters')->url($this->poster_mobile);
         }
 
-        return $this->poster ? $this->getPosterImgAttribute() : 'https://robohash.org/'.$this->id.'?set=set1&size=400x400';
+        $num = ($this->id % 9) + 1;
+        return Storage::disk('posters')->url("mobile/placeholder-{$num}.webp");
     }
 
     public function getPosterThumbImgAttribute(): string
@@ -94,7 +96,8 @@ class Event extends Model
             return Storage::disk('posters')->url($this->poster_thumb);
         }
 
-        return $this->poster ? $this->getPosterImgAttribute() : 'https://robohash.org/'.$this->id.'?set=set1&size=150x150';
+        $num = ($this->id % 9) + 1;
+        return Storage::disk('posters')->url("thumbs/placeholder-{$num}.webp");
     }
 
     public function getFormattedStartDateAttribute(): string

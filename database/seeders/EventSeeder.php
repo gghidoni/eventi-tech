@@ -257,19 +257,19 @@ class EventSeeder extends Seeder
         // 1. VERSIONE DESKTOP (1000px è perfetta, bilancia bene qualità e peso)
         $desktop = Image::read($sourcePath)
             ->scale(width: 1200)
-            ->toWebp(quality: 80);
+            ->toWebp(quality: 90);
         Storage::disk('posters')->put($filename, (string) $desktop);
 
         // 2. VERSIONE MOBILE (400px)
         $mobile = Image::read($sourcePath)
-            ->scale(width: 400)
-            ->toWebp(quality: 80);
+            ->scale(width: 500)
+            ->toWebp(quality: 90);
         Storage::disk('posters')->put('mobile/'.$filename, (string) $mobile);
 
         // 3. VERSIONE THUMBNAIL (150px)
         $thumb = Image::read($sourcePath)
-            ->scale(height: 120)
-            ->toWebp(quality: 80);
+            ->scale(height: 150)
+            ->toWebp(quality: 90);
         Storage::disk('posters')->put('thumbs/'.$filename, (string) $thumb);
 
         return [
