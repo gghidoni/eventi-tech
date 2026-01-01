@@ -29,6 +29,8 @@ return new class extends Migration
             $table->datetime('end_date');
             $table->string('website')->nullable();
             $table->string('poster')->nullable();
+            $table->string('poster_mobile')->nullable();
+            $table->string('poster_thumb')->nullable();
             $table->string('tickets_url')->nullable();
             $table->string('cfp_url')->nullable();
             $table->timestamps();

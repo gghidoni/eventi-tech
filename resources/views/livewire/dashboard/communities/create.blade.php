@@ -42,12 +42,7 @@ new class extends Component {
     {
         $data = $this->validate();
 
-        if ($this->logo) {
-            
-            $data['logo'] = $this->logo->store('communities/logos', 'public');
-        }
-
-        $action->execute($data);
+        $action->execute($data, $this->logo);
 
         return redirect()->route('dashboard.communities.index')->with('message', 'Community creata con successo, attendi l\'approvazione');
     }

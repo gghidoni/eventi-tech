@@ -9,6 +9,12 @@ use App\Enums\EventType;
 use App\Models\AddressBook\AddressBook;
 use App\Models\Event;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\File;
+
+use function Livewire\Volt\with;
 
 class EventSeeder extends Seeder
 {
@@ -28,7 +34,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(5),
                 'end_date'     => now()->addDays(5)->addHours(4),
                 'website'      => 'www.javaancora.it',
-                'poster'       => 'locandina1.png',
+                'poster_source'       => 'locandina1.png',
                 'tickets_url'  => 'www.javaancora.it/tickets',
                 'cfp_url'      => 'www.javaancora.it/cfp',
             ],
@@ -41,7 +47,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(10),
                 'end_date'     => now()->addDays(10)->addHours(2),
                 'website'      => 'www.laravelprodenone.it',
-                'poster'       => 'locandina15.jpg',
+                'poster_source'       => 'locandina15.jpg',
                 'tickets_url'  => 'www.laravelprodenone.it/tickets',
                 'cfp_url'      => 'www.laravelprodenone.it/cfp',
             ],
@@ -54,7 +60,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(20),
                 'end_date'     => now()->addDays(20)->addHours(3),
                 'website'      => 'www.wordpressfirenze.it',
-                'poster'       => 'locandina12.jpg',
+                'poster_source'       => 'locandina12.jpg',
                 'tickets_url'  => 'www.wordpressfirenze.it/tickets',
                 'cfp_url'      => 'www.wordpressfirenze.it/cfp',
             ],
@@ -67,7 +73,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(15),
                 'end_date'     => now()->addDays(15)->addHours(3),
                 'website'      => 'www.phpverona.it',
-                'poster'       => 'locandina3.jpg',
+                'poster_source'       => 'locandina3.jpg',
                 'tickets_url'  => 'www.phpverona.it/tickets',
                 'cfp_url'      => 'www.phpverona.it/cfp',
             ],
@@ -80,7 +86,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(30),
                 'end_date'     => now()->addDays(30)->addHours(3),
                 'website'      => 'www.reactroma.it',
-                'poster'       => 'locandina4.webp',
+                'poster_source'       => 'locandina4.webp',
                 'tickets_url'  => 'www.reactroma.it/tickets',
                 'cfp_url'      => 'www.reactroma.it/cfp',
             ],
@@ -93,7 +99,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(25),
                 'end_date'     => now()->addDays(25)->addHours(5),
                 'website'      => 'www.devopsnapoli.it',
-                'poster'       => null,
+                'poster_source'       => null,
                 'tickets_url'  => 'www.devopsnapoli.it/tickets',
                 'cfp_url'      => 'www.devopsnapoli.it/cfp',
             ],
@@ -106,7 +112,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(20),
                 'end_date'     => now()->addDays(20)->addHours(3),
                 'website'      => 'www.javaancora.it',
-                'poster'       => 'locandina5.png',
+                'poster_source'       => 'locandina5.png',
                 'tickets_url'  => 'www.javaancora.it/tickets',
                 'cfp_url'      => 'www.javaancora.it/cfp',
             ],
@@ -119,7 +125,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(35),
                 'end_date'     => now()->addDays(35)->addHours(2),
                 'website'      => 'www.laravelprodenone.it',
-                'poster'       => 'locandina6.jpg',
+                'poster_source'       => 'locandina6.jpg',
                 'tickets_url'  => 'www.laravelprodenone.it/tickets',
                 'cfp_url'      => 'www.laravelprodenone.it/cfp',
             ],
@@ -132,7 +138,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(30),
                 'end_date'     => now()->addDays(30)->addHours(5),
                 'website'      => 'www.devopsnapoli.it',
-                'poster'       => null,
+                'poster_source'       => null,
                 'tickets_url'  => 'www.devopsnapoli.it/tickets',
                 'cfp_url'      => 'www.devopsnapoli.it/cfp',
             ],
@@ -145,7 +151,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(25),
                 'end_date'     => now()->addDays(25)->addHours(3),
                 'website'      => 'www.javaancora.it',
-                'poster'       => 'locandina7.jpg',
+                'poster_source'       => 'locandina7.jpg',
                 'tickets_url'  => 'www.javaancora.it/tickets',
                 'cfp_url'      => 'www.javaancora.it/cfp',
             ],
@@ -158,7 +164,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(40),
                 'end_date'     => now()->addDays(40)->addHours(2),
                 'website'      => 'www.laravelprodenone.it',
-                'poster'       => 'locandina8.jpg',
+                'poster_source'       => 'locandina8.jpg',
                 'tickets_url'  => 'www.laravelprodenone.it/tickets',
                 'cfp_url'      => 'www.laravelprodenone.it/cfp',
             ],
@@ -171,7 +177,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(35),
                 'end_date'     => now()->addDays(35)->addHours(5),
                 'website'      => 'www.devopsnapoli.it',
-                'poster'       => 'locandina9.jpg',
+                'poster_source'       => 'locandina9.jpg',
                 'tickets_url'  => 'www.devopsnapoli.it/tickets',
                 'cfp_url'      => 'www.devopsnapoli.it/cfp',
             ],
@@ -184,7 +190,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(30),
                 'end_date'     => now()->addDays(30)->addHours(3),
                 'website'      => 'www.javaancora.it',
-                'poster'       => 'locandina10.jpg',
+                'poster_source'       => 'locandina10.jpg',
                 'tickets_url'  => 'www.javaancora.it/tickets',
                 'cfp_url'      => 'www.javaancora.it/cfp',
             ],
@@ -197,7 +203,7 @@ class EventSeeder extends Seeder
                 'start_date'   => now()->addDays(45),
                 'end_date'     => now()->addDays(45)->addHours(2),
                 'website'      => 'www.laravelprodenone.it',
-                'poster'       => 'locandina11.jpg',
+                'poster_source'       => 'locandina11.jpg',
                 'tickets_url'  => 'www.laravelprodenone.it/tickets',
                 'cfp_url'      => 'www.laravelprodenone.it/cfp',
             ],
@@ -208,6 +214,9 @@ class EventSeeder extends Seeder
 
             // Crea l'evento solo se esiste un indirizzo
             if ($address) {
+
+                $paths = $this->processPoster($eventData['poster_source'] ?? null);
+
                 Event::query()->create([
                     'community_id'    => $eventData['community_id'],
                     'title'           => $eventData['title'],
@@ -218,15 +227,54 @@ class EventSeeder extends Seeder
                     'start_date'      => $eventData['start_date'],
                     'end_date'        => $eventData['end_date'],
                     'website'         => $eventData['website'],
-                    'poster'          => $eventData['poster']
-                        ? $basePosterUrl.$eventData['poster']
-                        : null,
+                    'poster'          => $paths['desktop'] ?? null,
+                    'poster_mobile'   => $paths['mobile'] ?? null,
+                    'poster_thumb' => $paths['thumb'] ?? null,
                     'tickets_url' => $eventData['tickets_url'],
                     'cfp_url'     => $eventData['cfp_url'],
                 ]);
             } else {
-                echo 'No address found for the event: '.$eventData['title']."\n";
+                echo 'No address found for the event: ' . $eventData['title'] . "\n";
             }
         }
+    }
+
+    private function processPoster(?string $sourceFile): array
+    {
+        if (!$sourceFile) return [];
+
+        // Percorso dove hai messo le immagini per il seed (es: database/seeders/images/locandina1.png)
+        $sourcePath = database_path('seeders/images/' . $sourceFile);
+
+        if (!File::exists($sourcePath)) {
+            echo "File non trovato: $sourcePath \n";
+            return [];
+        }
+
+        $filename = Str::uuid() . '.webp';
+
+        // 1. VERSIONE DESKTOP (1000px è perfetta, bilancia bene qualità e peso)
+        $desktop = Image::read($sourcePath)
+            ->scale(width: 1200)
+            ->toWebp(quality: 80);
+        Storage::disk('posters')->put($filename, (string) $desktop);
+
+        // 2. VERSIONE MOBILE (400px)
+        $mobile = Image::read($sourcePath)
+            ->scale(width: 400)
+            ->toWebp(quality: 80);
+        Storage::disk('posters')->put('mobile/' . $filename, (string) $mobile);
+
+        // 3. VERSIONE THUMBNAIL (150px)
+        $thumb = Image::read($sourcePath)
+            ->scale(height: 120)
+            ->toWebp(quality: 80);
+        Storage::disk('posters')->put('thumbs/' . $filename, (string) $thumb);
+
+        return [
+            'desktop' => $filename,
+            'mobile'  => 'mobile/' . $filename,
+            'thumb'   => 'thumbs/' . $filename,
+        ];
     }
 }

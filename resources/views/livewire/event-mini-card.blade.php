@@ -45,7 +45,6 @@ new class extends Component {
             $message = 'Si è verificato un errore';
             $this->dispatch('messageSent', message: $message, success: false);
         }
-
     }
 
     public function mount()
@@ -59,16 +58,20 @@ new class extends Component {
 <div class="flex pt-2 mb-5 w-full">
 
     <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
-        <!--- h-28??? -->
-        <img src="{{ $event->poster_img }}" alt="" class="h-28 rounded-md bg-gray-700" />
+        <picture>
+            <source media="(min-width: 1024px)" srcset="{{ $event->poster_mobile_img }}">
 
+            <img src="{{ $event->poster_thumb_img }}" alt="{{ $event->title }}"
+                class="h-28 w-22 object-cover rounded-md bg-gray-700" loading="lazy" />
+        </picture>
     </a>
 
     <div class="flex flex-col justify-between pl-2.5 pr-2 w-full pb-1">
         <a href="{{ $event->public_url }}" wire:navigate>
             <div class="flex flex-col">
                 <span class="text-[9px] text-white opacity-70">{{ trans('titles.event.type.' . $event->type) }}</span>
-                <h3 class="text-pink font-anta leading-[18px] line-clamp-2" title="{{ $event->title }}">{{ $event->title }}</h3>
+                <h3 class="text-pink font-anta leading-[18px] line-clamp-2" title="{{ $event->title }}">
+                    {{ $event->title }}</h3>
             </div>
         </a>
         <div class="">

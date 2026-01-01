@@ -31,7 +31,12 @@ new class extends Component {
                     {{ $event->address_book->province->code }}</span>
             </div>
         </div>
-        <img src="{{ $event->poster_img }}" alt="" class="w-full rounded-md flex-shrink-0 mt-3 bg-gray-700">
+        <picture>
+            <source media="(max-width: 767px)" srcset="{{ $event->poster_mobile_img }}">
+
+            <img src="{{ $event->poster_img }}" alt="{{ $event->title }}"
+                class="w-full h-auto rounded-md flex-shrink-0 mt-3 bg-gray-700 shadow-xl" loading="eager">
+        </picture>
         <div class="flex justify-between mt-3 items-center">
             <a class="flex items-center space-x-1.5" href="{{ $event->community->public_url }}" wire:navigate>
                 <img src="{{ $event->community->logo_img }}" alt="" class="rounded-full w-7">

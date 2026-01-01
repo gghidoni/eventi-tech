@@ -43,7 +43,7 @@ class Community extends Model
     protected function getLogoImgAttribute(): string
     {
         if ($this->logo) {
-            return Storage::url($this->logo);
+            return Storage::disk('logos')->url($this->logo);
         }
         $name = urlencode($this->name);
 
