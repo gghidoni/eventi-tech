@@ -5,7 +5,8 @@
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
-
+@import "flatpickr/dist/flatpickr.min.css";
+@import "flatpickr/dist/themes/dark.css"; /* Tema scuro opzionale */
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -97,6 +98,19 @@ select:focus[data-flux-control] {
     @apply w-full pr-10 pl-3 h-[40px] border border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm!;
 }
 
+.select-et {
+    appearance: none; /* Rimuove la freccia di default del browser */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Aggiunge una freccia personalizzata come immagine di sfondo */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center; /* La stacca dal bordo destro di 0.75rem */
+    background-size: 1rem;
+    padding-right: 2.5rem; /* Evita che il testo finisca sotto la freccia */
+}
+
 .textarea-et {
     @apply w-full pr-10 pl-3 border border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 placeholder-gray-500 text-sm!;
 }
@@ -111,6 +125,18 @@ select:focus[data-flux-control] {
 
 .las-bg-white {
     background-color: #2b2b2b !important;
+}
+
+/* Cambia il colore dell'icona del calendario nei browser Chrome, Edge e Safari */
+input::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Inverte il nero in bianco */
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
 }
 
 /* \[:where(&)\]:size-4 {

@@ -51,6 +51,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Volt::route('events', 'dashboard.communities.events')->name('dashboard.communities.events');
         });
 
+        Volt::route('events/{event}/edit', 'dashboard.events.edit')->name('dashboard.events.edit');
+
         // COMMUNITY
         Route::get('create-event', [DashboardController::class, 'createEvent'])->name('dashboard.create-event');
     });

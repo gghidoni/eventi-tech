@@ -24,9 +24,15 @@ new class extends Component {
 
     public function mount()
     {
-        if(session()->has('message')) {
-            $this->message = session()->get('message');
+        if(session()->has('success')) {
+            $this->message = session()->get('success');
             $this->success = true;
+            $this->show = true;
+        }
+
+        if(session()->has('error')) {
+            $this->message = session()->get('error');
+            $this->success = false;
             $this->show = true;
         }
     }

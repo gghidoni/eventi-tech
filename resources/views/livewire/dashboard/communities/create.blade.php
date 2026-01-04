@@ -5,6 +5,9 @@ use Livewire\Attributes\Validate;
 use App\Models\Community;
 use App\Actions\CreateCommunity;
 use Livewire\WithFileUploads;
+use App\Actions\ProcessLogo;
+use App\Mail\CreatedNewCommunity;
+use Illuminate\Support\Facades\Mail;
 
 new class extends Component {
     use WithFileUploads;
@@ -38,14 +41,26 @@ new class extends Component {
         $view->layout('components.layouts.base', ['title' => __('Community')]);
     }
 
-    public function save(CreateCommunity $action)
+    public function save(CreateCommunity $createCommunityAction, ProcessLogo $processLogoAction)
     {
         $data = $this->validate();
 
-        $action->execute($data, $this->logo);
+        try {
+            if ($this->logo) {
+                $data['logo'] = $processLogoAction->execute($this->logo);
+            }
+            $community = $createCommunityAction->execute($data);
 
-        return redirect()->route('dashboard.communities.index')->with('message', 'Community creata con successo, attendi l\'approvazione');
+            $user = auth()->user();
+            Mail::to($user)->send(new CreatedNewCommunity($community));
+            return redirect()->route('dashboard.communities.index')->with('success', 'Community creata con successo, attendi l\'approvazione');
+
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return redirect()->route('dashboard.communities.index')->with('error', 'Errore durante la creazione della community');
+        }
     }
+
 }; ?>
 
 <div class="page">
@@ -129,8 +144,7 @@ new class extends Component {
                         </span>
 
                         {{-- Input REALE nascosto --}}
-                        <input type="file" id="logo" wire:model="logo" class="hidden"
-                            accept="image/*" />
+                        <input type="file" id="logo" wire:model="logo" class="hidden" accept="image/*" />
                     </label>
                 </div>
 

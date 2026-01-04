@@ -32,8 +32,16 @@ class Event extends Model
         'end_date',
         'website',
         'poster',
+        'poster_mobile',
+        'poster_thumb',
         'tickets_url',
         'cfp_url',
+    ];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'type' => \App\Enums\EventType::class,
     ];
 
     public function toSearchableArray()
@@ -117,7 +125,17 @@ class Event extends Model
 
     public function getPublicUrlAttribute(): string
     {
-        return '/events/'.$this->id;
+        return url('/events/' . $this->id);
+    }
+
+    public function getEditUrlAttribute(): string
+    {
+        return url('/dashboard/events/' . $this->id . '/edit');
+    }
+
+    public function getIsMineAttribute(): bool
+    {
+        return $this->community->user_id === auth()->id();
     }
 
     // #[Scope]

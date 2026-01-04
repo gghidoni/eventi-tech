@@ -5,14 +5,15 @@ use App\Models\Community;
 use Livewire\WithFileUploads;
 use App\Actions\UpdateCommunity;
 use Livewire\Attributes\Validate;
+use  App\Actions\ProcessLogo;
 
 new class extends Component {
     use WithFileUploads;
 
-    #[Validate(['required'])]
+    #[Validate(['required', 'string', 'max:100', 'min:6'])]
     public string $name = '';
 
-    #[Validate(['required'])]
+    #[Validate(['required', 'string', 'max:1000', 'min:6'])]
     public string $description = '';
 
     #[Validate(['sometimes', 'url'])]
@@ -47,19 +48,25 @@ new class extends Component {
         $view->layout('components.layouts.base', ['title' => $this->community->name]);
     }
 
-    public function save(UpdateCommunity $action)
+    public function save(UpdateCommunity $updateCommunityAction, ProcessLogo $processLogoAction)
     {
         $data = $this->validate();
 
-        if ($this->logo) {
-            $data['logo'] = $this->logo->store('communities/logos', 'public');
-        } else {
-            unset($data['logo']);
+        try {
+
+            if ($this->logo) {
+                $data['logo'] = $processLogoAction->execute($this->logo);
+            }
+
+            $updateCommunityAction->execute($this->community, $data);
+            
+            return redirect()->route('dashboard.communities.index')->with('success', 'Community aggiornata con successo!');
+
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return redirect()->route('dashboard.communities.index')->with('error', 'Errore durante la modifica della community');
         }
-
-        $action->execute($this->community, $data);
-
-        return redirect()->route('dashboard.communities.index')->with('message', 'Community aggiornata con successo!');
+        
     }
 }; ?>
 

@@ -3,13 +3,16 @@
 namespace App\Actions;
 
 use App\Models\Community;
+use Illuminate\Support\Facades\DB;
 
 class UpdateCommunity
 {
     public function execute(Community $community, array $data): Community
     {
-        $community->update($data);
+        return DB::transaction(function () use ($community, $data) {
+            $community->update($data);
 
-        return $community;
+            return $community;
+        });
     }
 }

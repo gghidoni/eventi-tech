@@ -84,7 +84,7 @@
                                 <span class="las-max-w-[150px] las-truncate">{{ $chipLabel }} 897978</span>
                             @endif
 
-                            <button
+                            {{-- <button
                                 type="button"
                                 class="las-icon-button las-inline-flex las-items-center las-justify-center las-rounded-sm las-text-gray-500 hover:las-bg-gray-200 hover:las-text-gray-700 focus:las-outline-none"
                                 wire:click="clearSelection({{ Js::from($chipValue) }})"
@@ -94,7 +94,7 @@
                                 <svg class="las-h-3 las-w-3" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 3l6 6m0-6L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                 </svg>
-                            </button>
+                            </button> --}}
                         </span>
                     @endforeach
 
@@ -119,7 +119,7 @@
                         @else
                             {{-- Default single select display --}}
                             {{-- TODO Selected --}}
-                            <img src="{{ $selectedOptions[0]['image'] }}" alt="{{ $selectedOptions[0]['label'] }}" class="{{ $this->imageSizeClass }} las-shrink-0 rounded-full las-object-cover">
+                            <img src="{{ $selectedOptions[0]['image'] }}" alt="{{ $selectedOptions[0]['label'] }}" class="w-6 las-shrink-0 rounded-full las-object-cover">
                             <span class="las-flex-1 las-truncate text-sm text-white ml-1">{{ $selectedOptions[0]['label'] }}</span>
                             {{-- <span class="las-flex-1 las-truncate text-sm text-white">{{ json_decode($selectedOptions[0]['value'])->name }}<b class="text-pink mx-1.5">&#x2022;</b><span class="text-gray-500 text-xs">{{ json_decode($selectedOptions[0]['value'])->type }}</span></span> --}}
                         @endif
@@ -141,7 +141,7 @@
 
             {{-- Action Icons --}}
             <div class="las-flex las-shrink-0 las-items-center las-gap-1 las-pl-2">
-                @if ($this->hasSelection && $this->clearable)
+                {{-- @if ($this->hasSelection && $this->clearable)
                     <button
                         type="button"
                         class="las-icon-button las-flex las-h-5 las-w-5 las-shrink-0 las-items-center las-justify-center las-rounded-sm text-pink hover:las-text-gray-900 focus:las-outline-none"
@@ -153,7 +153,7 @@
                             <path d="M11.5 3.5L3.5 11.5M3.5 3.5L11.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </button>
-                @endif
+                @endif --}}
 
                 <button
                     type="button"
@@ -372,7 +372,7 @@
                             @endif
 
                             @if ($optionImage)
-                                <img src="{{ $optionImage }}" alt="{{ $optionLabel }}" class="{{ $this->imageSizeClass }} las-shrink-0 rounded-full las-object-cover">
+                                <img src="{{ $optionImage }}" alt="{{ $optionLabel }}" class="w-6 las-shrink-0 rounded-full las-object-cover">
                             @endif
                             {{-- TODO Options --}}
                             <span class="las-flex-1 las-truncate text-white">{{ $optionLabel }}</span>

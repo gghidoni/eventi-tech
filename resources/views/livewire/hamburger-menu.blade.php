@@ -45,17 +45,31 @@ new class extends Component {
                 </div>
             @endif
             @if (!$isDashboard)
-                <ul class="flex flex-col mt-6">
+                <ul class="flex flex-col mt-6 space-y-2">
                     <li>
                         <x-menu-item icon="home-white" label="home" url="/" />
                     </li>
                     @if (auth()->check())
-                        <li class="mt-2">
+                        <li>
                             <x-menu-item icon="dashboard-white" label="dashboard"
                                 url="{{ route('dashboard.index') }}" />
                         </li>
+                        @if (auth()->user()->has_active_community)
+                            <li>
+                                <x-menu-item icon="users-white" label="community"
+                                    url="{{ route('dashboard.communities.index') }}" />
+                            </li>
+                            <li>
+                                <x-menu-item icon="calendar-white" label="i miei eventi"
+                                    url="{{ route('dashboard.communities.events') }}" />
+                            </li>
+                            <li>
+                                <x-menu-item icon="plus-white" label="nuovo evento"
+                                    url="{{ route('dashboard.create-event') }}" />
+                            </li>
+                        @endif
                     @endif
-                    <li class="mt-2">
+                    <li>
                         <x-menu-item icon="heart-white" label="preferiti"
                             url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />
                     </li>
