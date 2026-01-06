@@ -6,12 +6,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
 
-
 class ProcessLogo
 {
     public function execute($sourceFile): string
     {
-        $filename = Str::uuid() . '.webp';
+        $filename = Str::uuid().'.webp';
 
         // Elaborazione immagine (v3)
         $encoded = Image::read($sourceFile)

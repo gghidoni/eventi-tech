@@ -46,9 +46,10 @@ class AddressBookController extends Controller
                     'id'    => $region->id,
                 ];
             })->toArray();
-        } else if ($type === 'city') {
+        } elseif ($type === 'city') {
             $cities = City::search($query)->take(5)->get()->map(function ($city) {
-                $label = $city->name . ' (' . $city->province->code . ')' . ', ' . $city->province->region->name;
+                $label = $city->name.' ('.$city->province->code.')'.', '.$city->province->region->name;
+
                 return [
                     'value' => json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $label]),
                     'label' => $label,
@@ -56,7 +57,6 @@ class AddressBookController extends Controller
                 ];
             })->toArray();
         }
-
 
         if ($cities) {
             $results[] = $cities[0];

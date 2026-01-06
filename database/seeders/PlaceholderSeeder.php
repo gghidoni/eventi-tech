@@ -12,20 +12,22 @@ class PlaceholderSeeder extends Seeder
     public function run(): void
     {
         // Percorso dove si trovano i 10 PNG originali
-        $sourcePath = database_path('seeders/images/placeholders/'); 
-        
+        $sourcePath = database_path('seeders/images/placeholders/');
+
         if (!File::exists($sourcePath)) {
             $this->command->error("Cartella sorgente non trovata: $sourcePath");
+
             return;
         }
 
-        $this->command->info("Inizio ottimizzazione placeholder...");
+        $this->command->info('Inizio ottimizzazione placeholder...');
 
         for ($i = 1; $i <= 10; $i++) {
-            $sourceFile = $sourcePath . "placeholder-{$i}.png";
+            $sourceFile = $sourcePath."placeholder-{$i}.png";
 
             if (!File::exists($sourceFile)) {
                 $this->command->warn("File placeholder-{$i}.png non trovato, salto...");
+
                 continue;
             }
 
@@ -38,7 +40,7 @@ class PlaceholderSeeder extends Seeder
 
             foreach ($sizes as $size) {
                 $filename = "placeholder-{$i}.webp";
-                $targetPath = $size['folder'] . $filename;
+                $targetPath = $size['folder'].$filename;
 
                 // Elaborazione con Intervention Image v3
                 $encoded = Image::read($sourceFile)

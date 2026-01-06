@@ -3,7 +3,6 @@
 use App\Enums\CommunityStatus;
 use App\Enums\EventStatus;
 use App\Enums\EventType;
-use App\Models\Event;
 
 return [
     'event' => [
@@ -13,9 +12,9 @@ return [
             EventType::Hybrid->value    => 'in presenza e online',
         ],
         'status' => [
-            EventStatus::Pending->value => 'in sospeso',
-            EventStatus::Active->value  => 'attivo',
-            EventStatus::Reject->value => 'rifiutato',
+            EventStatus::Pending->value   => 'in sospeso',
+            EventStatus::Active->value    => 'attivo',
+            EventStatus::Reject->value    => 'rifiutato',
             EventStatus::Terminate->value => 'terminato',
         ],
     ],

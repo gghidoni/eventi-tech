@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Enums\CommunityStatus;
-use App\Mail\CreatedNewCommunity;
 use App\Models\Community;
 use Illuminate\Support\Facades\DB;
 

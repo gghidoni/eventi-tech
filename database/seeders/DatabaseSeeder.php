@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             AddressBookSeeder::class,
             EventSeeder::class,
             EventTagSeeder::class,
-            PlaceholderSeeder::class
+            PlaceholderSeeder::class,
         ]);
     }
 }

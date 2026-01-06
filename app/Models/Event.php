@@ -40,9 +40,9 @@ class Event extends Model
 
     protected $casts = [
         'start_date' => 'datetime',
-        'end_date' => 'datetime',
-        'type' => \App\Enums\EventType::class,
-        'status' => \App\Enums\EventStatus::class,
+        'end_date'   => 'datetime',
+        'type'       => \App\Enums\EventType::class,
+        'status'     => EventStatus::class,
     ];
 
     public function toSearchableArray()
@@ -86,6 +86,7 @@ class Event extends Model
         }
 
         $num = ($this->id % 9) + 1;
+
         return Storage::disk('posters')->url("placeholder-{$num}.webp");
     }
 
@@ -96,6 +97,7 @@ class Event extends Model
         }
 
         $num = ($this->id % 9) + 1;
+
         return Storage::disk('posters')->url("mobile/placeholder-{$num}.webp");
     }
 
@@ -106,6 +108,7 @@ class Event extends Model
         }
 
         $num = ($this->id % 9) + 1;
+
         return Storage::disk('posters')->url("thumbs/placeholder-{$num}.webp");
     }
 
@@ -126,12 +129,12 @@ class Event extends Model
 
     public function getPublicUrlAttribute(): string
     {
-        return url('/events/' . $this->id);
+        return url('/events/'.$this->id);
     }
 
     public function getEditUrlAttribute(): string
     {
-        return url('/dashboard/events/' . $this->id . '/edit');
+        return url('/dashboard/events/'.$this->id.'/edit');
     }
 
     public function getIsMineAttribute(): bool
