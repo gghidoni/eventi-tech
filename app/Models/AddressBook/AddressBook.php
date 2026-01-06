@@ -21,7 +21,7 @@ class AddressBook extends Model
         'city_id',
         'region_id',
         'province_id',
-        'addrress_line',
+        'address_line',
     ];
 
     public function region(): BelongsTo

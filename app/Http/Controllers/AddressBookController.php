@@ -12,6 +12,7 @@ class AddressBookController extends Controller
 {
     public function findLocation(Request $request): JsonResponse
     {
+        $type = $request->get('type');
         $query = $request->get('search');
 
         if (empty($query)) {
@@ -19,28 +20,43 @@ class AddressBookController extends Controller
         }
 
         $results = [];
+        $cities = [];
+        $provinces = [];
+        $regions = [];
 
-        $cities = City::search($query)->take(5)->get()->map(function ($city) {
-            return [
-                'value' => json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $city->name]),
-                'label' => $city->name,
-                'id'    => $city->id,
-            ];
-        })->toArray();
-        $provinces = Province::search($query)->take(3)->get()->map(function ($province) {
-            return [
-                'value' => json_encode(['type' => 'provincia', 'id' => $province->id, 'name' => $province->name]),
-                'label' => $province->name,
-                'id'    => $province->id,
-            ];
-        })->toArray();
-        $regions = Region::search($query)->take(2)->get()->map(function ($region) {
-            return [
-                'value' => json_encode(['type' => 'regione', 'id' => $region->id, 'name' => $region->name]),
-                'label' => $region->name,
-                'id'    => $region->id,
-            ];
-        })->toArray();
+        if ($type === 'all') {
+            $cities = City::search($query)->take(5)->get()->map(function ($city) {
+                return [
+                    'value' => json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $city->name]),
+                    'label' => $city->name,
+                    'id'    => $city->id,
+                ];
+            })->toArray();
+            $provinces = Province::search($query)->take(3)->get()->map(function ($province) {
+                return [
+                    'value' => json_encode(['type' => 'provincia', 'id' => $province->id, 'name' => $province->name]),
+                    'label' => $province->name,
+                    'id'    => $province->id,
+                ];
+            })->toArray();
+            $regions = Region::search($query)->take(2)->get()->map(function ($region) {
+                return [
+                    'value' => json_encode(['type' => 'regione', 'id' => $region->id, 'name' => $region->name]),
+                    'label' => $region->name,
+                    'id'    => $region->id,
+                ];
+            })->toArray();
+        } else if ($type === 'city') {
+            $cities = City::search($query)->take(5)->get()->map(function ($city) {
+                $label = $city->name . ' (' . $city->province->code . ')' . ', ' . $city->province->region->name;
+                return [
+                    'value' => json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $label]),
+                    'label' => $label,
+                    'id'    => $city->id,
+                ];
+            })->toArray();
+        }
+
 
         if ($cities) {
             $results[] = $cities[0];

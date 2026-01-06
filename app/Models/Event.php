@@ -42,6 +42,7 @@ class Event extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'type' => \App\Enums\EventType::class,
+        'status' => \App\Enums\EventStatus::class,
     ];
 
     public function toSearchableArray()

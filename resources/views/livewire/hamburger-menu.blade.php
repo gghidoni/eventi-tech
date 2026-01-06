@@ -65,7 +65,7 @@ new class extends Component {
                             </li>
                             <li>
                                 <x-menu-item icon="plus-white" label="nuovo evento"
-                                    url="{{ route('dashboard.create-event') }}" />
+                                    url="{{ route('dashboard.events.create') }}" />
                             </li>
                         @endif
                     @endif
@@ -96,7 +96,7 @@ new class extends Component {
                     </li>
                     <li>
                         <x-menu-item icon="plus-white" label="nuovo evento"
-                            url="{{ route('dashboard.create-event') }}" />
+                            url="{{ route('dashboard.events.create') }}" />
                     </li>
                 </ul>
             @endif

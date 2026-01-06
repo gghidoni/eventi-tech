@@ -47,7 +47,7 @@ class Community extends Model
 
     public function getEditUrlAttribute(): string
     {
-        return url('/dashboard/communities/edit/'.$this->id);
+        return url('/dashboard/communities/'.$this->id .'/edit');
     }
 
     protected function getLogoImgAttribute(): string

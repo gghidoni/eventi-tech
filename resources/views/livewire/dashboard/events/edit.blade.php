@@ -28,15 +28,23 @@ new class extends Component {
     #[Validate(['required'])]
     public $end_date;
 
+    #[Validate(['sometimes', 'url'])]
+    public string $website = '';
+
+    #[Validate(['sometimes', 'url'])]
+    public string $tickets_url = '';
+
+    #[Validate(['sometimes', 'url'])]
+    public string $cfp_url = '';
+
     public $types;
 
     public function mount(Event $event)
     {
         $this->event = $event;
 
-        $this->fill($this->event->only(['title', 'description']));
+        $this->fill($this->event->only(['title', 'description', 'website', 'tickets_url', 'cfp_url']));
 
-        // Formatta le date per Flatpickr (corrispondente a d-m-Y H:i)
         $this->start_date = $this->event->start_date?->format('d-m-Y H:i');
         $this->end_date = $this->event->end_date?->format('d-m-Y H:i');
 
@@ -82,7 +90,7 @@ new class extends Component {
 
         {{-- Title --}}
         <div class="mb-5">
-            <label for="title" class="block text-sm font-medium mb-1">titolo</label>
+            <label for="title" class="block text-sm font-medium mb-1 text-gray-500">titolo</label>
             <input type="text" id="title" name="title" class="input-et" wire:model="title" />
             @error('title')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -91,7 +99,7 @@ new class extends Component {
 
         {{-- Descrizione --}}
         <div class="mb-5">
-            <label for="description" class="block text-sm font-medium mb-1">descrizione</label>
+            <label for="description" class="block text-sm font-medium mb-1 text-gray-500">descrizione</label>
             <textarea id="description" name="description" class="textarea-et !pt-1.5" wire:model="description" rows="6"></textarea>
             @error('description')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -100,7 +108,7 @@ new class extends Component {
 
         {{-- Tipo --}}
         <div class="mb-5">
-            <label for="type" class="block text-sm font-medium mb-1">tipo</label>
+            <label for="type" class="block text-sm font-medium mb-1 text-gray-500">tipo</label>
             <select id="type" name="type" class="input-et select-et" wire:model="type">
                 @foreach ($types as $type)
                     <option value="{{ $type }}">
@@ -112,12 +120,9 @@ new class extends Component {
             @enderror
         </div>
 
-
-
-
         {{-- Data inizio --}}
         <div class="mb-5" wire:ignore>
-            <label class="block text-sm font-medium mb-1">inizio</label>
+            <label class="block text-sm font-medium mb-1 text-gray-500">inizio</label>
             <div x-data="{
                 init() {
                     flatpickr($refs.start, {
@@ -140,7 +145,7 @@ new class extends Component {
 
         {{-- Data fine --}}
         <div class="mb-5" wire:ignore>
-            <label class="block text-sm font-medium mb-1">fine</label>
+            <label class="block text-sm font-medium mb-1 text-gray-500">fine</label>
             <div x-data="{
                 picker: null,
                 init() {
@@ -162,14 +167,36 @@ new class extends Component {
             </div>
         </div>
 
+        {{-- Sito web --}}
+        <div class="mb-5">
+            <label for="website" class="block text-sm font-medium mb-1 text-gray-500">sito web</label>
+            <input type="text" id="website" name="website" class="input-et" wire:model="website" />
+            @error('website')
+                <span class="text-pink text-xs">{{ $message }}</span>
+            @enderror
+        </div>
 
+        {{-- Tickets --}}
+        <div class="mb-5">
+            <label for="tickets_url" class="block text-sm font-medium mb-1 text-gray-500">tickets url</label>
+            <input type="text" id="tickets_url" name="tickets_url" class="input-et" wire:model="tickets_url" />
+            @error('tickets_url')
+                <span class="text-pink text-xs">{{ $message }}</span>
+            @enderror
+        </div>
 
-
-
+        {{-- CFP --}}
+        <div class="mb-5">
+            <label for="cfp_url" class="block text-sm font-medium mb-1 text-gray-500">cfp url</label>
+            <input type="text" id="cfp_url" name="cfp_url" class="input-et" wire:model="cfp_url" />
+            @error('cfp_url')
+                <span class="text-pink text-xs">{{ $message }}</span>
+            @enderror
+        </div>
 
         {{-- Poster con Anteprima --}}
         <div class="mb-5">
-            <label for="poster" class="block text-sm font-medium mb-1">locandina</label>
+            <label for="poster" class="block text-sm font-medium mb-1 text-gray-500">locandina</label>
 
             <div class="flex items-center space-x-4 mb-4">
                 {{-- Bottone Personalizzato --}}

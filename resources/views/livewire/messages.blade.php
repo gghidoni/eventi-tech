@@ -24,13 +24,13 @@ new class extends Component {
 
     public function mount()
     {
-        if(session()->has('success')) {
+        if (session()->has('success')) {
             $this->message = session()->get('success');
             $this->success = true;
             $this->show = true;
         }
 
-        if(session()->has('error')) {
+        if (session()->has('error')) {
             $this->message = session()->get('error');
             $this->success = false;
             $this->show = true;
@@ -43,14 +43,29 @@ new class extends Component {
     arm() {
         clearTimeout(this.t);
         this.t = setTimeout(() => this.$wire.hide(), 4000);
+    },
+    scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-}" x-init="if ($wire.show) arm(); $watch('$wire.show', v => v ? arm() : clearTimeout(t))">
+}" x-init="if ($wire.show) {
+    arm();
+    scrollToTop();
+}
+$watch('$wire.show', v => {
+    if (v) {
+        arm();
+        scrollToTop();
+    } else {
+        clearTimeout(t);
+    }
+})">
     <div x-cloak x-show="$wire.show" x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 translate-y-2 scale-95"
         x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
         x-transition:leave-end="opacity-0 translate-y-2 scale-95"
-        class="fixed top-20 right-5 px-4 py-2 rounded shadow-lg z-50 text-sm" :class="$wire.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+        class="fixed top-20 right-5 px-4 py-2 rounded shadow-lg z-50 text-sm"
+        :class="$wire.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
         {{ $this->message }}
     </div>
 </div>

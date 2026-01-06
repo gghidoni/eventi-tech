@@ -47,14 +47,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('communities')->group(function () {
             Volt::route('/', 'dashboard.communities.index')->name('dashboard.communities.index');
             Volt::route('create', 'dashboard.communities.create')->name('dashboard.communities.create');
-            Volt::route('edit/{community}', 'dashboard.communities.edit')->name('dashboard.communities.edit')->middleware(IsMyCommunity::class);
+            Volt::route('{community}/edit', 'dashboard.communities.edit')->name('dashboard.communities.edit')->middleware(IsMyCommunity::class);
             Volt::route('events', 'dashboard.communities.events')->name('dashboard.communities.events');
         });
 
-        Volt::route('events/{event}/edit', 'dashboard.events.edit')->name('dashboard.events.edit');
-
-        // COMMUNITY
-        Route::get('create-event', [DashboardController::class, 'createEvent'])->name('dashboard.create-event');
+        Route::prefix('events')->group(function () {
+            Volt::route('{event}/edit', 'dashboard.events.edit')->name('dashboard.events.edit');
+            Volt::route('create', 'dashboard.events.create')->name('dashboard.events.create');
+        });
+    
     });
 });
 

@@ -11,7 +11,7 @@
     {{-- Location Search --}}
     <div style="relative w-100% mt-4 text-gray-300">
         <livewire:select.location name="location" wire:model.live="location" :endpoint="'http://nginx/find-location'"
-            placeholder="dove?" />
+            placeholder="dove?" :extra-params="['type' => 'all']" />
     </div>
 
 

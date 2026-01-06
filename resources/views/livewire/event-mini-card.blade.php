@@ -69,7 +69,12 @@ new class extends Component {
     <div class="flex flex-col justify-between pl-2.5 pr-2 w-full pb-1">
         <a href="{{ $event->public_url }}" wire:navigate>
             <div class="flex flex-col">
-                <span class="text-[9px] text-white opacity-70">{{ trans('titles.event.type.' . $event->type->value) }}</span>
+                <span
+                    class="text-[9px] text-white opacity-70">{{ trans('titles.event.type.' . $event->type->value) }}</span>
+                @if ($event->is_mine)
+                    <span
+                        class="text-xs text-cyan opacity-70 uppercase">{{ trans('titles.event.status.' . $event->status->value) }}</span>
+                @endif
                 <h3 class="text-pink font-anta leading-[18px] line-clamp-2" title="{{ $event->title }}">
                     {{ $event->title }}</h3>
             </div>
@@ -121,8 +126,8 @@ new class extends Component {
             </div>
         @endif
         @if (!$event->is_mine)
-            <img src="{{ $isBookmarked ? '/icons/heart-pink-fill.svg' : '/icons/heart-pink-empty.svg' }}" alt="bookmark"
-                class="w-4" wire:click="toggleBookmark">
+            <img src="{{ $isBookmarked ? '/icons/heart-pink-fill.svg' : '/icons/heart-pink-empty.svg' }}"
+                alt="bookmark" class="w-4" wire:click="toggleBookmark">
         @endif
     </div>
 </div>

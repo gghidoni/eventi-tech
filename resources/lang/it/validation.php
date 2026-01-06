@@ -193,6 +193,11 @@ return [
         'logo'                  => 'logo',
         'password_confirmation' => 'conferma password',
         'title'                 => 'titolo',
+        'address_line'          => 'indirizzo',
+        'city'                  => 'città',
+        'start_date'            => 'data inizio',
+        'end_date'              => 'data fine',
+        'type'                  => 'tipo',
     ],
 
 ];
