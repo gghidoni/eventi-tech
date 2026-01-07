@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum('status', array_column(EventStatus::cases(), 'value'))->index();
             $table->text('description');
             $table->enum('type', array_column(EventType::cases(), 'value'))->index();
-            $table->foreignIdFor(AddressBook::class);
+            $table->foreignIdFor(AddressBook::class)->nullable();
             $table->datetime('start_date')->index();
             $table->datetime('end_date');
             $table->string('website')->nullable();

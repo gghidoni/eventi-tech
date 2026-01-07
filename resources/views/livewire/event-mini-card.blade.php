@@ -84,6 +84,7 @@ new class extends Component {
                 <img src="/icons/calendar-cyan.svg" alt="" class="!w-3 mr-2" />
                 <span class="text-white font-anta text-xs">{{ $event->formatted_start_date }}</span>
             </div>
+            @if ($event->address_book_id)
             <div class="flex justify-between">
                 <div class="flex items-center">
                     <img src="/icons/location-cyan.svg" alt="" class="!w-3 mr-2" />
@@ -91,6 +92,7 @@ new class extends Component {
                         {{ $event->address_book->province->code }}</span>
                 </div>
             </div>
+            @endif
         </div>
     </div>
     <div class="relative flex flex-col justify-between pb-1">

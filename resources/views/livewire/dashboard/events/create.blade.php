@@ -9,46 +9,63 @@ use Livewire\Attributes\Validate;
 use Livewire\WithFileUploads;
 use App\Actions\CreateEvent;
 use App\Actions\CreateAddressBook;
+use App\Mail\CreatedNewEvent;
 
 new class extends Component {
     use WithFileUploads;
 
     public $poster;
 
-    #[Validate(['required', 'string', 'max:100', 'min:6'])]
+    // #[Validate(['required', 'string', 'max:100', 'min:6'])]
     public string $title = '';
 
-    #[Validate(['required', 'string', 'max:1000', 'min:6'])]
+    // #[Validate(['required', 'string', 'max:1000', 'min:6'])]
     public string $description = '';
 
-    #[Validate(['required', 'string'])]
+    // #[Validate(['required', 'string'])]
     public $type;
 
-    #[Validate(['required'])]
+    // #[Validate(['required'])]
     public $start_date;
 
-    #[Validate(['required'])]
+    // #[Validate(['required'])]
     public $end_date;
 
-    #[Validate(['sometimes', 'url'])]
+    // #[Validate(['sometimes', 'url'])]
     public string $website = '';
 
-    #[Validate(['sometimes', 'url'])]
+    // #[Validate(['sometimes', 'url'])]
     public string $tickets_url = '';
 
-    #[Validate(['sometimes', 'url'])]
+    // #[Validate(['sometimes', 'url'])]
     public string $cfp_url = '';
 
-    #[Validate(['required', 'string', 'max:100'])]
+    // #[Validate(['required', 'string', 'max:100'])]
     public string $address_line = '';
 
-    #[Validate(['required'])]
+    // #[Validate(['required'])]
     public $city;
 
     public $types;
 
     public $selectedCommunity = null;
     public $communities;
+
+    public function rules()
+    {
+        return [
+            'title' => 'required|string|max:100|min:6',
+            'description' => 'required|string|max:1000|min:6',
+            'type' => 'required|string',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'website' => 'sometimes|nullable|url',
+            'tickets_url' => 'sometimes|nullable|url',
+            'cfp_url' => 'sometimes|nullable|url',
+            'address_line' => $this->type !== EventType::Online->value ? 'required|string|max:100' : 'nullable',
+            'city' => $this->type !== EventType::Online->value ? 'required' : 'nullable',
+        ];
+    }
 
     public function mount(Event $event)
     {
@@ -89,12 +106,14 @@ new class extends Component {
             $data['community_id'] = (int) $this->selectedCommunity;
             $data['type'] = EventType::from($this->type);
 
-            $address['address_line'] = $this->address_line;
-            $address['city_id'] = json_decode($this->city)->id;
+            if (EventType::from($this->type) !== EventType::Online) {
+                $address['address_line'] = $this->address_line;
+                $address['city_id'] = json_decode($this->city)->id;
 
-            $addressBook = $createAddressBookAction->execute($address);
+                $addressBook = $createAddressBookAction->execute($address);
 
-            $data['address_book_id'] = $addressBook->id;
+                $data['address_book_id'] = $addressBook->id;
+            }
 
             if ($this->poster) {
                 $processPoster = $processPosterAction->execute($this->poster);
@@ -103,7 +122,10 @@ new class extends Component {
                 $data['poster_thumb'] = $processPoster['thumb'];
             }
 
-            $createEventAction->execute($data);
+            $event = $createEventAction->execute($data);
+
+            $user = auth()->user();
+            Mail::to($user)->send(new CreatedNewEvent($event));
 
             return redirect()->route('dashboard.communities.events')->with('success', 'Evento creato con successo, attendere l\'approvazione');
         } catch (\Exception $e) {
