@@ -17,7 +17,7 @@ class AddressSeeder extends Seeder
      */
     public function run(): void
     {
-        $file = Storage::get('comuni.json');
+        $file = Storage::disk('local')->get('comuni.json');
         $items = json_decode((string) $file, true);
 
         foreach ($items as $item) {
