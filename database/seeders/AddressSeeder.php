@@ -20,15 +20,19 @@ class AddressSeeder extends Seeder
         $file = Storage::disk('local')->get('comuni.json');
         $items = json_decode((string) $file, true);
 
+        if ($items === null) {
+            throw new \Exception('Failed to decode comuni.json file. File may be corrupted or not found.');
+        }
+
         foreach ($items as $item) {
-            if (!Region::whereName($item['denominazione_regione'])->exists()) {
+            if (!Region::where('name', $item['denominazione_regione'])->exists()) {
                 Region::query()->create([
                     'name'       => $item['denominazione_regione'],
                     'updated_at' => now(),
                     'created_at' => now(),
                 ]);
             }
-            if (!Province::whereName($item['denominazione_provincia'])->exists()) {
+            if (!Province::where('name', $item['denominazione_provincia'])->exists()) {
                 Province::query()->create([
                     'name'       => $item['denominazione_provincia'],
                     'code'       => $item['sigla_provincia'],
