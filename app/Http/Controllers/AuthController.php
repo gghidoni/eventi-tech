@@ -37,6 +37,6 @@ class AuthController extends Controller
     {
         $request->fulfill();
 
-        return redirect('/');
+        return redirect(route('dashboard.index').'?verified=1');
     }
 }
