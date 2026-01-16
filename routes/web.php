@@ -11,7 +11,6 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-
 // EVENTS
 Route::prefix('events')->group(function () {
     Volt::route('/{event}', 'events.show')->name('events.show');
