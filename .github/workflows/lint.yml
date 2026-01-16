@@ -25,7 +25,7 @@ jobs:
         with:
           php-version: '8.4'
 
-       - name: Add Flux Credentials Loaded From ENV
+      - name: Add Flux Credentials Loaded From ENV
          run: |
            if [ -n "${{ secrets.FLUX_USERNAME }}" ] && [ -n "${{ secrets.FLUX_LICENSE_KEY }}" ]; then
              composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
