@@ -4,9 +4,9 @@ This file contains essential information for agentic coding agents working in th
 
 ## Project Overview
 
-**Type**: Laravel 12 + Livewire 3 event management system  
-**Stack**: PHP 8.2+, SQLite/PostgreSQL, Tailwind CSS 4.x, Vite 7.x  
-**Purpose**: Tech community event management with search, user management, and notifications
+**Type**: Laravel 12 + Livewire 3 event management system
+**Stack**: PHP 8.4+, SQLite/PostgreSQL, Tailwind CSS 4.x, Vite 7.x, Meilisearch, Redis
+**Purpose**: Tech community event management with geolocation search, bookmarks, notifications, and user management
 
 ## Essential Commands
 
@@ -88,7 +88,7 @@ use function view;
 
 ### Volt Components
 - Use Blade syntax for simple components
-- Follow existing patterns in `resources/views/volt/`
+- Follow existing patterns in `resources/views/livewire/` (not `volt/`)
 - Keep logic minimal, move complex operations to Actions
 
 ### Best Practices
@@ -159,6 +159,15 @@ test('users can view events', function () {
 
 ## Development Workflow
 
+### Local Development (Docker)
+1. **Setup**: Run `docker-compose up -d` to start all services
+2. **Database**: Run `docker exec eventi-tech php artisan migrate` and `docker exec eventi-tech php artisan db:seed`
+3. **Development**: Use `docker exec eventi-tech composer dev` for full stack or individual services
+4. **Testing**: Run `docker exec eventi-tech ./vendor/bin/pest` before committing
+5. **Code Quality**: Run `docker exec eventi-tech vendor/bin/pint` and `docker exec eventi-tech vendor/bin/phpstan` before PRs
+6. **Deployment**: Use `docker exec eventi-tech npm run build` for production assets
+
+### Host Development (without Docker)
 1. **Setup**: Run `composer setup` for new environments
 2. **Development**: Use `composer dev` for full stack
 3. **Testing**: Run tests before committing
@@ -174,8 +183,54 @@ class CreateEvent
     public function handle(array $data): Event
     {
         return DB::transaction(function () use ($data) {
-            return Event::create($data);
+            $event = Event::create($data);
+            $event->searchable(); // Index for Meilisearch
+            return $event;
         });
+    }
+}
+```
+
+### Notification Example
+```php
+class CreatedNewEvent extends Mailable
+{
+    public function __construct(
+        public Event $event,
+        public User $organizer
+    ) {}
+
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: 'New Event Created',
+            from: config('mail.from.address'),
+        );
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.events.created',
+        );
+    }
+}
+```
+
+### Scout Search Integration
+```php
+class Event extends Model
+{
+    use Searchable;
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'tags' => $this->tags->pluck('name')->toArray(),
+            'location' => $this->addressBook?->full_address,
+        ];
     }
 }
 ```
@@ -185,15 +240,16 @@ class CreateEvent
 class EventsSearch extends Component
 {
     public string $search = '';
-    
+
     #[Computed]
     public function results(): Collection
     {
-        return Event::where('name', 'like', "%{$this->search}%")
-            ->limit(10)
-            ->get();
+        return Event::search($this->search) // Meilisearch integration
+            ->where('status', EventStatus::Published)
+            ->with('addressBook')
+            ->paginate(20);
     }
-    
+
     public function render(): View
     {
         return view('livewire.events-search');
@@ -201,12 +257,26 @@ class EventsSearch extends Component
 }
 ```
 
+### AddressBook Models (Geolocation)
+- **Region/Province/City**: Hierarchical location models for Italian addresses
+- **AddressBook**: Links events to specific locations for geolocation-based filtering
+- **Usage**: Events have `addressBook()` relationship for location data
+
 ## Environment Configuration
 
-- **Database**: SQLite for local, PostgreSQL for production
-- **Search**: Meilisearch for full-text search
+- **Database**: SQLite for local development, PostgreSQL in Docker/production
+- **Search**: Meilisearch for full-text search with Scout integration
 - **Queue**: Redis for background jobs
-- **Email**: Mailpit for local testing
+- **Email**: Mailpit for local testing (SMTP port 1025, Web UI port 8025)
+- **Image Processing**: Intervention Image for poster/logo handling
+- **Async Select**: Livewire Async Select for dynamic dropdowns
+
+### Docker Services
+- **app** (eventi-tech): PHP-FPM container on port 9000
+- **nginx**: Web server on port 8083
+- **postgres**: Database on port 5432
+- **meilisearch**: Search engine on port 7700
+- **mailpit**: Email testing on ports 1025 (SMTP) and 8025 (Web UI)
 
 ## CI/CD Requirements
 
@@ -216,11 +286,40 @@ class EventsSearch extends Component
 - **Linting**: Pint and PHPStan must pass
 - **Coverage**: Maintain test coverage
 
+## Docker Commands
+
+### Container Execution
+```bash
+# Start all services
+docker-compose up -d
+
+# Execute commands inside app container
+docker exec eventi-tech <command>
+
+# Examples
+docker exec eventi-tech php artisan migrate
+docker exec eventi-tech composer install
+docker exec eventi-tech vendor/bin/pint
+docker exec eventi-tech ./vendor/bin/pest
+docker exec eventi-tech npm run build
+
+# View logs
+docker logs eventi-tech -f
+docker logs eventi-tech-meilisearch -f
+```
+
+### Service URLs
+- **App**: http://localhost:8083
+- **Meilisearch**: http://localhost:7700
+- **Mailpit**: http://localhost:8025
+- **Vite (dev)**: http://localhost:5173
+
 ## Debugging Tools
 
 - **Laravel Telescope**: Available for debugging
-- **Laravel Pail**: Real-time log viewing (`php artisan pail`)
-- **Tinker**: Interactive debugging (`php artisan tinker`)
+- **Laravel Pail**: Real-time log viewing (`docker exec eventi-tech php artisan pail`)
+- **Tinker**: Interactive debugging (`docker exec eventi-tech php artisan tinker`)
 - **Browser DevTools**: For frontend debugging
+- **Docker Logs**: `docker logs <service-name>` for container debugging
 
 Remember: This is a modern Laravel application following best practices. Always test thoroughly and maintain code quality standards.

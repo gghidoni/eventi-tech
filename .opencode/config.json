@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "commands": {
+    "lint": "docker exec eventi-tech vendor/bin/pint --test",
+    "format": "docker exec eventi-tech vendor/bin/pint",
+    "test": "docker exec eventi-tech ./vendor/bin/pest",
+    "build": "docker exec eventi-tech npm run build",
+    "migrate": "docker exec eventi-tech php artisan migrate",
+    "seed": "docker exec eventi-tech php artisan db:seed",
+    "static-analyze": "docker exec eventi-tech vendor/bin/phpstan analyse",
+    "dev": "docker exec eventi-tech composer dev"
+  },
+  "environment": {
+    "type": "docker",
+    "container": "eventi-tech"
+  },
+  "rules": {
+    "php": {
+      "version": "8.4",
+      "strict_types": true,
+      "psr4": true
+    },
+    "javascript": {
+      "type": "module",
+      "bundler": "vite"
+    }
+  }
+}
