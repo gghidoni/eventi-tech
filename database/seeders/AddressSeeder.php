@@ -49,6 +49,7 @@ class AddressSeeder extends Seeder
                     'updated_at'  => now(),
                     'created_at'  => now(),
                 ]);
+                
             }
 
         }
