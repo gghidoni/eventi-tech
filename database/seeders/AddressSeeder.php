@@ -36,16 +36,16 @@ class AddressSeeder extends Seeder
                 Province::query()->create([
                     'name'       => $item['denominazione_provincia'],
                     'code'       => $item['sigla_provincia'],
-                    'region_id'  => Region::whereName($item['denominazione_regione'])->first()->id,
+                    'region_id'  => Region::where('name', $item['denominazione_regione'])->first()->id,
                     'updated_at' => now(),
                     'created_at' => now(),
                 ]);
             }
-            if (!City::whereName($item['denominazione_ita'])->exists()) {
+            if (!City::where('name', $item['denominazione_ita'])->exists()) {
                 City::query()->create([
                     'name'        => $item['denominazione_ita'],
                     'cap'         => $item['cap'],
-                    'province_id' => Province::whereName($item['denominazione_provincia'])->first()->id,
+                    'province_id' => Province::where('name', $item['denominazione_provincia'])->first()->id,
                     'updated_at'  => now(),
                     'created_at'  => now(),
                 ]);

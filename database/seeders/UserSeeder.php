@@ -70,6 +70,11 @@ class UserSeeder extends Seeder
             ],
         ];
 
-        User::query()->insert($users);
+        foreach ($users as $userData) {
+            User::updateOrCreate(
+                ['email' => $userData['email']],
+                $userData
+            );
+        }
     }
 }
