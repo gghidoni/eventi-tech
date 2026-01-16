@@ -1,6 +1,6 @@
 <?php
 
-use Livewire\Volt\Component;
+use Livewire\Component;
 use App\Actions\ToggleBookmark;
 
 new class extends Component {
