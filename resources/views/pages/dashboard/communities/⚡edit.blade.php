@@ -1,6 +1,6 @@
 <?php
 
-use Livewire\Volt\Component;
+use Livewire\Component;
 use App\Models\Community;
 use Livewire\WithFileUploads;
 use App\Actions\UpdateCommunity;

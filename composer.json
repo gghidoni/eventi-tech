@@ -10,13 +10,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "drpshtiwan/livewire-async-select": "^2.0",
+        "drpshtiwan/livewire-async-select": "dev-main as 2.0.1",  
         "http-interop/http-factory-guzzle": "^1.2",
         "intervention/image-laravel": "^1.5",
         "laravel/fortify": "^1.30",
         "laravel/framework": "^12.0",
         "laravel/scout": "^10.22",
         "laravel/tinker": "^2.10.1",
+        "livewire/livewire": "^4.0",
         "livewire/volt": "^1.7.0",
         "meilisearch/meilisearch-php": "^1.16"
     },
@@ -94,5 +95,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/gghidoni/livewire-async-select"
+        }
+    ]
 }

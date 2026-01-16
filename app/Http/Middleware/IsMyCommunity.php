@@ -15,7 +15,7 @@ class IsMyCommunity
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->communities()->where('id', $request->route('community'))->doesntExist()) {
+        if ($request->user()->communities()->where('id', $request->route('community')->id)->doesntExist()) {
             abort(403);
         }
 

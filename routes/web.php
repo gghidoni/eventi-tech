@@ -4,8 +4,6 @@ use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\IsMyCommunity;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
-use Livewire\Volt\Volt;
 
 Route::get('/', function () {
     return view('index');
@@ -13,11 +11,11 @@ Route::get('/', function () {
 
 // EVENTS
 Route::prefix('events')->group(function () {
-    Volt::route('/{event}', 'events.show')->name('events.show');
+    Route::livewire('/{event}', 'pages::events.show')->name('events.show');
 });
 
 Route::prefix('communities')->group(function () {
-    Volt::route('/{community}', 'communities.show')->name('communities.show');
+    Route::livewire('/{community}', 'pages::communities.show')->name('communities.show');
 });
 
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
@@ -37,46 +35,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // DASHBOARD
     Route::prefix('dashboard')->group(function () {
-        Volt::route('/', 'dashboard.index')->name('dashboard.index');
-        Volt::route('bookmarks', 'dashboard.bookmarks')->name('dashboard.bookmarks');
-
-        Volt::route('communities', 'dashboard.communities')
-            ->name('dashboard.communities');
+        Route::livewire('/', 'pages::dashboard.index')->name('dashboard.index');
+        Route::livewire('bookmarks', 'pages::dashboard.bookmarks')->name('dashboard.bookmarks');
 
         Route::prefix('communities')->group(function () {
-            Volt::route('/', 'dashboard.communities.index')->name('dashboard.communities.index');
-            Volt::route('create', 'dashboard.communities.create')->name('dashboard.communities.create');
-            Volt::route('{community}/edit', 'dashboard.communities.edit')->name('dashboard.communities.edit')->middleware(IsMyCommunity::class);
-            Volt::route('events', 'dashboard.communities.events')->name('dashboard.communities.events');
+            Route::livewire('/', 'pages::dashboard.communities.index')->name('dashboard.communities.index');
+            Route::livewire('create', 'pages::dashboard.communities.create')->name('dashboard.communities.create');
+            Route::livewire('{community}/edit', 'pages::dashboard.communities.edit')->name('dashboard.communities.edit')->middleware(IsMyCommunity::class);
+            Route::livewire('events', 'pages::dashboard.communities.events')->name('dashboard.communities.events');
         });
 
         Route::prefix('events')->group(function () {
-            Volt::route('{event}/edit', 'dashboard.events.edit')->name('dashboard.events.edit');
-            Volt::route('create', 'dashboard.events.create')->name('dashboard.events.create');
+            Route::livewire('{event}/edit', 'pages::dashboard.events.edit')->name('dashboard.events.edit');
+            Route::livewire('create', 'pages::dashboard.events.create')->name('dashboard.events.create');
         });
 
     });
 });
 
-// Route::view('dashboard', 'dashboard')
-//     ->middleware(['auth', 'verified'])
-//     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
-
-    Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
-    Volt::route('settings/password', 'settings.password')->name('user-password.edit');
-    Volt::route('settings/appearance', 'settings.appearance')->name('appearance.edit');
-
-    Volt::route('settings/two-factor', 'settings.two-factor')
-        ->middleware(
-            when(
-                Features::canManageTwoFactorAuthentication()
-                    && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
-                ['password.confirm'],
-                [],
-            ),
-        )
-        ->name('two-factor.show');
-});

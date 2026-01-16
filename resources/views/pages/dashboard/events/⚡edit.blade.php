@@ -1,92 +1,56 @@
 <?php
 
-use Livewire\Volt\Component;
+use Livewire\Component;
 use App\Models\Event;
 use App\Enums\EventType;
 use App\Actions\UpdateEvent;
 use App\Actions\ProcessPoster;
 use Livewire\Attributes\Validate;
 use Livewire\WithFileUploads;
-use App\Actions\CreateEvent;
-use App\Actions\CreateAddressBook;
-use App\Mail\CreatedNewEvent;
 
 new class extends Component {
     use WithFileUploads;
-
+    public Event $event;
     public $poster;
 
-    // #[Validate(['required', 'string', 'max:100', 'min:6'])]
+    #[Validate(['required', 'string', 'max:100', 'min:6'])]
     public string $title = '';
 
-    // #[Validate(['required', 'string', 'max:1000', 'min:6'])]
+    #[Validate(['required', 'string', 'max:1000', 'min:6'])]
     public string $description = '';
 
-    // #[Validate(['required', 'string'])]
+    #[Validate(['required'])]
     public $type;
 
-    // #[Validate(['required'])]
+    #[Validate(['required'])]
     public $start_date;
 
-    // #[Validate(['required'])]
+    #[Validate(['required'])]
     public $end_date;
 
-    // #[Validate(['sometimes', 'url'])]
+    #[Validate(['sometimes', 'url'])]
     public string $website = '';
 
-    // #[Validate(['sometimes', 'url'])]
+    #[Validate(['sometimes', 'url'])]
     public string $tickets_url = '';
 
-    // #[Validate(['sometimes', 'url'])]
+    #[Validate(['sometimes', 'url'])]
     public string $cfp_url = '';
 
-    // #[Validate(['required', 'string', 'max:100'])]
-    public string $address_line = '';
-
-    // #[Validate(['required'])]
-    public $city;
-
     public $types;
-
-    public $selectedCommunity = null;
-    public $communities;
-
-    public function rules()
-    {
-        return [
-            'title' => 'required|string|max:100|min:6',
-            'description' => 'required|string|max:1000|min:6',
-            'type' => 'required|string',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'website' => 'sometimes|nullable|url',
-            'tickets_url' => 'sometimes|nullable|url',
-            'cfp_url' => 'sometimes|nullable|url',
-            'address_line' => $this->type !== EventType::Online->value ? 'required|string|max:100' : 'nullable',
-            'city' => $this->type !== EventType::Online->value ? 'required' : 'nullable',
-        ];
-    }
 
     public function mount(Event $event)
     {
         $this->event = $event;
 
+        $this->fill($this->event->only(['title', 'description', 'website', 'tickets_url', 'cfp_url']));
+
+        $this->start_date = $this->event->start_date?->format('d-m-Y H:i');
+        $this->end_date = $this->event->end_date?->format('d-m-Y H:i');
+
+        $this->type = $this->event->type;
+
         $this->types = array_column(EventType::cases(), 'value');
-
-        $this->type = $this->types[0];
-
-        $this->communities = auth()
-            ->user()
-            ->communities->map(
-                fn($community) => [
-                    'value' => (string) $community->id,
-                    'label' => $community->name,
-                    'image' => $community->logo_img,
-                ],
-            )
-            ->toArray();
-
-        $this->selectedCommunity = $this->communities[0]['value'];
     }
 
     public function rendering($view)
@@ -94,7 +58,7 @@ new class extends Component {
         $view->layout('components.layouts.base', ['title' => __('Modifica evento')]);
     }
 
-    public function save(CreateEvent $createEventAction, ProcessPoster $processPosterAction, CreateAddressBook $createAddressBookAction)
+    public function save(UpdateEvent $updateEventAction, ProcessPoster $processPosterAction)
     {
         $data = $this->validate();
 
@@ -103,17 +67,6 @@ new class extends Component {
 
             $data['start_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
             $data['end_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
-            $data['community_id'] = (int) $this->selectedCommunity;
-            $data['type'] = EventType::from($this->type);
-
-            if (EventType::from($this->type) !== EventType::Online) {
-                $address['address_line'] = $this->address_line;
-                $address['city_id'] = json_decode($this->city)->id;
-
-                $addressBook = $createAddressBookAction->execute($address);
-
-                $data['address_book_id'] = $addressBook->id;
-            }
 
             if ($this->poster) {
                 $processPoster = $processPosterAction->execute($this->poster);
@@ -122,16 +75,11 @@ new class extends Component {
                 $data['poster_thumb'] = $processPoster['thumb'];
             }
 
-            $event = $createEventAction->execute($data);
-
-            $user = auth()->user();
-            Mail::to($user)->send(new CreatedNewEvent($event));
-
-            return redirect()->route('dashboard.communities.events')->with('success', 'Evento creato con successo, attendere l\'approvazione');
+            $updateEventAction->execute($this->event, $data);
+            return redirect()->route('dashboard.communities.events')->with('success', 'Evento modificato con successo');
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
-            $message = 'Si è verificato un errore';
-            $this->dispatch('messageSent', message: $message, success: false);
+            return redirect()->route('dashboard.communities.events')->with('error', 'Errore durante la modifica dell\'evento');
         }
     }
 }; ?>
@@ -140,13 +88,8 @@ new class extends Component {
 <div class="page">
     <form wire:submit="save" class="mt-5">
 
-        <div style="relative w-100% mt-4 text-gray-300">
-            <livewire:select.communities name="selectedCommunity" wire:model.live="selectedCommunity" :options="$communities"
-                placeholder="scegli una community" :searchable="false" />
-        </div>
-
         {{-- Title --}}
-        <div class="mb-5 mt-5">
+        <div class="mb-5">
             <label for="title" class="block text-sm font-medium mb-1 text-gray-500">titolo</label>
             <input type="text" id="title" name="title" class="input-et" wire:model="title" />
             @error('title')
@@ -166,7 +109,7 @@ new class extends Component {
         {{-- Tipo --}}
         <div class="mb-5">
             <label for="type" class="block text-sm font-medium mb-1 text-gray-500">tipo</label>
-            <select id="type" name="type" class="input-et select-et" wire:model.live="type">
+            <select id="type" name="type" class="input-et select-et" wire:model="type">
                 @foreach ($types as $type)
                     <option value="{{ $type }}">
                         @lang('titles.event.type.' . $type)</option>
@@ -224,29 +167,8 @@ new class extends Component {
             </div>
         </div>
 
-        @if ($this->type != EventType::Online->value)
-            {{-- Address --}}
-            <div class="mb-5">
-                <label for="address_line" class="block text-sm font-medium mb-1 text-gray-500">indirizzo</label>
-                <input type="text" id="address_line" name="address_line" class="input-et"
-                    wire:model="address_line" />
-                @error('address_line')
-                    <span class="text-pink text-xs">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div style="mb-5">
-                <label for="website" class="block text-sm font-medium text-gray-500 mb-[-12px]">città</label>
-                <livewire:select.location name="city" wire:model="city" :endpoint="'http://nginx/find-location'"
-                    placeholder="inserisci la città" :extra-params="['type' => 'city']" />
-                @error('city')
-                    <span class="text-pink text-xs">{{ $message }}</span>
-                @enderror
-            </div>
-        @endif
-
         {{-- Sito web --}}
-        <div class="mb-5 mt-5">
+        <div class="mb-5">
             <label for="website" class="block text-sm font-medium mb-1 text-gray-500">sito web</label>
             <input type="text" id="website" name="website" class="input-et" wire:model="website" />
             @error('website')
@@ -296,6 +218,8 @@ new class extends Component {
                 @if ($poster)
                     <img src="{{ $poster->temporaryUrl() }}"
                         class="h-40 rounded-sm object-cover border border-gray-600">
+                @elseif ($event->poster_img)
+                    <img src="{{ $event->poster_img }}" class="h-40 rounded-sm object-cover border border-gray-600">
                 @else
                     <div
                         class="h-40 rounded-sm border border-dashed border-gray-600 flex items-center justify-center text-[10px] text-gray-500 text-center">
