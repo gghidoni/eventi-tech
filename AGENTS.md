@@ -159,20 +159,27 @@ test('users can view events', function () {
 
 ## Development Workflow
 
+### Core Development Principles
+- **Step-by-Step Implementation**: Propose structure first, implement gradually with user approval
+- **User Confirmation Required**: Always ask before commits, pushes, and database operations
+- **Quality Gates**: Test and validate before committing changes
+- **Safety First**: Database operations and destructive actions require explicit confirmation
+
 ### Local Development (Docker)
 1. **Setup**: Run `docker-compose up -d` to start all services
-2. **Database**: Run `docker exec eventi-tech php artisan migrate` and `docker exec eventi-tech php artisan db:seed`
+2. **Database**: ⚠️ **Ask user confirmation** before `docker exec eventi-tech php artisan migrate` and seeding
 3. **Development**: Use `docker exec eventi-tech composer dev` for full stack or individual services
-4. **Testing**: Run `docker exec eventi-tech ./vendor/bin/pest` before committing
+4. **Testing**: Run `docker exec eventi-tech ./vendor/bin/pest` before committing (user approval required)
 5. **Code Quality**: Run `docker exec eventi-tech vendor/bin/pint` and `docker exec eventi-tech vendor/bin/phpstan` before PRs
 6. **Deployment**: Use `docker exec eventi-tech npm run build` for production assets
 
 ### Host Development (without Docker)
 1. **Setup**: Run `composer setup` for new environments
-2. **Development**: Use `composer dev` for full stack
-3. **Testing**: Run tests before committing
-4. **Code Quality**: Run `pint` and `phpstan` before PRs
-5. **Deployment**: Use `npm run build` for production assets
+2. **Database**: ⚠️ **Ask user confirmation** before migrations and seeding
+3. **Development**: Use `composer dev` for full stack
+4. **Testing**: Run tests before committing (user approval required)
+5. **Code Quality**: Run `pint` and `phpstan` before PRs
+6. **Deployment**: Use `npm run build` for production assets
 
 ## Common Patterns
 
@@ -282,9 +289,12 @@ class EventsSearch extends Component
 
 - **PHP**: 8.4 in CI
 - **Node**: 22 for frontend builds
-- **Tests**: Must pass before merge
+- **Tests**: Must pass before merge (user confirmation required for test implementation)
 - **Linting**: Pint and PHPStan must pass
 - **Coverage**: Maintain test coverage
+- **Database**: Migrations and seeds require explicit approval
+- **Commits**: Only create commits when explicitly requested by user
+- **Pushes**: Only push when explicitly requested by user
 
 ## Docker Commands
 
@@ -313,6 +323,20 @@ docker logs eventi-tech-meilisearch -f
 - **Meilisearch**: http://localhost:7700
 - **Mailpit**: http://localhost:8025
 - **Vite (dev)**: http://localhost:5173
+
+## Development Safety Protocols
+
+### User Confirmation Requirements
+- **Database Operations**: Always ask before migrations, seeds, or destructive DB changes
+- **Git Operations**: Never commit or push without explicit user approval
+- **Complex Changes**: Break down into steps and get approval for each phase
+- **Destructive Actions**: Warn and confirm before force pushes, branch deletions, or data loss
+
+### Workflow Guidelines
+- **Step-by-Step**: Propose general structure first, then implement specific parts
+- **Quality Gates**: Test and validate each component before proceeding
+- **Documentation**: Update AGENTS.md for any workflow or architectural changes
+- **Backup**: Ensure critical data is backed up before major changes
 
 ## Debugging Tools
 
