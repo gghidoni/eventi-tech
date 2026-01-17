@@ -1,8 +1,11 @@
 ---
 description: Formatta il codice con Pint
 ---
-Esegui `vendor/bin/pint` per formattare il codice PHP.
+Esegui Pint dentro il container Docker:
 
-Se vengono passati argomenti (path specifici), usa: `vendor/bin/pint $ARGUMENTS`
+`docker exec eventi-tech vendor/bin/pint`
+
+Se vengono passati argomenti (path specifici):
+`docker exec eventi-tech vendor/bin/pint $ARGUMENTS`
 
 Mostra i file modificati.

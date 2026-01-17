@@ -39,7 +39,9 @@
       "git diff": "allow",
       "git branch *": "allow",
       "git branch": "allow",
-      "git show *": "allow"
+      "git show *": "allow",
+      "docker exec *": "allow",
+      "docker-compose *": "allow"
     }
   },
   "provider": {

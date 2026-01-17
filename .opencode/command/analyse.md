@@ -1,6 +1,8 @@
 ---
 description: Esegue analisi statica PHPStan
 ---
-Esegui `vendor/bin/phpstan analyse` per l'analisi statica.
+Esegui PHPStan dentro il container Docker:
+
+`docker exec eventi-tech vendor/bin/phpstan analyse`
 
 Mostra gli errori trovati e suggerisci fix per ciascuno.

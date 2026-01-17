@@ -1,8 +1,11 @@
 ---
 description: Esegue i test Pest
 ---
-Esegui i test con: `composer test`
+Esegui i test dentro il container Docker:
 
-Se vengono passati argomenti, usa: `vendor/bin/pest --filter $ARGUMENTS`
+`docker exec eventi-tech composer test`
+
+Se vengono passati argomenti (filter):
+`docker exec eventi-tech vendor/bin/pest --filter $ARGUMENTS`
 
 Mostra i risultati e suggerisci fix per eventuali fallimenti.
