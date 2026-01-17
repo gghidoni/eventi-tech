@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * @property int $id
+ * @property int $city_id
+ * @property int $province_id
+ * @property int $region_id
+ * @property string|null $address_line
  * @property City $city
  * @property Province $province
  * @property Region $region

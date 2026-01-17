@@ -10,6 +10,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property string $slug
+ * @property string $status
+ * @property string $description
+ * @property string|null $website
+ * @property string|null $logo
+ * @property string|null $linkedin
+ * @property string|null $instagram
+ * @property string|null $facebook
+ * @property string|null $phone
+ * @property User $user
+ */
 class Community extends Model
 {
     use HasFactory;

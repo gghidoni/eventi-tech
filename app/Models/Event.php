@@ -44,14 +44,21 @@ class Event extends Model
         'status'     => EventStatus::class,
     ];
 
-    public function toSearchableArray()
+    /**
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
     {
         $array = $this->toArray();
         $array['title'] = $this->title;
         $array['description'] = $this->description;
-        $array['city_id'] = $this->address_book?->city_id;
-        $array['province_id'] = $this->address_book?->province_id;
-        $array['region_id'] = $this->address_book?->region_id;
+
+        /** @var AddressBook|null $addressBook */
+        $addressBook = $this->address_book;
+        $array['city_id'] = $addressBook?->city_id;
+        $array['province_id'] = $addressBook?->province_id;
+        $array['region_id'] = $addressBook?->region_id;
+
         $array['start_date'] = $this->start_date;
         $array['end_date'] = $this->end_date;
 
@@ -143,7 +150,10 @@ class Event extends Model
 
     public function getIsMineAttribute(): bool
     {
-        return $this->community->user_id === auth()->id();
+        /** @var Community $community */
+        $community = $this->community;
+
+        return $community->user_id === auth()->id();
     }
 
     // #[Scope]
