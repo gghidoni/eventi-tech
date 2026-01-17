@@ -21,8 +21,11 @@ Route::prefix('communities')->group(function () {
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
 
 // AUTH
-Route::livewire('/login', 'pages::auth.login')->name('login');
-Route::livewire('/register', 'pages::auth.register')->name('register');
+Route::middleware('guest')->group(function () {
+    Route::livewire('/login', 'pages::auth.login')->name('login');
+    Route::livewire('/register', 'pages::auth.register')->name('register');
+});
+
 Route::livewire('/thanks-register', 'pages::auth.thanks-register')->name('thanks-register');
 
 // Quando utente non è verificato e visita rotte verified

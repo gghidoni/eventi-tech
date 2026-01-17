@@ -1,7 +1,6 @@
 ---
 description: Commits changes using Conventional Commits format
 mode: subagent
-model: gemini-2.5-flash
 tools:
   write: true
   edit: true

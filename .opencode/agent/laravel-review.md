@@ -1,7 +1,6 @@
 ---
 description: Review codice Laravel/Livewire
 mode: subagent
-model: antigravity-claude-opus-4-5-thinking
 tools:
   write: false
   edit: false
