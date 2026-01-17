@@ -49,7 +49,11 @@ new class extends Component {
 
     public function mount()
     {
-        $this->isBookmarked = auth()->check() && auth()->user()->bookmarks()->where('event_id', $this->event->id)->exists();
+        if ($this->event->getAttribute('is_bookmarked') !== null) {
+            $this->isBookmarked = (bool) $this->event->is_bookmarked;
+        } else {
+            $this->isBookmarked = auth()->check() && auth()->user()->bookmarks()->where('event_id', $this->event->id)->exists();
+        }
     }
 };
 

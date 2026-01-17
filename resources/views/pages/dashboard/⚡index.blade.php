@@ -9,6 +9,7 @@ new class extends Component {
     public User $user;
     public int $pendingEvents = 0;
     public int $activeEvents = 0;
+    public int $bookmarksCount = 0;
 
     public function rendering($view)
     {
@@ -19,6 +20,9 @@ new class extends Component {
     {
         $this->user = auth()->user();
         $user = $this->user;
+        
+        $this->bookmarksCount = $this->user->bookmarks()->count();
+
         $this->pendingEvents = Event::whereHas('community', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })
@@ -39,7 +43,7 @@ new class extends Component {
         {{-- Card eventi preferiti --}}
         <div class="relative w-1/2 border rounded-sm border-gray-600 flex flex-col p-3 space-y-3 h-32">
             <div class="flex items-baseline space-x-2">
-                <span class="text-[40px] font-bold leading-none">{{ $user->bookmarks()->count() }}</span>
+                <span class="text-[40px] font-bold leading-none">{{ $bookmarksCount }}</span>
                 <span class="text-sm">eventi</span>
             </div>
             <div class="text-sm text-gray-500 m-0">
@@ -54,7 +58,7 @@ new class extends Component {
         {{-- TODO community seguite --}}
         <div class="relative w-1/2 border rounded-sm border-gray-600 flex flex-col p-3 space-y-3 h-32">
             <div class="flex items-baseline space-x-2">
-                <span class="text-[40px] font-bold leading-none">{{ $user->bookmarks()->count() }}</span>
+                <span class="text-[40px] font-bold leading-none">{{ $bookmarksCount }}</span>
                 <span class="text-sm">eventi</span>
             </div>
             <div class="text-sm text-gray-500 m-0">

@@ -26,7 +26,7 @@ new class extends Component {
             <span>crea</span>
         </a>
     </div>
-    @if (auth()->user()->communities()->count() == 0)
+    @if ($communities->isEmpty())
         <p class="text-gray-500 mt-8">crea la tua prima community per creare eventi</p>
     @else
         <div class="mt-8 flex flex-col space-y-2">

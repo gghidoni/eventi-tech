@@ -16,17 +16,10 @@ class ToggleBookmark
         }
 
         return DB::transaction(function () use ($user, $eventId) {
-            $exists = $user->bookmarks()->where('event_id', $eventId)->exists();
+            $result = $user->bookmarks()->toggle($eventId);
 
-            if ($exists) {
-                $user->bookmarks()->detach($eventId);
-
-                return false; // bookmark rimosso
-            }
-
-            $user->bookmarks()->attach($eventId);
-
-            return true; // bookmark aggiunto
+            // toggle returns ['attached' => [id], 'detached' => [id]]
+            return !empty($result['attached']);
         });
     }
 }

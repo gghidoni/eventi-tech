@@ -18,7 +18,6 @@ use Laravel\Scout\Searchable;
 class Event extends Model
 {
     use HasFactory;
-    use HasFactory;
     use Searchable;
 
     protected $fillable = [
@@ -77,6 +76,11 @@ class Event extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function bookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 
     public function getPosterImgAttribute(): string

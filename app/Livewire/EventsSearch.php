@@ -47,11 +47,19 @@ class EventsSearch extends Component
 
         $searchIds = [];
         if (mb_strlen($this->query) > 2) {
-            $searchIds = Event::search($this->query)->get()->pluck('id')->toArray();
+            $searchIds = Event::search($this->query)->keys()->toArray();
             $events = $events->whereIn('id', $searchIds);
         }
 
-        $events = $events->with('address_book.city', 'address_book.province')->paginate(8);
+        $events = $events->with(['address_book.city', 'address_book.province', 'community']);
+
+        if (auth()->check()) {
+            $events->withCount(['bookmarks as is_bookmarked' => function ($q) {
+                $q->where('user_id', auth()->id());
+            }]);
+        }
+
+        $events = $events->paginate(8);
 
         return view('livewire.events-search', [
             'events' => $events,
