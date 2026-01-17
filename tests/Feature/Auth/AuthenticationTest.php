@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Livewire\Livewire;
 
 test('login screen can be rendered', function () {
     $response = $this->get(route('login'));
@@ -13,12 +14,12 @@ test('users can authenticate using the login screen', function () {
         'password' => bcrypt('password'),
     ]);
 
-    $response = $this->post('/login', [
-        'email'    => $user->email,
-        'password' => 'password',
-    ]);
+    Livewire::test('pages::auth.login')
+        ->set('email', $user->email)
+        ->set('password', 'password')
+        ->call('login')
+        ->assertRedirect(route('dashboard.index'));
 
-    $response->assertRedirect('/'); // Fortify default home
     $this->assertAuthenticated();
 });
 
@@ -27,12 +28,12 @@ test('users can not authenticate with invalid password', function () {
         'password' => bcrypt('password'),
     ]);
 
-    $response = $this->post('/login', [
-        'email'    => $user->email,
-        'password' => 'wrong-password',
-    ]);
+    Livewire::test('pages::auth.login')
+        ->set('email', $user->email)
+        ->set('password', 'wrong-password')
+        ->call('login')
+        ->assertHasErrors(['email']);
 
-    $response->assertSessionHasErrors('email');
     $this->assertGuest();
 });
 

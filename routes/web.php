@@ -21,12 +21,12 @@ Route::prefix('communities')->group(function () {
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
 
 // AUTH
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/thanks-register', [AuthController::class, 'thanksRegister'])->name('thanks-register');
+Route::livewire('/login', 'pages::auth.login')->name('login');
+Route::livewire('/register', 'pages::auth.register')->name('register');
+Route::livewire('/thanks-register', 'pages::auth.thanks-register')->name('thanks-register');
 
 // Quando utente non è verificato e visita rotte verified
-Route::get('/email/verify', [AuthController::class, 'verificationNotice'])->middleware('auth')->name('verification.notice');
+Route::livewire('/email/verify', 'pages::auth.verify-email')->middleware('auth')->name('verification.notice');
 
 // Link di ritorno da mail di verifica
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'redirectEmailVerification'])->middleware(['auth', 'signed'])->name('verification.verify');
