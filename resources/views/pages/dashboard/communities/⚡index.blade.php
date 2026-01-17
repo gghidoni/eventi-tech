@@ -7,7 +7,7 @@ new class extends Component {
     // Definisci il layout e il titolo qui
     public function rendering($view)
     {
-        $view->layout('components.layouts.base', ['title' => __('Community')]);
+        $view->layout('components.layouts.base', ['title' => __('communities.title')]);
     }
 
     public function with()
@@ -19,15 +19,15 @@ new class extends Component {
 }; ?>
 
 <div class="page">
-    <h1 class="text-xl">gestisci le tue communities</h1>
+    <h1 class="text-xl">{{ __('communities.manage') }}</h1>
     <div class="mt-6">
         <a class="flex items-center space-x-2 text-cyan" href="{{ route('dashboard.communities.create') }}" wire:navigate>
             <img src="/icons/plus-cyan.svg" alt="" class="w-4">
-            <span>crea</span>
+            <span>{{ __('communities.create') }}</span>
         </a>
     </div>
     @if ($communities->isEmpty())
-        <p class="text-gray-500 mt-8">crea la tua prima community per creare eventi</p>
+        <p class="text-gray-500 mt-8">{{ __('communities.first_community') }}</p>
     @else
         <div class="mt-8 flex flex-col space-y-2">
             @foreach ($communities as $community)

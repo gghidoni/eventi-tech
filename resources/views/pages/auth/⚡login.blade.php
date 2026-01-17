@@ -21,7 +21,7 @@ new class extends Component {
 
     public function rendering($view)
     {
-        $view->layout('components.layouts.base', ['title' => 'Accedi']);
+        $view->layout('components.layouts.base', ['title' => __('auth.login.title')]);
     }
 
     public function login()
@@ -68,7 +68,7 @@ new class extends Component {
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 class="mt-10 text-center text-2xl/9 font-bold">Accedi</h2>
+        <h2 class="mt-10 text-center text-2xl/9 font-bold">{{ __('auth.login.title') }}</h2>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -82,7 +82,7 @@ new class extends Component {
         <form wire:submit="login" class="space-y-4">
             
             <div>
-                <label for="email" class="block text-sm font-medium mb-1">Email</label>
+                <label for="email" class="block text-sm font-medium mb-1">{{ __('auth.fields.email') }}</label>
                 <input type="email" id="email" wire:model="email" class="input-et" />
                 @error('email')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -90,7 +90,7 @@ new class extends Component {
             </div>
 
             <div>
-                <label for="password" class="block text-sm font-medium mb-1">Password</label>
+                <label for="password" class="block text-sm font-medium mb-1">{{ __('auth.fields.password') }}</label>
                 <input type="password" id="password" wire:model="password" class="input-et" />
                 @error('password')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -99,20 +99,20 @@ new class extends Component {
 
             <div class="flex items-center">
                 <input type="checkbox" id="remember" wire:model="remember" class="rounded border-gray-300" />
-                <label for="remember" class="ml-2 text-sm">Ricordami</label>
+                <label for="remember" class="ml-2 text-sm">{{ __('auth.login.remember') }}</label>
             </div>
 
             <button type="submit"
                 class="w-full flex items-center justify-center bg-accent text-background px-4 py-2 rounded-md hover:bg-accent/90 mt-8 disabled:opacity-50">
-                <span wire:loading.remove>login</span>
+                <span wire:loading.remove>{{ __('auth.login.button') }}</span>
                 <span wire:loading>...</span>
                 <img class="ml-3 w-3" src="/icons/right-black.svg" alt="" wire:loading.remove>
             </button>
         </form>
 
         <p class="mt-4 text-center text-sm text-gray-600">
-            Non sei ancora registrato?
-            <a href="{{ route('register') }}" class="text-accent hover:underline">registrati</a>
+            {{ __('auth.login.not_registered') }}
+            <a href="{{ route('register') }}" class="text-accent hover:underline">{{ __('auth.login.register_link') }}</a>
         </p>
 
     </div>

@@ -66,7 +66,7 @@ new class extends Component {
         </div>
         @if (strlen($community->description) > 100)
             <button @click="expanded = !expanded" class="text-cyan text-xs mt-1 underline focus:outline-none"
-                x-text="expanded ? 'mostra meno' : 'leggi tutto'">
+                x-text="expanded ? '{{ __('communities.show_less') }}' : '{{ __('communities.show_more') }}'">
             </button>
         @endif
 

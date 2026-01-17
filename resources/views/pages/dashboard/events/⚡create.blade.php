@@ -91,7 +91,7 @@ new class extends Component {
 
     public function rendering($view)
     {
-        $view->layout('components.layouts.base', ['title' => __('Modifica evento')]);
+        $view->layout('components.layouts.base', ['title' => __('dashboard.events.edit_title')]);
     }
 
     public function save(CreateEvent $createEventAction, ProcessPoster $processPosterAction, CreateAddressBook $createAddressBookAction)
@@ -127,10 +127,10 @@ new class extends Component {
             $user = auth()->user();
             Mail::to($user)->send(new CreatedNewEvent($event));
 
-            return redirect()->route('dashboard.communities.events')->with('success', 'Evento creato con successo, attendere l\'approvazione');
+            return redirect()->route('dashboard.communities.events')->with('success', __('dashboard.events.success_created'));
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
-            $message = 'Si è verificato un errore';
+            $message = __('common.error');
             $this->dispatch('messageSent', message: $message, success: false);
         }
     }
@@ -142,12 +142,12 @@ new class extends Component {
 
         <div style="relative w-100% mt-4 text-gray-300">
             <livewire:select.communities name="selectedCommunity" wire:model.live="selectedCommunity" :options="$communities"
-                placeholder="scegli una community" :searchable="false" />
+                placeholder="{{ __('dashboard.events.select_community') }}" :searchable="false" />
         </div>
 
         {{-- Title --}}
         <div class="mb-5 mt-5">
-            <label for="title" class="block text-sm font-medium mb-1 text-gray-500">titolo</label>
+            <label for="title" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.title') }}</label>
             <input type="text" id="title" name="title" class="input-et" wire:model="title" />
             @error('title')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -156,7 +156,7 @@ new class extends Component {
 
         {{-- Descrizione --}}
         <div class="mb-5">
-            <label for="description" class="block text-sm font-medium mb-1 text-gray-500">descrizione</label>
+            <label for="description" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.description') }}</label>
             <textarea id="description" name="description" class="textarea-et !pt-1.5" wire:model="description" rows="6"></textarea>
             @error('description')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -165,7 +165,7 @@ new class extends Component {
 
         {{-- Tipo --}}
         <div class="mb-5">
-            <label for="type" class="block text-sm font-medium mb-1 text-gray-500">tipo</label>
+            <label for="type" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.type') }}</label>
             <select id="type" name="type" class="input-et select-et" wire:model.live="type">
                 @foreach ($types as $type)
                     <option value="{{ $type }}">
@@ -179,7 +179,7 @@ new class extends Component {
 
         {{-- Data inizio --}}
         <div class="mb-5" wire:ignore>
-            <label class="block text-sm font-medium mb-1 text-gray-500">inizio</label>
+            <label class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.start') }}</label>
             <div x-data="{
                 init() {
                     flatpickr($refs.start, {
@@ -202,7 +202,7 @@ new class extends Component {
 
         {{-- Data fine --}}
         <div class="mb-5" wire:ignore>
-            <label class="block text-sm font-medium mb-1 text-gray-500">fine</label>
+            <label class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.end') }}</label>
             <div x-data="{
                 picker: null,
                 init() {
@@ -227,7 +227,7 @@ new class extends Component {
         @if ($this->type != EventType::Online->value)
             {{-- Address --}}
             <div class="mb-5">
-                <label for="address_line" class="block text-sm font-medium mb-1 text-gray-500">indirizzo</label>
+                <label for="address_line" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.address') }}</label>
                 <input type="text" id="address_line" name="address_line" class="input-et"
                     wire:model="address_line" />
                 @error('address_line')
@@ -236,9 +236,9 @@ new class extends Component {
             </div>
 
             <div style="mb-5">
-                <label for="website" class="block text-sm font-medium text-gray-500 mb-[-12px]">città</label>
+                <label for="website" class="block text-sm font-medium text-gray-500 mb-[-12px]">{{ __('dashboard.events.fields.city') }}</label>
                 <livewire:select.location name="city" wire:model="city" :endpoint="'http://nginx/find-location'"
-                    placeholder="inserisci la città" :extra-params="['type' => 'city']" />
+                    placeholder="{{ __('dashboard.events.fields.city_placeholder') }}" :extra-params="['type' => 'city']" />
                 @error('city')
                     <span class="text-pink text-xs">{{ $message }}</span>
                 @enderror
@@ -247,7 +247,7 @@ new class extends Component {
 
         {{-- Sito web --}}
         <div class="mb-5 mt-5">
-            <label for="website" class="block text-sm font-medium mb-1 text-gray-500">sito web</label>
+            <label for="website" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.website') }}</label>
             <input type="text" id="website" name="website" class="input-et" wire:model="website" />
             @error('website')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -256,7 +256,7 @@ new class extends Component {
 
         {{-- Tickets --}}
         <div class="mb-5">
-            <label for="tickets_url" class="block text-sm font-medium mb-1 text-gray-500">tickets url</label>
+            <label for="tickets_url" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.tickets_url') }}</label>
             <input type="text" id="tickets_url" name="tickets_url" class="input-et" wire:model="tickets_url" />
             @error('tickets_url')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -265,7 +265,7 @@ new class extends Component {
 
         {{-- CFP --}}
         <div class="mb-5">
-            <label for="cfp_url" class="block text-sm font-medium mb-1 text-gray-500">cfp url</label>
+            <label for="cfp_url" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.cfp_url') }}</label>
             <input type="text" id="cfp_url" name="cfp_url" class="input-et" wire:model="cfp_url" />
             @error('cfp_url')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -274,7 +274,7 @@ new class extends Component {
 
         {{-- Poster con Anteprima --}}
         <div class="mb-5">
-            <label for="poster" class="block text-sm font-medium mb-1 text-gray-500">locandina</label>
+            <label for="poster" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.poster') }}</label>
 
             <div class="flex items-center space-x-4 mb-4">
                 {{-- Bottone Personalizzato --}}
@@ -282,7 +282,7 @@ new class extends Component {
                     <label for="poster"
                         class="input-et flex items-center justify-center cursor-pointer hover:border-gray-400 transition-colors">
                         <span class="text-gray-400">
-                            {{ $poster ? 'Cambia immagine' : 'Seleziona un file' }}
+                            {{ $poster ? __('dashboard.events.fields.change_image') : __('dashboard.events.fields.select_file') }}
                         </span>
 
                         {{-- Input REALE nascosto --}}
@@ -299,14 +299,14 @@ new class extends Component {
                 @else
                     <div
                         class="h-40 rounded-sm border border-dashed border-gray-600 flex items-center justify-center text-[10px] text-gray-500 text-center">
-                        no locandina
+                        {{ __('dashboard.events.fields.no_poster') }}
                     </div>
                 @endif
             </div>
 
             {{-- Indicatore di caricamento --}}
             <div wire:loading wire:target="poster" class="text-xs text-cyan mt-1">
-                caricamento immagine...
+                {{ __('dashboard.events.fields.uploading') }}
             </div>
 
             @error('poster')
@@ -315,7 +315,7 @@ new class extends Component {
         </div>
 
         <button type="submit" class="flex items-center space-x-2 text-cyan underline mt-6">
-            <span>salva</span>
+            <span>{{ __('common.actions.save') }}</span>
             <img src="/icons/right-cyan.svg" alt="">
         </button>
     </form>

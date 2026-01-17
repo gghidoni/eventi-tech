@@ -39,10 +39,10 @@ new class extends Component {
                 $this->dispatch('bookmarkUpdated');
             }
 
-            $message = $this->isBookmarked ? 'evento aggiunto ai preferiti' : 'evento rimosso dai preferiti';
+            $message = $this->isBookmarked ? __('events.messages.bookmarked') : __('events.messages.unbookmarked');
             $this->dispatch('messageSent', message: $message, success: true);
         } catch (\Throwable $th) {
-            $message = 'Si è verificato un errore';
+            $message = __('common.error');
             $this->dispatch('messageSent', message: $message, success: false);
         }
     }
@@ -108,24 +108,24 @@ new class extends Component {
                 <div class="py-1">
                     <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
                         href="{{ $event->public_url }}" wire:navigate>
-                        apri
+                        {{ __('common.actions.open') }}
                     </a>
                     @if (!$event->is_mine)
                         @if (!$isBookmarked)
                             <span class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
                                 wire:click="toggleBookmark">
-                                aggiungi ai preferiti
+                                {{ __('events.actions.add_bookmark') }}
                             </span>
                         @else
                             <span class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
                                 wire:click="toggleBookmark">
-                                rimuovi dai preferiti
+                                {{ __('events.actions.remove_bookmark') }}
                             </span>
                         @endif
                     @else
                         <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
                             href="{{ $event->edit_url }}" wire:navigate>
-                            modifica
+                            {{ __('common.actions.edit') }}
                         </a>
                     @endif
                 </div>

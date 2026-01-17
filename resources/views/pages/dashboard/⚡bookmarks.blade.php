@@ -9,7 +9,7 @@ new class extends Component {
 
     public function rendering($view)
     {
-        $view->layout('components.layouts.base', ['title' => __('Eventi preferiti')]);
+        $view->layout('components.layouts.base', ['title' => __('dashboard.bookmarks.title')]);
     }
 
     #[On('bookmarkUpdated')]
@@ -28,9 +28,9 @@ new class extends Component {
 }; ?>
 
 <div class="page">
-    <h1 class="text-xl">i miei eventi preferiti</h1>
+    <h1 class="text-xl">{{ __('dashboard.bookmarks.heading') }}</h1>
     @if (count($events) == 0)
-        <p class="text-gray-500 mt-8">Nessun evento preferito</p>
+        <p class="text-gray-500 mt-8">{{ __('dashboard.bookmarks.empty') }}</p>
     @endif
     <div class="mt-8">
         @foreach ($events as $event)

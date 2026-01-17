@@ -38,7 +38,7 @@ new class extends Component {
 
     public function rendering($view)
     {
-        $view->layout('components.layouts.base', ['title' => __('Community')]);
+        $view->layout('components.layouts.base', ['title' => __('communities.title')]);
     }
 
     public function save(CreateCommunity $createCommunityAction, ProcessLogo $processLogoAction)
@@ -53,23 +53,23 @@ new class extends Component {
 
             $user = auth()->user();
             Mail::to($user)->send(new CreatedNewCommunity($community));
-            return redirect()->route('dashboard.communities.index')->with('success', 'Community creata con successo, attendi l\'approvazione');
+            return redirect()->route('dashboard.communities.index')->with('success', __('communities.success_created'));
 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
-            return redirect()->route('dashboard.communities.index')->with('error', 'Errore durante la creazione della community');
+            return redirect()->route('dashboard.communities.index')->with('error', __('communities.error_create'));
         }
     }
 
 }; ?>
 
 <div class="page">
-    <h1 class="text-xl">crea una community</h1>
+    <h1 class="text-xl">{{ __('communities.create_title') }}</h1>
     <form wire:submit="save" class="mt-5">
 
         {{-- Nome --}}
         <div class="mb-3">
-            <label for="name" class="block text-sm font-medium mb-1">nome</label>
+            <label for="name" class="block text-sm font-medium mb-1">{{ __('communities.fields.name') }}</label>
             <input type="text" id="name" name="name" class="input-et" wire:model="name" />
             @error('name')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -78,7 +78,7 @@ new class extends Component {
 
         {{-- Descrizione --}}
         <div class="mb-3">
-            <label for="description" class="block text-sm font-medium mb-1">descrizione</label>
+            <label for="description" class="block text-sm font-medium mb-1">{{ __('communities.fields.description') }}</label>
             <textarea id="description" name="description" class="textarea-et !pt-1.5" wire:model="description" rows="6"></textarea>
             @error('description')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -87,7 +87,7 @@ new class extends Component {
 
         {{-- Sito web --}}
         <div class="mb-3">
-            <label for="website" class="block text-sm font-medium mb-1">sito web</label>
+            <label for="website" class="block text-sm font-medium mb-1">{{ __('communities.fields.website') }}</label>
             <input type="text" id="website" name="website" class="input-et" wire:model="website" />
             @error('website')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -96,7 +96,7 @@ new class extends Component {
 
         {{-- Linkedin --}}
         <div class="mb-3">
-            <label for="linkedin" class="block text-sm font-medium mb-1">linkedin</label>
+            <label for="linkedin" class="block text-sm font-medium mb-1">{{ __('communities.fields.linkedin') }}</label>
             <input type="text" id="linkedin" name="linkedin" class="input-et" wire:model="linkedin" />
             @error('linkedin')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -105,7 +105,7 @@ new class extends Component {
 
         {{-- Instagram --}}
         <div class="mb-3">
-            <label for="instagram" class="block text-sm font-medium mb-1">instagram</label>
+            <label for="instagram" class="block text-sm font-medium mb-1">{{ __('communities.fields.instagram') }}</label>
             <input type="text" id="instagram" name="instagram" class="input-et" wire:model="instagram" />
             @error('instagram')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -114,7 +114,7 @@ new class extends Component {
 
         {{-- Facebook --}}
         <div class="mb-3">
-            <label for="facebook" class="block text-sm font-medium mb-1">facebook</label>
+            <label for="facebook" class="block text-sm font-medium mb-1">{{ __('communities.fields.facebook') }}</label>
             <input type="text" id="facebook" name="facebook" class="input-et" wire:model="facebook" />
             @error('facebook')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -123,7 +123,7 @@ new class extends Component {
 
         {{-- Telefono --}}
         <div class="mb-3">
-            <label for="phone" class="block text-sm font-medium mb-1">telefono</label>
+            <label for="phone" class="block text-sm font-medium mb-1">{{ __('communities.fields.phone') }}</label>
             <input type="text" id="phone" name="phone" class="input-et" wire:model="phone" />
             @error('phone')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -132,7 +132,7 @@ new class extends Component {
 
         {{-- Logo con Anteprima --}}
         <div class="mb-3">
-            <label for="logo" class="block text-sm font-medium mb-[-5px]">logo</label>
+            <label for="logo" class="block text-sm font-medium mb-[-5px]">{{ __('communities.fields.logo') }}</label>
 
             <div class="flex items-center space-x-4">
                 {{-- Bottone Personalizzato --}}
@@ -140,7 +140,7 @@ new class extends Component {
                     <label for="logo"
                         class="input-et flex items-center justify-center cursor-pointer hover:border-gray-400 transition-colors">
                         <span class="text-gray-400">
-                            {{ $logo ? 'Cambia immagine' : 'Seleziona un file' }}
+                            {{ $logo ? __('communities.fields.change_image') : __('communities.fields.select_file') }}
                         </span>
 
                         {{-- Input REALE nascosto --}}
@@ -156,7 +156,7 @@ new class extends Component {
                     @else
                         <div
                             class="size-16 rounded-full border border-dashed border-gray-600 flex items-center justify-center text-[10px] text-gray-500 text-center">
-                            no logo
+                            {{ __('communities.fields.no_logo') }}
                         </div>
                     @endif
                 </div>
@@ -164,7 +164,7 @@ new class extends Component {
 
             {{-- Indicatore di caricamento --}}
             <div wire:loading wire:target="logo" class="text-xs text-cyan mt-1">
-                caricamento immagine...
+                {{ __('communities.fields.uploading') }}
             </div>
 
             @error('logo')
@@ -173,7 +173,7 @@ new class extends Component {
         </div>
 
         <button type="submit" class="flex items-center space-x-2 text-cyan underline mt-6">
-            <span>crea</span>
+            <span>{{ __('communities.create') }}</span>
             <img src="/icons/right-cyan.svg" alt="">
         </button>
     </form>

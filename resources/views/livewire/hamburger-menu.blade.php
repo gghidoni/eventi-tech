@@ -47,55 +47,55 @@ new class extends Component {
             @if (!$isDashboard)
                 <ul class="flex flex-col mt-6 space-y-2">
                     <li>
-                        <x-menu-item icon="home-white" label="home" url="/" />
+                        <x-menu-item icon="home-white" label="{{ __('navigation.home') }}" url="/" />
                     </li>
                     @if (auth()->check())
                         <li>
-                            <x-menu-item icon="dashboard-white" label="dashboard"
+                            <x-menu-item icon="dashboard-white" label="{{ __('navigation.dashboard') }}"
                                 url="{{ route('dashboard.index') }}" />
                         </li>
                         @if (auth()->user()->has_active_community)
                             <li>
-                                <x-menu-item icon="users-white" label="community"
+                                <x-menu-item icon="users-white" label="{{ __('navigation.community') }}"
                                     url="{{ route('dashboard.communities.index') }}" />
                             </li>
                             <li>
-                                <x-menu-item icon="calendar-white" label="i miei eventi"
+                                <x-menu-item icon="calendar-white" label="{{ __('navigation.my_events') }}"
                                     url="{{ route('dashboard.communities.events') }}" />
                             </li>
                             <li>
-                                <x-menu-item icon="plus-white" label="nuovo evento"
+                                <x-menu-item icon="plus-white" label="{{ __('navigation.new_event') }}"
                                     url="{{ route('dashboard.events.create') }}" />
                             </li>
                         @endif
                     @endif
                     <li>
-                        <x-menu-item icon="heart-white" label="preferiti"
+                        <x-menu-item icon="heart-white" label="{{ __('navigation.favorites') }}"
                             url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />
                     </li>
                 </ul>
             @else
                 <ul class="flex flex-col space-y-2 mt-6">
                     <li>
-                        <x-menu-item icon="home-white" label="home" url="/" />
+                        <x-menu-item icon="home-white" label="{{ __('navigation.home') }}" url="/" />
                     </li>
                     <li>
-                        <x-menu-item icon="dashboard-white" label="dashboard" url="{{ route('dashboard.index') }}" />
+                        <x-menu-item icon="dashboard-white" label="{{ __('navigation.dashboard') }}" url="{{ route('dashboard.index') }}" />
                     </li>
                     <li>
-                        <x-menu-item icon="heart-white" label="preferiti"
+                        <x-menu-item icon="heart-white" label="{{ __('navigation.favorites') }}"
                             url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />
                     </li>
                     <li>
-                        <x-menu-item icon="users-white" label="community"
+                        <x-menu-item icon="users-white" label="{{ __('navigation.community') }}"
                             url="{{ route('dashboard.communities.index') }}" />
                     </li>
                     <li>
-                        <x-menu-item icon="calendar-white" label="i miei eventi"
+                        <x-menu-item icon="calendar-white" label="{{ __('navigation.my_events') }}"
                             url="{{ route('dashboard.communities.events') }}" />
                     </li>
                     <li>
-                        <x-menu-item icon="plus-white" label="nuovo evento"
+                        <x-menu-item icon="plus-white" label="{{ __('navigation.new_event') }}"
                             url="{{ route('dashboard.events.create') }}" />
                     </li>
                 </ul>
@@ -113,7 +113,7 @@ new class extends Component {
                                 @csrf
                                 <button class="flex space-x-2 items-center">
                                     <img src="/icons/logout-2-white.svg" alt="" class="!w-4">
-                                    <span>esci</span>
+                                    <span>{{ __('navigation.logout') }}</span>
                                 </button>
 
                             </form>
@@ -126,10 +126,10 @@ new class extends Component {
                 <div>
                     <ul class="mt-9">
                         <li class="mt-2">
-                            <x-menu-item icon="login-white" label="login" url="/login" />
+                            <x-menu-item icon="login-white" label="{{ __('navigation.login') }}" url="/login" />
                         </li>
                         <li class="mt-2">
-                            <x-menu-item icon="register-white" label="registrati" url="/register" />
+                            <x-menu-item icon="register-white" label="{{ __('navigation.register') }}" url="/register" />
                         </li>
                     </ul>
                 </div>
