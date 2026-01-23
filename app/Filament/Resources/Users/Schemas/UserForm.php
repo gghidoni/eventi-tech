@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -15,28 +16,56 @@ class UserForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('email')
                     ->label('Email address')
                     ->email()
-                    ->required(),
-                DateTimePicker::make('email_verified_at'),
+                    ->required()
+                    ->maxLength(255),
+                DateTimePicker::make('email_verified_at')
+                    ->native(false),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->required(fn ($context) => $context === 'create')
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->maxLength(255),
                 Toggle::make('is_admin')
                     ->required(),
-                TextInput::make('avatar'),
+                FileUpload::make('avatar_upload')
+                    ->label('Avatar')
+                    ->helperText('Il sistema ridimensionerà automaticamente l\'avatar (200x200px, WebP)')
+                    ->image()
+                    ->disk('public')
+                    ->directory('temp')
+                    ->visibility('public')
+                    ->imagePreviewHeight('150')
+                    ->maxSize(1024)
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->downloadable()
+                    ->openable()
+                    ->avatar()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        '1:1',
+                    ])
+                    ->dehydrated(false)
+                    ->columnSpanFull(),
                 TextInput::make('website')
-                    ->url(),
-                TextInput::make('linkedin'),
-                TextInput::make('instagram'),
-                TextInput::make('facebook'),
+                    ->url()
+                    ->maxLength(255),
+                TextInput::make('linkedin')
+                    ->maxLength(255),
+                TextInput::make('instagram')
+                    ->maxLength(255),
+                TextInput::make('facebook')
+                    ->maxLength(255),
                 Textarea::make('two_factor_secret')
                     ->columnSpanFull(),
                 Textarea::make('two_factor_recovery_codes')
                     ->columnSpanFull(),
-                DateTimePicker::make('two_factor_confirmed_at'),
+                DateTimePicker::make('two_factor_confirmed_at')
+                    ->native(false),
             ]);
     }
 }
