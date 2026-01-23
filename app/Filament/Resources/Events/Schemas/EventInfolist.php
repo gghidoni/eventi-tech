@@ -24,9 +24,6 @@ class EventInfolist
                             ->columnSpanFull(),
                         TextEntry::make('type')
                             ->badge(),
-                        TextEntry::make('address_book.id')
-                            ->label('Address book')
-                            ->placeholder('-'),
                         TextEntry::make('start_date')
                             ->dateTime(),
                         TextEntry::make('end_date')
@@ -46,6 +43,26 @@ class EventInfolist
                             ->openUrlInNewTab(),
                     ])
                     ->columns(2),
+
+                Section::make('Indirizzo Evento')
+                    ->schema([
+                        TextEntry::make('address_book.region.name')
+                            ->label('Regione')
+                            ->placeholder('-'),
+                        TextEntry::make('address_book.province.name')
+                            ->label('Provincia')
+                            ->placeholder('-'),
+                        TextEntry::make('address_book.city.name')
+                            ->label('Città')
+                            ->placeholder('-'),
+                        TextEntry::make('address_book.address_line')
+                            ->label('Indirizzo')
+                            ->placeholder('-')
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(3)
+                    ->visible(fn ($record) => $record->address_book !== null)
+                    ->collapsible(),
 
                 Section::make('Immagini Poster')
                     ->schema([
