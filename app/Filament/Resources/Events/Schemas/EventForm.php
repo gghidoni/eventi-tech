@@ -9,6 +9,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Schemas\Schema;
 
 class EventForm
@@ -46,8 +47,20 @@ class EventForm
                 TextInput::make('website')
                     ->url()
                     ->maxLength(255),
+
+                // Preview dell'immagine attuale (solo in edit)
+                ViewField::make('current_poster')
+                    ->label('Poster Attuale')
+                    ->view('filament.forms.components.current-image-preview')
+                    ->visible(fn ($record) => $record && $record->poster)
+                    ->viewData(fn ($record) => [
+                        'url'   => $record->poster_img ?? null,
+                        'label' => 'Poster Desktop Attuale',
+                    ])
+                    ->columnSpanFull(),
+
                 FileUpload::make('poster_upload')
-                    ->label('Poster Evento')
+                    ->label('Carica Nuovo Poster')
                     ->helperText('Il sistema genererà automaticamente le versioni Desktop (1200px), Mobile (500px) e Thumbnail (150px)')
                     ->image()
                     ->disk('posters')
@@ -64,8 +77,8 @@ class EventForm
                         '4:3',
                         '1:1',
                     ])
-                    ->dehydrated(false)
                     ->columnSpanFull(),
+
                 TextInput::make('tickets_url')
                     ->url()
                     ->maxLength(255),

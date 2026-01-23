@@ -7,6 +7,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ViewField;
 use Filament\Schemas\Schema;
 
 class UserForm
@@ -32,8 +33,20 @@ class UserForm
                     ->maxLength(255),
                 Toggle::make('is_admin')
                     ->required(),
+
+                // Preview dell'immagine attuale (solo in edit)
+                ViewField::make('current_avatar')
+                    ->label('Avatar Attuale')
+                    ->view('filament.forms.components.current-image-preview')
+                    ->visible(fn ($record) => $record && $record->avatar)
+                    ->viewData(fn ($record) => [
+                        'url'   => $record->avatar_img ?? null,
+                        'label' => 'Avatar Attuale',
+                    ])
+                    ->columnSpanFull(),
+
                 FileUpload::make('avatar_upload')
-                    ->label('Avatar')
+                    ->label('Carica Nuovo Avatar')
                     ->helperText('Il sistema ridimensionerà automaticamente l\'avatar (200x200px, WebP)')
                     ->image()
                     ->disk('public')
@@ -49,8 +62,8 @@ class UserForm
                     ->imageEditorAspectRatios([
                         '1:1',
                     ])
-                    ->dehydrated(false)
                     ->columnSpanFull(),
+
                 TextInput::make('website')
                     ->url()
                     ->maxLength(255),

@@ -9,6 +9,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Log;
 
@@ -27,7 +28,7 @@ class EditCommunity extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         // Processa il logo se presente un nuovo upload
-        if (isset($data['logo_upload'])) {
+        if (isset($data['logo_upload']) && !empty($data['logo_upload'])) {
             try {
                 // Elimina il vecchio logo se esiste
                 /** @var \App\Models\Community $record */
@@ -38,19 +39,38 @@ class EditCommunity extends EditRecord
 
                 $processor = app(ProcessLogo::class);
 
-                // Ottieni il file temporaneo
-                $tempFile = Storage::disk('logos')->path('temp/'.$data['logo_upload']);
+                // Ottieni il file caricato
+                $uploadedFileName = is_array($data['logo_upload'])
+                    ? $data['logo_upload'][0]
+                    : $data['logo_upload'];
 
-                if (file_exists($tempFile)) {
-                    $data['logo'] = $processor->execute($tempFile);
+                // Percorso completo del file temporaneo
+                $tempPath = Storage::disk('logos')->path($uploadedFileName);
 
-                    // Rimuovi il file temporaneo
-                    Storage::disk('logos')->delete('temp/'.$data['logo_upload']);
+                if (file_exists($tempPath)) {
+                    // Crea un UploadedFile object compatibile con ProcessLogo
+                    $file = new UploadedFile(
+                        $tempPath,
+                        basename($tempPath),
+                        mime_content_type($tempPath),
+                        null,
+                        true,
+                    );
+
+                    $data['logo'] = $processor->execute($file);
+
+                    // Cleanup temp file
+                    Storage::disk('logos')->delete($uploadedFileName);
+                } else {
+                    Log::warning('Temp file not found: '.$tempPath);
                 }
             } catch (Exception $e) {
                 Log::error('Logo processing failed: '.$e->getMessage());
+                Log::error('Stack trace: '.$e->getTraceAsString());
+
                 Notification::make()
                     ->title('Errore nel processing del logo')
+                    ->body($e->getMessage())
                     ->danger()
                     ->send();
             }

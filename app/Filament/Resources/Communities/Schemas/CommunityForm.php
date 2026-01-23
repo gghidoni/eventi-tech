@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Schemas\Schema;
 
 class CommunityForm
@@ -36,8 +37,20 @@ class CommunityForm
                 TextInput::make('website')
                     ->url()
                     ->maxLength(255),
+
+                // Preview dell'immagine attuale (solo in edit)
+                ViewField::make('current_logo')
+                    ->label('Logo Attuale')
+                    ->view('filament.forms.components.current-image-preview')
+                    ->visible(fn ($record) => $record && $record->logo)
+                    ->viewData(fn ($record) => [
+                        'url'   => $record->logo_img ?? null,
+                        'label' => 'Logo Attuale',
+                    ])
+                    ->columnSpanFull(),
+
                 FileUpload::make('logo_upload')
-                    ->label('Logo Community')
+                    ->label('Carica Nuovo Logo')
                     ->helperText('Il sistema ottimizzerà automaticamente il logo (150px, WebP)')
                     ->image()
                     ->disk('logos')
@@ -53,8 +66,8 @@ class CommunityForm
                     ->imageEditorAspectRatios([
                         '1:1',
                     ])
-                    ->dehydrated(false)
                     ->columnSpanFull(),
+
                 TextInput::make('linkedin')
                     ->maxLength(255),
                 TextInput::make('instagram')
