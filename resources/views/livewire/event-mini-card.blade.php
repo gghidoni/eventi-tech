@@ -59,43 +59,54 @@ new class extends Component {
 
 ?>
 
-<div class="flex pt-2 mb-5 w-full">
+<div class="flex mb-5 w-full bg-white/8 backdrop-blur-md rounded-lg px-3 pt-3 pb-3 shadow-lg h-28">
 
     <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
         <picture>
             <source media="(min-width: 1024px)" srcset="{{ $event->poster_mobile_img }}">
 
             <img src="{{ $event->poster_thumb_img }}" alt="{{ $event->title }}"
-                class="h-28 w-22 object-cover rounded-md bg-gray-700" loading="lazy" />
+                class="h-18 w-18 object-cover rounded-md bg-gray-700" loading="lazy" />
         </picture>
     </a>
 
-    <div class="flex flex-col justify-between pl-2.5 pr-2 w-full pb-1">
+    <div class="flex flex-col justify-between pr-2 w-full">
         <a href="{{ $event->public_url }}" wire:navigate>
             <div class="flex flex-col">
-                <span
-                    class="text-[9px] text-white opacity-70">{{ trans('titles.event.type.' . $event->type->value) }}</span>
-                @if ($event->is_mine)
-                    <span
-                        class="text-xs text-cyan opacity-70 uppercase">{{ trans('titles.event.status.' . $event->status->value) }}</span>
-                @endif
+                <div class="text-[10px] text-white opacity-70 flex space-x-1">
+                    <span>{{ trans('titles.event.type.' . $event->type->value) }}</span>
+                    @if ($event->is_mine)
+                        <span
+                            class="text-xs text-cyan opacity-70 uppercase">
+                            @if($event->status->value === \App\Enums\EventStatus::Active->value)
+                                <img src="/icons/accept.svg" alt="" class="!w-3.5" />
+                            @elseif($event->status->value === \App\Enums\EventStatus::Pending->value)
+                                <img src="/icons/pending.svg" alt="" class="!w-3.5" />
+                            @elseif($event->status->value === \App\Enums\EventStatus::Terminate->value)
+                                <img src="/icons/terminate.svg" alt="" class="!w-3.5" />
+                            @else
+                                <img src="/icons/reject.svg" alt="" class="!w-3.5" />
+                            @endif
+                        </span>
+                    @endif
+                </div>
                 <h3 class="text-pink font-anta leading-[18px] line-clamp-2" title="{{ $event->title }}">
                     {{ $event->title }}</h3>
             </div>
         </a>
         <div class="">
-            <div class="flex items-center mb-0.5">
-                <img src="/icons/calendar-cyan.svg" alt="" class="!w-3 mr-2" />
+            <div class="flex items-center">
+                <img src="/icons/calendar-cyan.svg" alt="" class="!w-2.5 mr-2" />
                 <span class="text-white font-anta text-xs">{{ $event->formatted_start_date }}</span>
             </div>
             @if ($event->address_book_id)
-            <div class="flex justify-between">
-                <div class="flex items-center">
-                    <img src="/icons/location-cyan.svg" alt="" class="!w-3 mr-2" />
-                    <span class="text-white font-anta text-xs">{{ $event->address_book->city->name }},
-                        {{ $event->address_book->province->code }}</span>
+                <div class="flex justify-between">
+                    <div class="flex items-center">
+                        <img src="/icons/location-cyan.svg" alt="" class="!w-2.5 mr-2" />
+                        <span class="text-white font-anta text-xs">{{ $event->address_book->city->name }},
+                            {{ $event->address_book->province->code }}</span>
+                    </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>
