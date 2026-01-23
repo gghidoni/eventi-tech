@@ -2,16 +2,16 @@
 
 return [
     'search' => [
-        'placeholder' => 'titolo, argomento...',
+        'placeholder'          => 'titolo, argomento...',
         'location_placeholder' => 'dove?',
-        'no_results' => 'Nessun evento trovato',
+        'no_results'           => 'Nessun evento trovato',
     ],
     'actions' => [
-        'add_bookmark' => 'aggiungi ai preferiti',
+        'add_bookmark'    => 'aggiungi ai preferiti',
         'remove_bookmark' => 'rimuovi dai preferiti',
     ],
     'messages' => [
-        'bookmarked' => 'evento aggiunto ai preferiti',
+        'bookmarked'   => 'evento aggiunto ai preferiti',
         'unbookmarked' => 'evento rimosso dai preferiti',
     ],
 ];

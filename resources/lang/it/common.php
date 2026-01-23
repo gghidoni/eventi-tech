@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'error' => 'Si è verificato un errore',
+    'error'   => 'Si è verificato un errore',
     'actions' => [
-        'open' => 'apri',
-        'edit' => 'modifica',
-        'save' => 'salva',
+        'open'   => 'apri',
+        'edit'   => 'modifica',
+        'save'   => 'salva',
         'cancel' => 'annulla',
-        'back' => 'indietro',
+        'back'   => 'indietro',
         'delete' => 'elimina',
     ],
 ];

@@ -25,26 +25,26 @@ class EventsTable
                 TextColumn::make('type')
                     ->badge()
                     ->searchable(),
-                TextColumn::make('address_book.id')
-                    ->searchable(),
+                // TextColumn::make('address_book.id')
+                //     ->searchable(),
                 TextColumn::make('start_date')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('end_date')
                     ->dateTime()
                     ->sortable(),
-                TextColumn::make('website')
-                    ->searchable(),
-                TextColumn::make('poster')
-                    ->searchable(),
-                TextColumn::make('poster_mobile')
-                    ->searchable(),
-                TextColumn::make('poster_thumb')
-                    ->searchable(),
-                TextColumn::make('tickets_url')
-                    ->searchable(),
-                TextColumn::make('cfp_url')
-                    ->searchable(),
+                // TextColumn::make('website')
+                //     ->searchable(),
+                // TextColumn::make('poster')
+                //     ->searchable(),
+                // TextColumn::make('poster_mobile')
+                //     ->searchable(),
+                // TextColumn::make('poster_thumb')
+                //     ->searchable(),
+                // TextColumn::make('tickets_url')
+                //     ->searchable(),
+                // TextColumn::make('cfp_url')
+                //     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

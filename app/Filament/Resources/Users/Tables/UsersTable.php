@@ -26,16 +26,16 @@ class UsersTable
                     ->sortable(),
                 IconColumn::make('is_admin')
                     ->boolean(),
-                TextColumn::make('avatar')
-                    ->searchable(),
-                TextColumn::make('website')
-                    ->searchable(),
-                TextColumn::make('linkedin')
-                    ->searchable(),
-                TextColumn::make('instagram')
-                    ->searchable(),
-                TextColumn::make('facebook')
-                    ->searchable(),
+                // TextColumn::make('avatar')
+                //     ->searchable(),
+                // TextColumn::make('website')
+                //     ->searchable(),
+                // TextColumn::make('linkedin')
+                //     ->searchable(),
+                // TextColumn::make('instagram')
+                //     ->searchable(),
+                // TextColumn::make('facebook')
+                //     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
