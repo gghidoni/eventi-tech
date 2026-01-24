@@ -19,11 +19,13 @@ new class extends Component {
 
 <div class="container mx-auto py-8 px-6 flex flex-col">
     <div>
-        <h1 class="text-3xl font-anta text-cyan">{{ $event->title }}</h1>
-        <div class="flex justify-between pt-1">
+        <h1 class="text-3xl font-anta font-bold">{{ $event->title }}</h1>
+        <div class="flex justify-between pt-2">
             <div class="flex space-x-2 items-center">
-                <img src="/icons/calendar-pink.svg" alt="" class="w-4">
-                <span class="text-sm font-anta">{{ $event->formatted_start_date }}</span>
+                <a class="flex items-center space-x-1.5" href="{{ $event->community->public_url }}" wire:navigate>
+                    <img src="{{ $event->community->logo_img }}" alt="" class="rounded-full w-7">
+                    <span class="text-sm font-anta">{{ $event->community->name }}</span>
+                </a>
             </div>
             <div class="flex space-x-2 items-center">
                 <img src="/icons/location-pink.svg" alt="" class="w-4">
@@ -31,19 +33,13 @@ new class extends Component {
                     {{ $event->address_book->province->code }}</span>
             </div>
         </div>
-        <picture>
-            <source media="(max-width: 767px)" srcset="{{ $event->poster_mobile_img }}">
 
-            <img src="{{ $event->poster_img }}" alt="{{ $event->title }}"
-                class="w-full h-auto rounded-md flex-shrink-0 mt-3 bg-gray-700 shadow-xl" loading="eager">
-        </picture>
-        <div class="flex justify-between mt-3 items-center">
+        {{-- <div class="flex justify-between mt-3 items-center">
             <a class="flex items-center space-x-1.5" href="{{ $event->community->public_url }}" wire:navigate>
                 <img src="{{ $event->community->logo_img }}" alt="" class="rounded-full w-7">
                 <span class="text-sm font-anta">{{ $event->community->name }}</span>
             </a>
-            {{-- <BookmarkButton v-if="event" :eventId="event.id" /> --}}
-        </div>
+        </div> --}}
         <div class="flex space-x-2 mt-3">
             <img src="/icons/clock-pink.svg" alt="" class="w-5">
             <span class="text-sm font-anta">{{ $event->formatted_datetime_start }} -
@@ -52,7 +48,7 @@ new class extends Component {
         <div class="mt-5">
             <p class="text-sm">{{ $event->description }}</p>
         </div>
-        <div class="flex flex-col mt-6 space-y-2">
+        <div class="flex flex-col mt-6 space-y-2 mb-8">
             @if ($event->tickets_url)
                 <a href="{{ $event->tickets_url }}" target="_blank" rel="noopener" class="flex space-x-2">
                     <img src="/icons/tickets-cyan.svg" alt="" class="w-4">
@@ -70,5 +66,12 @@ new class extends Component {
                 <span class="text-cyan text-sm underline">Aggiungi al calendario</span>
             </a>
         </div>
+
+        <picture>
+            <source media="(max-width: 767px)" srcset="{{ $event->poster_mobile_img }}">
+
+            <img src="{{ $event->poster_img }}" alt="{{ $event->title }}"
+                class="w-full h-auto rounded-md flex-shrink-0 mt-3 bg-gray-700 shadow-xl" loading="eager">
+        </picture>
     </div>
 </div>

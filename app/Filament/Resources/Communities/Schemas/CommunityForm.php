@@ -48,6 +48,17 @@ class CommunityForm
                         'label' => 'Logo Attuale',
                     ])
                     ->columnSpanFull(),
+                
+
+                TextInput::make('linkedin')
+                    ->maxLength(255),
+                TextInput::make('instagram')
+                    ->maxLength(255),
+                TextInput::make('facebook')
+                    ->maxLength(255),
+                TextInput::make('phone')
+                    ->tel()
+                    ->maxLength(50),
 
                 FileUpload::make('logo_upload')
                     ->label('Carica Nuovo Logo')
@@ -68,15 +79,7 @@ class CommunityForm
                     ])
                     ->columnSpanFull(),
 
-                TextInput::make('linkedin')
-                    ->maxLength(255),
-                TextInput::make('instagram')
-                    ->maxLength(255),
-                TextInput::make('facebook')
-                    ->maxLength(255),
-                TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(50),
+                
             ]);
     }
 }

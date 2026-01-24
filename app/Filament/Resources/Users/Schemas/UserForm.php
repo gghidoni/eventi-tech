@@ -33,6 +33,22 @@ class UserForm
                     ->maxLength(255),
                 Toggle::make('is_admin')
                     ->required(),
+                
+                TextInput::make('website')
+                    ->url()
+                    ->maxLength(255),
+                TextInput::make('linkedin')
+                    ->maxLength(255),
+                TextInput::make('instagram')
+                    ->maxLength(255),
+                TextInput::make('facebook')
+                    ->maxLength(255),
+                Textarea::make('two_factor_secret')
+                    ->columnSpanFull(),
+                Textarea::make('two_factor_recovery_codes')
+                    ->columnSpanFull(),
+                DateTimePicker::make('two_factor_confirmed_at')
+                    ->native(false),
 
                 // Preview dell'immagine attuale (solo in edit)
                 ViewField::make('current_avatar')
@@ -64,21 +80,7 @@ class UserForm
                     ])
                     ->columnSpanFull(),
 
-                TextInput::make('website')
-                    ->url()
-                    ->maxLength(255),
-                TextInput::make('linkedin')
-                    ->maxLength(255),
-                TextInput::make('instagram')
-                    ->maxLength(255),
-                TextInput::make('facebook')
-                    ->maxLength(255),
-                Textarea::make('two_factor_secret')
-                    ->columnSpanFull(),
-                Textarea::make('two_factor_recovery_codes')
-                    ->columnSpanFull(),
-                DateTimePicker::make('two_factor_confirmed_at')
-                    ->native(false),
+                
             ]);
     }
 }

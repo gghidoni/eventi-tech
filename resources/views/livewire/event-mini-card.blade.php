@@ -66,7 +66,7 @@ new class extends Component {
             <source media="(min-width: 1024px)" srcset="{{ $event->poster_mobile_img }}">
 
             <img src="{{ $event->poster_thumb_img }}" alt="{{ $event->title }}"
-                class="h-18 w-18 object-cover rounded-md bg-gray-700" loading="lazy" />
+                class="h-18 w-18 object-cover object-top-left rounded-md bg-gray-700" loading="lazy" />
         </picture>
     </a>
 
@@ -75,7 +75,7 @@ new class extends Component {
             <div class="flex flex-col">
                 <div class="text-[10px] text-white opacity-70 flex space-x-1">
                     <span>{{ trans('titles.event.type.' . $event->type->value) }}</span>
-                    @if ($event->is_mine)
+                    {{-- @if ($event->is_mine)
                         <span
                             class="text-xs text-cyan opacity-70 uppercase">
                             @if($event->status->value === \App\Enums\EventStatus::Active->value)
@@ -88,22 +88,22 @@ new class extends Component {
                                 <img src="/icons/reject.svg" alt="" class="!w-3.5" />
                             @endif
                         </span>
-                    @endif
+                    @endif --}}
                 </div>
-                <h3 class="text-pink font-anta leading-[18px] line-clamp-2" title="{{ $event->title }}">
+                <h3 class="font-anta leading-[18px] line-clamp-2 font-bold" title="{{ $event->title }}">
                     {{ $event->title }}</h3>
             </div>
         </a>
         <div class="">
             <div class="flex items-center">
                 <img src="/icons/calendar-cyan.svg" alt="" class="!w-2.5 mr-2" />
-                <span class="text-white font-anta text-xs">{{ $event->formatted_start_date }}</span>
+                <span class="text-white font-anta text-xs opacity-80">{{ $event->formatted_start_date }}</span>
             </div>
             @if ($event->address_book_id)
                 <div class="flex justify-between">
                     <div class="flex items-center">
                         <img src="/icons/location-cyan.svg" alt="" class="!w-2.5 mr-2" />
-                        <span class="text-white font-anta text-xs">{{ $event->address_book->city->name }},
+                        <span class="text-white font-anta text-xs opacity-80">{{ $event->address_book->city->name }},
                             {{ $event->address_book->province->code }}</span>
                     </div>
                 </div>
@@ -111,7 +111,7 @@ new class extends Component {
         </div>
     </div>
     <div class="relative flex flex-col justify-between pb-1">
-        <img src="/icons/kebab-white.svg" class="w-7 cursor-pointer pt-2" alt="event menu" wire:click="openMenu">
+        <img src="/icons/kebab-white.svg" class="w-7 cursor-pointer" alt="event menu" wire:click="openMenu">
 
         @if ($menuOpen)
             <div class="absolute right-0 top-6.5 mt-1 w-48 bg-white rounded-md shadow-lg z-10"
