@@ -48,7 +48,6 @@ class CommunityForm
                         'label' => 'Logo Attuale',
                     ])
                     ->columnSpanFull(),
-                
 
                 TextInput::make('linkedin')
                     ->maxLength(255),
@@ -79,7 +78,6 @@ class CommunityForm
                     ])
                     ->columnSpanFull(),
 
-                
             ]);
     }
 }

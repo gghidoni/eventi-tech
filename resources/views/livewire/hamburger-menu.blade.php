@@ -1,11 +1,16 @@
 <?php
 
-use Livewire\Component;
 use App\Models\User;
+use Livewire\Component;
 
-new class extends Component {
+new class extends Component
+{
     public bool $isOpen = false;
+
     public bool $isDashboard;
+
+    public ?string $currentRoute = null;
+
     public ?User $user;
 
     public function toggleMenu()
@@ -21,7 +26,8 @@ new class extends Component {
     public function mount()
     {
         $this->user = auth()->user();
-        $this->isDashboard = request()->routeIs('dashboard.*');
+        $this->currentRoute = request()->route()?->getName();
+        $this->isDashboard = str_starts_with($this->currentRoute ?? '', 'dashboard.');
     }
 };
 ?>
@@ -47,56 +53,56 @@ new class extends Component {
             @if (!$isDashboard)
                 <ul class="flex flex-col mt-6 space-y-2">
                     <li>
-                        <x-menu-item icon="home-white" label="{{ __('navigation.home') }}" url="/" />
+                        <x-menu-item icon="home-white" label="{{ __('navigation.home') }}" url="/" inactiveClass="text-white" :active="$currentRoute === 'home'" />
                     </li>
                     @if (auth()->check())
                         <li>
                             <x-menu-item icon="dashboard-white" label="{{ __('navigation.dashboard') }}"
-                                url="{{ route('dashboard.index') }}" />
+                                url="{{ route('dashboard.index') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.index'" />
                         </li>
                         @if (auth()->user()->has_active_community)
                             <li>
                                 <x-menu-item icon="users-white" label="{{ __('navigation.community') }}"
-                                    url="{{ route('dashboard.communities.index') }}" />
+                                    url="{{ route('dashboard.communities.index') }}" inactiveClass="text-white" :active="str_starts_with($currentRoute ?? '', 'dashboard.communities.') && $currentRoute !== 'dashboard.communities.events'" />
                             </li>
                             <li>
                                 <x-menu-item icon="calendar-white" label="{{ __('navigation.my_events') }}"
-                                    url="{{ route('dashboard.communities.events') }}" />
+                                    url="{{ route('dashboard.communities.events') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.communities.events'" />
                             </li>
                             <li>
                                 <x-menu-item icon="plus-white" label="{{ __('navigation.new_event') }}"
-                                    url="{{ route('dashboard.events.create') }}" />
+                                    url="{{ route('dashboard.events.create') }}" inactiveClass="text-white" :active="in_array($currentRoute, ['dashboard.events.create', 'dashboard.events.edit'], true)" />
                             </li>
                         @endif
                     @endif
                     <li>
                         <x-menu-item icon="heart-white" label="{{ __('navigation.favorites') }}"
-                            url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />
+                            url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" inactiveClass="text-white" :active="auth()->check() && $currentRoute === 'dashboard.bookmarks'" />
                     </li>
                 </ul>
             @else
                 <ul class="flex flex-col space-y-2 mt-6">
                     <li>
-                        <x-menu-item icon="home-white" label="{{ __('navigation.home') }}" url="/" />
+                        <x-menu-item icon="home-white" label="{{ __('navigation.home') }}" url="/" inactiveClass="text-white" :active="$currentRoute === 'home'" />
                     </li>
                     <li>
-                        <x-menu-item icon="dashboard-white" label="{{ __('navigation.dashboard') }}" url="{{ route('dashboard.index') }}" />
+                        <x-menu-item icon="dashboard-white" label="{{ __('navigation.dashboard') }}" url="{{ route('dashboard.index') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.index'" />
                     </li>
                     <li>
                         <x-menu-item icon="heart-white" label="{{ __('navigation.favorites') }}"
-                            url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" />
+                            url="{{ auth()->check() ? route('dashboard.bookmarks') : route('login') }}" inactiveClass="text-white" :active="auth()->check() && $currentRoute === 'dashboard.bookmarks'" />
                     </li>
                     <li>
                         <x-menu-item icon="users-white" label="{{ __('navigation.community') }}"
-                            url="{{ route('dashboard.communities.index') }}" />
+                            url="{{ route('dashboard.communities.index') }}" inactiveClass="text-white" :active="str_starts_with($currentRoute ?? '', 'dashboard.communities.') && $currentRoute !== 'dashboard.communities.events'" />
                     </li>
                     <li>
                         <x-menu-item icon="calendar-white" label="{{ __('navigation.my_events') }}"
-                            url="{{ route('dashboard.communities.events') }}" />
+                            url="{{ route('dashboard.communities.events') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.communities.events'" />
                     </li>
                     <li>
                         <x-menu-item icon="plus-white" label="{{ __('navigation.new_event') }}"
-                            url="{{ route('dashboard.events.create') }}" />
+                            url="{{ route('dashboard.events.create') }}" inactiveClass="text-white" :active="in_array($currentRoute, ['dashboard.events.create', 'dashboard.events.edit'], true)" />
                     </li>
                 </ul>
             @endif
@@ -126,10 +132,10 @@ new class extends Component {
                 <div>
                     <ul class="mt-9">
                         <li class="mt-2">
-                            <x-menu-item icon="login-white" label="{{ __('navigation.login') }}" url="/login" />
+                            <x-menu-item icon="login-white" label="{{ __('navigation.login') }}" url="/login" inactiveClass="text-white" :active="$currentRoute === 'login'" />
                         </li>
                         <li class="mt-2">
-                            <x-menu-item icon="register-white" label="{{ __('navigation.register') }}" url="/register" />
+                            <x-menu-item icon="register-white" label="{{ __('navigation.register') }}" url="/register" inactiveClass="text-white" :active="$currentRoute === 'register'" />
                         </li>
                     </ul>
                 </div>

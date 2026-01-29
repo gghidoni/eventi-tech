@@ -47,7 +47,6 @@ class EventForm
                 TextInput::make('website')
                     ->url()
                     ->maxLength(255),
-                
 
                 TextInput::make('tickets_url')
                     ->url()
@@ -88,7 +87,6 @@ class EventForm
                     ])
                     ->columnSpanFull(),
 
-                
             ]);
     }
 }

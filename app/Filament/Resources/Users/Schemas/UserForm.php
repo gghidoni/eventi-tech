@@ -33,7 +33,7 @@ class UserForm
                     ->maxLength(255),
                 Toggle::make('is_admin')
                     ->required(),
-                
+
                 TextInput::make('website')
                     ->url()
                     ->maxLength(255),
@@ -80,7 +80,6 @@ class UserForm
                     ])
                     ->columnSpanFull(),
 
-                
             ]);
     }
 }
