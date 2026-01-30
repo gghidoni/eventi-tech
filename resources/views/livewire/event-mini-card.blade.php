@@ -1,11 +1,14 @@
 <?php
 
-use Livewire\Component;
 use App\Actions\ToggleBookmark;
+use Livewire\Component;
 
-new class extends Component {
-    public \App\Models\Event $event;
+new class extends Component
+{
+    public App\Models\Event $event;
+
     public bool $menuOpen = false;
+
     public bool $isBookmarked = false;
 
     public function openMenu()
@@ -41,7 +44,7 @@ new class extends Component {
 
             $message = $this->isBookmarked ? __('events.messages.bookmarked') : __('events.messages.unbookmarked');
             $this->dispatch('messageSent', message: $message, success: true);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $message = __('common.error');
             $this->dispatch('messageSent', message: $message, success: false);
         }
@@ -59,7 +62,7 @@ new class extends Component {
 
 ?>
 
-<div class="flex mb-5 w-full bg-white/8 backdrop-blur-md rounded-lg px-3 pt-3 pb-3 shadow-lg h-28">
+<div class="flex mb-5 w-full glass-card px-3 pt-3 pb-3 shadow-lg h-28">
 
     <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
         <picture>
@@ -114,27 +117,27 @@ new class extends Component {
         <img src="/icons/kebab-white.svg" class="w-7 cursor-pointer" alt="event menu" wire:click="openMenu">
 
         @if ($menuOpen)
-            <div class="absolute right-0 top-6.5 mt-1 w-48 bg-white rounded-md shadow-lg z-10"
+            <div class="absolute right-0 top-6.5 mt-1 w-48 glass-panel z-10"
                 wire:click.outside="closeMenu">
                 <div class="py-1">
-                    <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
                         href="{{ $event->public_url }}" wire:navigate>
                         {{ __('common.actions.open') }}
                     </a>
                     @if (!$event->is_mine)
                         @if (!$isBookmarked)
-                            <span class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                            <span class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
                                 wire:click="toggleBookmark">
                                 {{ __('events.actions.add_bookmark') }}
                             </span>
                         @else
-                            <span class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                            <span class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
                                 wire:click="toggleBookmark">
                                 {{ __('events.actions.remove_bookmark') }}
                             </span>
                         @endif
                     @else
-                        <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
                             href="{{ $event->edit_url }}" wire:navigate>
                             {{ __('common.actions.edit') }}
                         </a>

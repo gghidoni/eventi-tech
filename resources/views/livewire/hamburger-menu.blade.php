@@ -43,7 +43,7 @@ new class extends Component
 
     @if ($isOpen)
         <!-- Menu mobile -->
-        <div class="fixed top-[72px] left-0 w-full h-[calc(100vh-72px)] bg-[#2B2B2B] flex flex-col z-40 p-6">
+        <div class="fixed top-[72px] left-0 w-full h-[calc(100vh-72px)] glass-overlay flex flex-col z-40 p-6">
             @if (auth()->check())
                 <div class="flex flex-col space-y-2 mt-6 border-b-1 border-stone-600 pb-3">
                     <img src="{{ $user->avatar_img }}" alt="" class="rounded-full w-10 h-10">

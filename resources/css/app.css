@@ -51,6 +51,25 @@
     --ui-info: var(--ui-color-info-500);
     --ui-warning: var(--ui-color-warning-500);
     --ui-error: #f19cba;
+
+    /* --app-atmosphere-image:
+        radial-gradient(900px 600px at 15% 10%, rgba(114, 183, 192, 0.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(241, 156, 186, 0.16), transparent 60%),
+        radial-gradient(1100px 700px at 55% 90%, rgba(114, 192, 160, 0.18), transparent 60%),
+        linear-gradient(180deg, #0b141c, var(--color-background)); */
+
+    /* --app-atmosphere-image:
+        radial-gradient(900px 600px at 15% 10%, rgba(114, 183, 192, 0.12), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(241, 156, 186, 0.10), transparent 60%),
+        radial-gradient(1100px 700px at 55% 90%, rgba(114, 192, 160, 0.12), transparent 60%),
+        linear-gradient(180deg, #070d12, var(--color-background)); */
+
+
+    --app-atmosphere-image:
+  radial-gradient(900px 600px at 15% 10%, rgba(114, 183, 192, 0.10), transparent 60%),
+  radial-gradient(900px 600px at 85% 20%, rgba(241, 156, 186, 0.18), transparent 60%),
+  radial-gradient(1100px 700px at 55% 90%, rgba(114, 192, 160, 0.10), transparent 60%),
+  linear-gradient(180deg, #070d12, var(--color-background));
 }
 
 @layer theme {
@@ -73,6 +92,51 @@
     body {
         font-family: "JetBrains Mono", monospace;
         @apply text-gray-300;
+
+        background-color: var(--color-background);
+        background-image: var(--app-atmosphere-image);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: 0 0;
+    }
+}
+
+@layer components {
+    .glass-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 14px;
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+    }
+
+    .glass-panel {
+        background: rgba(10, 16, 22, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+    }
+
+    .glass-nav {
+        background-color: var(--color-background);
+        background-image: var(--app-atmosphere-image);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: 0 0;
+        /* border-bottom: 1px solid rgba(255, 255, 255, 0.10); */
+    }
+
+    .glass-overlay {
+        background-color: var(--color-background);
+        background-image: var(--app-atmosphere-image);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: 0 0;
     }
 }
 
@@ -123,8 +187,62 @@ select:focus[data-flux-control] {
     @apply text-3xl text-white;
 }
 
-.las-bg-white {
-    background-color: #2b2b2b !important;
+/* Async Select: dark/glass overrides (vendor CSS loaded via @asyncSelectStyles) */
+.las-async-select-wrapper .las-select-trigger,
+.las-async-select-wrapper .las-suffix-button {
+    background: transparent !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    color: rgb(229 231 235) !important;
+    box-shadow: none !important;
+}
+
+.las-async-select-wrapper .las-select-trigger:hover,
+.las-async-select-wrapper .las-suffix-button:hover {
+    background: transparent !important;
+}
+
+.las-async-select-wrapper .las-absolute.las-bg-white {
+    background: rgba(10, 16, 22, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: rgb(229 231 235) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+}
+
+.las-async-select-wrapper .las-h-9.las-w-full.las-bg-white {
+    background: transparent !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    color: rgb(229 231 235) !important;
+    box-shadow: none !important;
+}
+
+.las-async-select-wrapper .las-h-9.las-w-full.las-bg-white::placeholder {
+    color: rgb(156 163 175) !important;
+}
+
+/* Normalize vendor "light" text colors inside async-select */
+.las-async-select-wrapper .las-text-gray-900 {
+    color: rgb(229 231 235) !important;
+}
+
+.las-async-select-wrapper .las-text-gray-700 {
+    color: rgb(209 213 219) !important;
+}
+
+.las-async-select-wrapper .las-text-gray-500 {
+    color: rgb(156 163 175) !important;
+}
+
+/* Normalize vendor highlight/chip colors for dark background */
+.las-async-select-wrapper .las-bg-primary-50,
+.las-async-select-wrapper .las-bg-primary-100 {
+    background-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+.las-async-select-wrapper .las-text-primary-900,
+.las-async-select-wrapper .las-text-primary-800 {
+    color: rgb(255 255 255) !important;
 }
 
 /* Cambia il colore dell'icona del calendario nei browser Chrome, Edge e Safari */

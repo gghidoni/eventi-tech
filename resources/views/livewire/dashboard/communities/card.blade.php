@@ -2,8 +2,10 @@
 
 use Livewire\Component;
 
-new class extends Component {
+new class extends Component
+{
     public App\Models\Community $community;
+
     public bool $menuOpen = false;
 
     public function openMenu()
@@ -27,14 +29,14 @@ new class extends Component {
         <img src="/icons/kebab-white.svg" class="w-7 cursor-pointer pt-2" alt="event menu" wire:click="openMenu">
 
         @if ($menuOpen)
-            <div class="absolute right-0 top-7.5 mt-1 w-48 bg-white rounded-md shadow-lg z-10"
+            <div class="absolute right-0 top-7.5 mt-1 w-48 glass-panel z-10"
                 wire:click.outside="closeMenu">
                 <div class="py-1">
-                    <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
                         href="{{ $community->public_url }}">
                         Apri
                     </a>
-                    <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
                         href="{{ $community->edit_url }}">
                         Modifica
                     </a>

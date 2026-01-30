@@ -6,7 +6,7 @@
 </head>
 
 <body class="min-h-screen bg-background antialiased">
-    <nav class="bg-background text-lg md:px-6 py-6 fixed top-0 left-0 w-full z-50">
+    <nav class="glass-nav text-lg md:px-6 py-6 fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto flex items-center justify-between px-6">
             <a href="/">
                 <img src="/images/logo.png" alt="Logo" class="w-24">
