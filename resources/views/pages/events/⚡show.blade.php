@@ -1,14 +1,18 @@
 <?php
 
-use Livewire\Component;
+use App\Livewire\Concerns\HasBookmarkToggle;
 use App\Models\Event;
+use Livewire\Component;
 
 new class extends Component {
+    use HasBookmarkToggle;
+
     public Event $event;
 
     public function mount(Event $event)
     {
         $this->event = $event->load(['community', 'address_book.city', 'address_book.province', 'address_book.region']);
+        $this->initializeBookmarkState($this->event);
     }
 
     public function rendering($view)
@@ -48,7 +52,13 @@ new class extends Component {
         <div class="mt-5">
             <p class="text-sm">{{ $event->description }}</p>
         </div>
-        <div class="flex flex-col mt-6 space-y-2 mb-8">
+        @if (!$event->is_mine)
+            <div class="flex justify-end mt-2">
+                <img src="{{ $isBookmarked ? '/icons/heart-pink-fill.svg' : '/icons/heart-pink-empty.svg' }}"
+                    alt="bookmark" class="w-5" wire:click="toggleBookmark">
+            </div>
+        @endif
+        <div class="flex flex-col mt-3 space-y-2 mb-8">
             @if ($event->tickets_url)
                 <a href="{{ $event->tickets_url }}" target="_blank" rel="noopener" class="flex space-x-2">
                     <img src="/icons/tickets-cyan.svg" alt="" class="w-4">

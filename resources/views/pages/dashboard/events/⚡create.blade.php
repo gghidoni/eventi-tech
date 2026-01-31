@@ -1,17 +1,20 @@
 <?php
 
-use Livewire\Component;
-use App\Models\Event;
-use App\Enums\EventType;
-use App\Actions\UpdateEvent;
-use App\Actions\ProcessPoster;
-use Livewire\Attributes\Validate;
-use Livewire\WithFileUploads;
-use App\Actions\CreateEvent;
 use App\Actions\CreateAddressBook;
+use App\Actions\CreateEvent;
+use App\Actions\ProcessPoster;
+use App\Enums\EventType;
+use App\Mail\AdminNewEventNotification;
 use App\Mail\CreatedNewEvent;
+use App\Models\Event;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
-new class extends Component {
+new class extends Component
+{
     use WithFileUploads;
 
     public $poster;
@@ -49,21 +52,22 @@ new class extends Component {
     public $types;
 
     public $selectedCommunity = null;
+
     public $communities;
 
     public function rules()
     {
         return [
-            'title' => 'required|string|max:100|min:6',
-            'description' => 'required|string|max:1000|min:6',
-            'type' => 'required|string',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'website' => 'sometimes|nullable|url',
-            'tickets_url' => 'sometimes|nullable|url',
-            'cfp_url' => 'sometimes|nullable|url',
+            'title'        => 'required|string|max:100|min:6',
+            'description'  => 'required|string|max:1000|min:6',
+            'type'         => 'required|string',
+            'start_date'   => 'required',
+            'end_date'     => 'required',
+            'website'      => 'sometimes|nullable|url',
+            'tickets_url'  => 'sometimes|nullable|url',
+            'cfp_url'      => 'sometimes|nullable|url',
             'address_line' => $this->type !== EventType::Online->value ? 'required|string|max:100' : 'nullable',
-            'city' => $this->type !== EventType::Online->value ? 'required' : 'nullable',
+            'city'         => $this->type !== EventType::Online->value ? 'required' : 'nullable',
         ];
     }
 
@@ -78,7 +82,7 @@ new class extends Component {
         $this->communities = auth()
             ->user()
             ->communities->map(
-                fn($community) => [
+                fn ($community) => [
                     'value' => (string) $community->id,
                     'label' => $community->name,
                     'image' => $community->logo_img,
@@ -101,8 +105,8 @@ new class extends Component {
         try {
             unset($data['poster']);
 
-            $data['start_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
-            $data['end_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
+            $data['start_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
+            $data['end_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
             $data['community_id'] = (int) $this->selectedCommunity;
             $data['type'] = EventType::from($this->type);
 
@@ -127,9 +131,15 @@ new class extends Component {
             $user = auth()->user();
             Mail::to($user)->send(new CreatedNewEvent($event));
 
+            // Invia notifica a tutti gli admin
+            $admins = User::where('is_admin', true)->get();
+            foreach ($admins as $admin) {
+                Mail::to($admin)->send(new AdminNewEventNotification($event));
+            }
+
             return redirect()->route('dashboard.communities.events')->with('success', __('dashboard.events.success_created'));
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
             $message = __('common.error');
             $this->dispatch('messageSent', message: $message, success: false);
         }

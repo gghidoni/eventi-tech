@@ -1,15 +1,15 @@
 <?php
 
-use App\Actions\ToggleBookmark;
+use App\Livewire\Concerns\HasBookmarkToggle;
 use Livewire\Component;
 
 new class extends Component
 {
+    use HasBookmarkToggle;
+
     public App\Models\Event $event;
 
     public bool $menuOpen = false;
-
-    public bool $isBookmarked = false;
 
     public function openMenu()
     {
@@ -21,42 +21,9 @@ new class extends Component
         $this->menuOpen = false;
     }
 
-    public function toggleBookmark(ToggleBookmark $action)
-    {
-        // Utente non loggato
-        if (!auth()->check()) {
-            return redirect('/login');
-        }
-
-        // Utente loggato ma NON verificato
-        if (!Auth::user()->hasVerifiedEmail()) {
-            return redirect()->route('verification.notice');
-        }
-
-        try {
-            $isBookmarked = $action->execute(auth()->user(), $this->event->id);
-            $this->isBookmarked = $isBookmarked;
-            $this->menuOpen = false;
-
-            if (!$this->isBookmarked) {
-                $this->dispatch('bookmarkUpdated');
-            }
-
-            $message = $this->isBookmarked ? __('events.messages.bookmarked') : __('events.messages.unbookmarked');
-            $this->dispatch('messageSent', message: $message, success: true);
-        } catch (Throwable $th) {
-            $message = __('common.error');
-            $this->dispatch('messageSent', message: $message, success: false);
-        }
-    }
-
     public function mount()
     {
-        if ($this->event->getAttribute('is_bookmarked') !== null) {
-            $this->isBookmarked = (bool) $this->event->is_bookmarked;
-        } else {
-            $this->isBookmarked = auth()->check() && auth()->user()->bookmarks()->where('event_id', $this->event->id)->exists();
-        }
+        $this->initializeBookmarkState($this->event);
     }
 };
 

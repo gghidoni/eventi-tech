@@ -1,15 +1,17 @@
 <?php
 
-use Livewire\Component;
-use Livewire\Attributes\Validate;
-use App\Models\Community;
 use App\Actions\CreateCommunity;
-use Livewire\WithFileUploads;
 use App\Actions\ProcessLogo;
+use App\Mail\AdminNewCommunityNotification;
 use App\Mail\CreatedNewCommunity;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
-new class extends Component {
+new class extends Component
+{
     use WithFileUploads;
 
     #[Validate(['required'])]
@@ -53,14 +55,21 @@ new class extends Component {
 
             $user = auth()->user();
             Mail::to($user)->send(new CreatedNewCommunity($community));
+
+            // Invia notifica a tutti gli admin
+            $admins = User::where('is_admin', true)->get();
+            foreach ($admins as $admin) {
+                Mail::to($admin)->send(new AdminNewCommunityNotification($community));
+            }
+
             return redirect()->route('dashboard.communities.index')->with('success', __('communities.success_created'));
 
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+
             return redirect()->route('dashboard.communities.index')->with('error', __('communities.error_create'));
         }
     }
-
 }; ?>
 
 <div class="page">
