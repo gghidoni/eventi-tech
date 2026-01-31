@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::livewire('/', 'pages::dashboard.index')->name('dashboard.index');
         Route::livewire('bookmarks', 'pages::dashboard.bookmarks')->name('dashboard.bookmarks');
+        Route::livewire('profile', 'pages::dashboard.profile')->name('dashboard.profile');
 
         Route::prefix('communities')->group(function () {
             Route::livewire('/', 'pages::dashboard.communities.index')->name('dashboard.communities.index');
