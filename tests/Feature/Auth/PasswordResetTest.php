@@ -1,0 +1,85 @@
+<?php
+
+use App\Models\User;
+use App\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Notification;
+
+test('forgot password screen can be rendered', function () {
+    $response = $this->get(route('password.request'));
+
+    $response->assertStatus(200);
+});
+
+test('reset password link can be requested', function () {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $this->post(route('password.email'), ['email' => $user->email]);
+
+    Notification::assertSentTo($user, ResetPassword::class);
+});
+
+test('reset password link is not sent for unknown email', function () {
+    Notification::fake();
+
+    $this->post(route('password.email'), ['email' => 'unknown@example.com']);
+
+    Notification::assertNothingSent();
+});
+
+test('reset password screen can be rendered', function () {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $this->post(route('password.email'), ['email' => $user->email]);
+
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        $response = $this->get(route('password.reset', ['token' => $notification->token]));
+        $response->assertStatus(200);
+
+        return true;
+    });
+});
+
+test('password can be reset with valid token', function () {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $this->post(route('password.email'), ['email' => $user->email]);
+
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        $response = $this->post(route('password.update'), [
+            'token' => $notification->token,
+            'email' => $user->email,
+            'password' => 'NewPassword1!',
+            'password_confirmation' => 'NewPassword1!',
+        ]);
+
+        $response->assertSessionHasNoErrors();
+
+        return true;
+    });
+});
+
+test('password cannot be reset with invalid token', function () {
+    $user = User::factory()->create();
+
+    $response = $this->post(route('password.update'), [
+        'token' => 'invalid-token',
+        'email' => $user->email,
+        'password' => 'NewPassword1!',
+        'password_confirmation' => 'NewPassword1!',
+    ]);
+
+    $response->assertSessionHasErrors(['email']);
+});
+
+test('login page shows forgot password link', function () {
+    $response = $this->get(route('login'));
+
+    $response->assertStatus(200);
+    $response->assertSee(route('password.request'));
+});

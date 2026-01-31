@@ -97,9 +97,12 @@ new class extends Component {
                 @enderror
             </div>
 
-            <div class="flex items-center">
-                <input type="checkbox" id="remember" wire:model="remember" class="rounded border-gray-300" />
-                <label for="remember" class="ml-2 text-sm">{{ __('auth.login.remember') }}</label>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember" wire:model="remember" class="rounded border-gray-300" />
+                    <label for="remember" class="ml-2 text-sm">{{ __('auth.login.remember') }}</label>
+                </div>
+                <a href="{{ route('password.request') }}" class="text-sm text-accent hover:underline">{{ __('auth.login.forgot_password') }}</a>
             </div>
 
             <button type="submit"
