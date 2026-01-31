@@ -43,7 +43,13 @@ new class extends Component {
     {
         $this->event = $event;
 
-        $this->fill($this->event->only(['title', 'description', 'website', 'tickets_url', 'cfp_url']));
+        $this->fill([
+            'title'       => $this->event->title ?? '',
+            'description' => $this->event->description ?? '',
+            'website'     => $this->event->website ?? '',
+            'tickets_url' => $this->event->tickets_url ?? '',
+            'cfp_url'     => $this->event->cfp_url ?? '',
+        ]);
 
         $this->start_date = $this->event->start_date?->format('d-m-Y H:i');
         $this->end_date = $this->event->end_date?->format('d-m-Y H:i');
@@ -64,6 +70,10 @@ new class extends Component {
 
         try {
             unset($data['poster']);
+
+            $data['website'] = $data['website'] ?: null;
+            $data['tickets_url'] = $data['tickets_url'] ?: null;
+            $data['cfp_url'] = $data['cfp_url'] ?: null;
 
             $data['start_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
             $data['end_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);

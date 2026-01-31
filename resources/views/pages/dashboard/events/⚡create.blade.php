@@ -105,6 +105,10 @@ new class extends Component
         try {
             unset($data['poster']);
 
+            $data['website'] = $data['website'] ?: null;
+            $data['tickets_url'] = $data['tickets_url'] ?: null;
+            $data['cfp_url'] = $data['cfp_url'] ?: null;
+
             $data['start_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
             $data['end_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
             $data['community_id'] = (int) $this->selectedCommunity;

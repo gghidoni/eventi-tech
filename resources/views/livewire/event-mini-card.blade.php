@@ -45,20 +45,6 @@ new class extends Component
             <div class="flex flex-col">
                 <div class="text-[10px] text-white opacity-70 flex space-x-1">
                     <span>{{ trans('titles.event.type.' . $event->type->value) }}</span>
-                    {{-- @if ($event->is_mine)
-                        <span
-                            class="text-xs text-cyan opacity-70 uppercase">
-                            @if($event->status->value === \App\Enums\EventStatus::Active->value)
-                                <img src="/icons/accept.svg" alt="" class="!w-3.5" />
-                            @elseif($event->status->value === \App\Enums\EventStatus::Pending->value)
-                                <img src="/icons/pending.svg" alt="" class="!w-3.5" />
-                            @elseif($event->status->value === \App\Enums\EventStatus::Terminate->value)
-                                <img src="/icons/terminate.svg" alt="" class="!w-3.5" />
-                            @else
-                                <img src="/icons/reject.svg" alt="" class="!w-3.5" />
-                            @endif
-                        </span>
-                    @endif --}}
                 </div>
                 <h3 class="font-anta leading-[18px] line-clamp-2 font-bold" title="{{ $event->title }}">
                     {{ $event->title }}</h3>
@@ -76,6 +62,11 @@ new class extends Component
                         <span class="text-white font-anta text-xs opacity-80">{{ $event->address_book->city->name }},
                             {{ $event->address_book->province->code }}</span>
                     </div>
+                </div>
+            @else 
+                <div class="flex items-center">
+                    <img src="/icons/location-cyan.svg" alt="" class="!w-2.5 mr-2" />
+                    <span class="text-white font-anta text-xs opacity-80">Online</span>
                 </div>
             @endif
         </div>

@@ -7,6 +7,7 @@ use Exception;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Log;
+use App\Enums\EventStatus;
 
 class EventsSearch extends Component
 {
@@ -28,9 +29,14 @@ class EventsSearch extends Component
         $this->resetPage();
     }
 
+    private function getActiveEvents(): object
+    {
+        return Event::where('status', EventStatus::Active->value)->where('end_date', '>=', now())->orderBy('start_date', 'asc');
+    }
+
     public function render()
     {
-        $events = Event::query();
+        $events = $this->getActiveEvents();
 
         if ($this->location) {
             $locationData = json_decode($this->location, true);
