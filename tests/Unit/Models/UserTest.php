@@ -38,6 +38,22 @@ describe('relationships', function () {
 
         expect($user->bookmarks)->toHaveCount(0);
     });
+
+    test('has many favorite communities through pivot table', function () {
+        $user = User::factory()->create();
+        $communities = Community::factory()->count(3)->create();
+
+        $user->favoriteCommunities()->attach($communities->pluck('id'));
+
+        expect($user->favoriteCommunities)->toHaveCount(3);
+        expect($user->favoriteCommunities->first())->toBeInstanceOf(Community::class);
+    });
+
+    test('returns empty collection when no favorite communities', function () {
+        $user = User::factory()->create();
+
+        expect($user->favoriteCommunities)->toHaveCount(0);
+    });
 });
 
 describe('accessors', function () {

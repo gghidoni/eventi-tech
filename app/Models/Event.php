@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\EventStatus;
+use App\Jobs\NotifyCommunityFollowersOfApprovedEvent;
 use App\Models\AddressBook\AddressBook;
 use Carbon\Carbon;
 use Database\Factories\EventFactory;
@@ -173,6 +174,26 @@ class Event extends Model
         $community = $this->community;
 
         return $community->user_id === auth()->id();
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (self $event): void {
+            // Invia notifiche solo alla transizione verso "active".
+            if (!$event->wasChanged('status')) {
+                return;
+            }
+
+            if ($event->status !== EventStatus::Active) {
+                return;
+            }
+
+            if ((string) $event->getRawOriginal('status') === EventStatus::Active->value) {
+                return;
+            }
+
+            NotifyCommunityFollowersOfApprovedEvent::dispatch($event->id);
+        });
     }
 
     // #[Scope]

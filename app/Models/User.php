@@ -70,6 +70,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Event::class);
     }
 
+    /**
+     * Relationship Favorite Communities
+     *
+     * @return BelongsToMany<Community, $this>
+     */
+    public function favoriteCommunities(): BelongsToMany
+    {
+        return $this->belongsToMany(Community::class)->withTimestamps();
+    }
+
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());

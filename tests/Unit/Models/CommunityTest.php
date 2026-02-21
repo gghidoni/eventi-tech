@@ -30,6 +30,16 @@ describe('relationships', function () {
 
         expect($community->events)->toHaveCount(0);
     });
+
+    test('belongs to many users that favorited it', function () {
+        $community = Community::factory()->create();
+        $users = User::factory()->count(2)->create();
+
+        $community->favoritedByUsers()->attach($users->pluck('id'));
+
+        expect($community->favoritedByUsers)->toHaveCount(2);
+        expect($community->favoritedByUsers->first())->toBeInstanceOf(User::class);
+    });
 });
 
 describe('accessors', function () {
@@ -43,6 +53,25 @@ describe('accessors', function () {
         $community = Community::factory()->create();
 
         expect($community->edit_url)->toBe(url('/dashboard/communities/'.$community->id.'/edit'));
+    });
+
+    test('is_mine returns true when authenticated user owns the community', function () {
+        $user = User::factory()->create();
+        $community = Community::factory()->forUser($user)->create();
+
+        $this->actingAs($user);
+
+        expect($community->is_mine)->toBeTrue();
+    });
+
+    test('is_mine returns false when authenticated user does not own the community', function () {
+        $owner = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $community = Community::factory()->forUser($owner)->create();
+
+        $this->actingAs($otherUser);
+
+        expect($community->is_mine)->toBeFalse();
     });
 
     test('logo_img returns logo URL when logo exists', function () {

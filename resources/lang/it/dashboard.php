@@ -3,14 +3,21 @@
 return [
     'title'     => 'Dashboard',
     'bookmarks' => [
-        'title'   => 'Eventi preferiti',
-        'heading' => 'i miei eventi preferiti',
-        'empty'   => 'Nessun evento preferito',
+        'title'             => 'Preferiti',
+        'heading'           => 'i miei preferiti',
+        'empty'             => 'Nessun evento preferito',
+        'empty_events'      => 'Nessun evento preferito',
+        'empty_communities' => 'Nessuna community preferita',
+        'tabs'              => [
+            'events'      => 'Eventi',
+            'communities' => 'Community',
+        ],
     ],
     'cards' => [
         'favorites' => [
-            'events' => 'eventi',
-            'label'  => 'preferiti',
+            'events'      => 'eventi',
+            'communities' => 'community',
+            'label'       => 'preferiti',
         ],
         'pending_events' => [
             'label' => 'in fase di approvazione',

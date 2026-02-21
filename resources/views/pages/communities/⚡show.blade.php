@@ -1,10 +1,12 @@
 <?php
 
+use App\Livewire\Concerns\HasCommunityFavoriteToggle;
 use Livewire\Component;
 use App\Models\Community;
 use Livewire\WithPagination;
 
 new class extends Component {
+    use HasCommunityFavoriteToggle;
     use WithPagination;
     public Community $community;
     // public $events;
@@ -12,6 +14,7 @@ new class extends Component {
     public function mount(Community $community)
     {
         $this->community = $community;
+        $this->initializeCommunityFavoriteState($this->community);
         // $this->events = $community->events()->latest()->paginate(8);
     }
 
@@ -32,9 +35,15 @@ new class extends Component {
 }; ?>
 
 <div class="page">
-    <div class="flex space-x-4 mt-4">
-        <img src="{{ $community->logo_img }}" alt="" class="w-13 h-13 rounded-full">
-        <h1 class="text-2xl font-anta">{{ $community->name }}</h1>
+    <div class="flex justify-between items-start mt-4">
+        <div class="flex space-x-4">
+            <img src="{{ $community->logo_img }}" alt="" class="w-13 h-13 rounded-full">
+            <h1 class="text-2xl font-anta">{{ $community->name }}</h1>
+        </div>
+        @if (!$community->is_mine)
+            <img src="{{ $isCommunityFavorited ? '/icons/heart-pink-fill.svg' : '/icons/heart-pink-empty.svg' }}"
+                alt="favorite" class="w-5 cursor-pointer" wire:click="toggleCommunityFavorite">
+        @endif
     </div>
     @if ($community->website || $community->linkedin || $community->instagram || $community->facebook)
         <div class="mt-5 flex space-x-1.5 items-center">

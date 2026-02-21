@@ -23,7 +23,7 @@ new class extends Component
     <img src="{{ $community->logo_img }}" alt="" class="w-10 h-10 rounded-full">
     <div class="flex flex-col ml-3">
         <span>{{ $community->name }}</span>
-        <span class="text-cyan text-xs">@lang('titles.community.status.' . $community->status)</span>
+        <span class="text-cyan text-xs">@lang('titles.community.status.' . $community->status->value)</span>
     </div>
     <div class="relative ml-auto">
         <img src="/icons/kebab-white.svg" class="w-7 cursor-pointer pt-2" alt="event menu" wire:click="openMenu">

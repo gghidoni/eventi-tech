@@ -10,6 +10,14 @@ return [
     'create_title'    => 'crea una community',
     'success_created' => 'Community creata con successo, attendi l\'approvazione',
     'error_create'    => 'Errore durante la creazione della community',
+    'actions'         => [
+        'add_favorite'    => 'aggiungi ai preferiti',
+        'remove_favorite' => 'rimuovi dai preferiti',
+    ],
+    'messages'        => [
+        'favorited'   => 'community aggiunta ai preferiti',
+        'unfavorited' => 'community rimossa dai preferiti',
+    ],
     'fields'          => [
         'name'         => 'nome',
         'description'  => 'descrizione',

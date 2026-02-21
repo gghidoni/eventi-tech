@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\CommunityStatus;
 use Database\Factories\CommunityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int $user_id
  * @property string $name
  * @property string $slug
- * @property string $status
+ * @property CommunityStatus $status
  * @property string $description
  * @property string|null $website
  * @property string|null $logo
@@ -30,6 +32,10 @@ class Community extends Model
 {
     /** @use HasFactory<CommunityFactory> */
     use HasFactory;
+
+    protected $casts = [
+        'status' => CommunityStatus::class,
+    ];
 
     protected $fillable = [
         'user_id',
@@ -62,6 +68,14 @@ class Community extends Model
         return $this->hasMany(Event::class);
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function favoritedByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
     public function getPublicUrlAttribute(): string
     {
         return url('/communities/'.$this->id);
@@ -70,6 +84,11 @@ class Community extends Model
     public function getEditUrlAttribute(): string
     {
         return url('/dashboard/communities/'.$this->id.'/edit');
+    }
+
+    public function getIsMineAttribute(): bool
+    {
+        return $this->user_id === auth()->id();
     }
 
     protected function getLogoImgAttribute(): string

@@ -10,6 +10,7 @@ new class extends Component {
     public int $pendingEvents = 0;
     public int $activeEvents = 0;
     public int $bookmarksCount = 0;
+    public int $favoriteCommunitiesCount = 0;
 
     public function rendering($view)
     {
@@ -22,6 +23,7 @@ new class extends Component {
         $user = $this->user;
         
         $this->bookmarksCount = $this->user->bookmarks()->count();
+        $this->favoriteCommunitiesCount = $this->user->favoriteCommunities()->count();
 
         $this->pendingEvents = Event::whereHas('community', function ($query) use ($user) {
             $query->where('user_id', $user->id);
@@ -55,19 +57,19 @@ new class extends Component {
         </div>
 
 
-        {{-- TODO community seguite --}}
-        <div class="relative w-1/2 border rounded-sm border-gray-600 flex flex-col p-3 space-y-3 h-32">
+        <a href="{{ route('dashboard.bookmarks', ['tab' => 'communities']) }}" wire:navigate
+            class="relative w-1/2 border rounded-sm border-gray-600 flex flex-col p-3 space-y-3 h-32">
             <div class="flex items-baseline space-x-2">
-                <span class="text-[40px] font-bold leading-none">{{ $bookmarksCount }}</span>
-                <span class="text-sm">eventi</span>
+                <span class="text-[40px] font-bold leading-none">{{ $favoriteCommunitiesCount }}</span>
+                <span class="text-sm">{{ __('dashboard.cards.favorites.communities') }}</span>
             </div>
             <div class="text-sm text-gray-500 m-0">
-                <span>preferiti</span>
+                <span>{{ __('dashboard.cards.favorites.label') }}</span>
             </div>
             <div class="absolute top-3 right-3">
                 <img src="/icons/heart-pink-empty.svg" class="size-5" alt="Preferiti">
             </div>
-        </div>
+        </a>
     </div>
     <div class="mt-6">
         <ul>
