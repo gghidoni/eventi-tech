@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->string('badge_color');
+            $table->string('label_color');
             $table->timestamps();
         });
     }

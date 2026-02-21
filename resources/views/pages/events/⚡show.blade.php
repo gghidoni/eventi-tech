@@ -49,7 +49,16 @@ new class extends Component {
             <span class="text-sm font-anta">{{ $event->formatted_datetime_start }} -
                 {{ $event->formatted_datetime_end }}</span>
         </div>
-        <div class="mt-5">
+        <div class="flex space-x-2 mt-5">
+            @foreach ($event->tags as $tag)
+                <span class="text-xs font-anta px-1 py-0.5 rounded-md"
+                    {{-- Colori dinamici dal DB: inline style evita i limiti di compilazione classi Tailwind dinamiche --}}
+                    style="background-color: {{ $tag->badge_color }}; color: {{ $tag->label_color }};">
+                    {{ $tag->name }}
+                </span>
+            @endforeach
+        </div>
+        <div class="mt-3">
             <p class="text-sm">{{ $event->description }}</p>
         </div>
         @if (!$event->is_mine)

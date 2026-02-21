@@ -29,7 +29,7 @@ new class extends Component
 
 ?>
 
-<div class="flex mb-5 w-full glass-card px-3 pt-3 pb-3 shadow-lg h-28">
+<div class="flex mb-5 w-full glass-card px-3 pt-3 pb-3 shadow-lg h-34">
 
     <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
         <picture>
@@ -51,6 +51,10 @@ new class extends Component
             </div>
         </a>
         <div class="">
+            <div class="flex items-center space-x-1 mb-1 mt-1.5 ml-[-2px]">
+                <img class="rounded-full w-4" src="{{ $event->community->logo_img }}" alt="">
+                <span class="text-xs font-anta opacity-80">{{ $event->community->name }}</span>
+            </div>
             <div class="flex items-center">
                 <img src="/icons/calendar-cyan.svg" alt="" class="!w-2.5 mr-2" />
                 <span class="text-white font-anta text-xs opacity-80">{{ $event->formatted_start_date }}</span>
