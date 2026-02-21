@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Livewire;
 
 use App\Livewire\EventsSearch;
-use App\Models\AddressBook\AddressBook;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;

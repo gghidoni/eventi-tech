@@ -52,6 +52,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Relationship Community
+     *
+     * @return HasMany<Community, $this>
      */
     public function communities(): HasMany
     {
@@ -60,6 +62,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Relationship Bookmarks
+     *
+     * @return BelongsToMany<Event, $this>
      */
     public function bookmarks(): BelongsToMany
     {

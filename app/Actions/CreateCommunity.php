@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\DB;
 
 class CreateCommunity
 {
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public function execute(array $data): Community
     {
         return DB::transaction(function () use ($data): Community {

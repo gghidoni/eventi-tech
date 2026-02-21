@@ -48,11 +48,13 @@ class EditUser extends EditRecord
                 $tempPath = Storage::disk('public')->path($uploadedFileName);
 
                 if (file_exists($tempPath)) {
+                    $mimeType = mime_content_type($tempPath) ?: null;
+
                     // Crea un UploadedFile object compatibile con ProcessAvatar
                     $file = new UploadedFile(
                         $tempPath,
                         basename($tempPath),
-                        mime_content_type($tempPath),
+                        $mimeType,
                         null,
                         true,
                     );

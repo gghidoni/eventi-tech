@@ -27,7 +27,7 @@ class TagFactory extends Factory
             'name' => $name,
             'slug' => str()->slug($name),
             // Default coerenti con i vincoli della tabella tags.
-            'icon' => 'code',
+            'icon'        => 'code',
             'badge_color' => fake()->hexColor(),
             'label_color' => '#FFFFFF',
         ];

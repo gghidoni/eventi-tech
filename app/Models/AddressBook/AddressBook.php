@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\AddressBook;
 
+use Database\Factories\AddressBook\AddressBookFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AddressBook extends Model
 {
+    /** @use HasFactory<AddressBookFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -29,16 +31,25 @@ class AddressBook extends Model
         'address_line',
     ];
 
+    /**
+     * @return BelongsTo<Region, $this>
+     */
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);
     }
 
+    /**
+     * @return BelongsTo<Province, $this>
+     */
     public function province(): BelongsTo
     {
         return $this->belongsTo(Province::class);
     }
 
+    /**
+     * @return BelongsTo<City, $this>
+     */
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);

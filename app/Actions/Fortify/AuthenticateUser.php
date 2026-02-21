@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -9,7 +10,7 @@ use Laravel\Fortify\Fortify;
 
 class AuthenticateUser
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Authenticatable
     {
         $request->validate([
             Fortify::username() => 'required|email',
@@ -33,6 +34,14 @@ class AuthenticateUser
         $request->session()->regenerate();
 
         // Ritorna l'utente autenticato
-        return Auth::user();
+        $user = Auth::user();
+
+        if ($user === null) {
+            throw ValidationException::withMessages([
+                Fortify::username() => ['Utente non autenticato.'],
+            ]);
+        }
+
+        return $user;
     }
 }

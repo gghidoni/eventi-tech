@@ -2,13 +2,14 @@
 
 namespace App\Actions;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ProcessLogo
 {
-    public function execute($sourceFile): string
+    public function execute(UploadedFile $sourceFile): string
     {
         $filename = Str::uuid().'.webp';
 

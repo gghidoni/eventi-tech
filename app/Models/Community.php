@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\CommunityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class Community extends Model
 {
+    /** @use HasFactory<CommunityFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -44,12 +46,17 @@ class Community extends Model
 
     /**
      * Relationship User
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<Event, $this>
+     */
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);

@@ -2,12 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use Exception;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Log;
-use App\Enums\EventStatus;
 
 class EventsSearch extends Component
 {
@@ -15,7 +17,7 @@ class EventsSearch extends Component
 
     public string $query = '';
 
-    public $location = null;
+    public ?string $location = null;
 
     public function updatedQuery(): void
     {
@@ -23,31 +25,34 @@ class EventsSearch extends Component
         $this->resetPage();
     }
 
-    public function updatedLocation($location): void
+    public function updatedLocation(?string $location): void
     {
         Log::info('Location selected:', ['location' => $location]);
         $this->resetPage();
     }
 
-    private function getActiveEvents(): object
-    {
-        return Event::where('status', EventStatus::Active->value)->where('end_date', '>=', now())->orderBy('start_date', 'asc');
-    }
-
-    public function render()
+    public function render(): View
     {
         $events = $this->getActiveEvents();
 
         if ($this->location) {
             $locationData = json_decode($this->location, true);
+
+            if (
+                !is_array($locationData)
+                || !isset($locationData['type'], $locationData['id'])
+            ) {
+                throw new Exception('Formato location non valido');
+            }
+
             $field = match ($locationData['type']) {
                 'comune'    => 'city_id',
                 'provincia' => 'province_id',
                 'regione'   => 'region_id',
                 default     => throw new Exception('Tipo di location non valido'),
             };
-            $events = $events->whereHas('address_book', function ($q) use ($field, $locationData) {
-                $q->where($field, $locationData['id']);
+            $events = $events->whereHas('address_book', function (Builder $query) use ($field, $locationData): void {
+                $query->where($field, $locationData['id']);
             });
         }
 
@@ -60,8 +65,8 @@ class EventsSearch extends Component
         $events = $events->with(['address_book.city', 'address_book.province', 'community']);
 
         if (auth()->check()) {
-            $events->withCount(['bookmarks as is_bookmarked' => function ($q) {
-                $q->where('user_id', auth()->id());
+            $events->withCount(['bookmarks as is_bookmarked' => function (Builder $query): void {
+                $query->where('user_id', auth()->id());
             }]);
         }
 
@@ -70,5 +75,16 @@ class EventsSearch extends Component
         return view('livewire.events-search', [
             'events' => $events,
         ]);
+    }
+
+    /**
+     * @return Builder<Event>
+     */
+    private function getActiveEvents(): Builder
+    {
+        return Event::query()
+            ->where('status', EventStatus::Active->value)
+            ->where('end_date', '>=', now())
+            ->orderBy('start_date', 'asc');
     }
 }

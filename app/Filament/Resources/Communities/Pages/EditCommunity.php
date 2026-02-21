@@ -48,11 +48,13 @@ class EditCommunity extends EditRecord
                 $tempPath = Storage::disk('logos')->path($uploadedFileName);
 
                 if (file_exists($tempPath)) {
+                    $mimeType = mime_content_type($tempPath) ?: null;
+
                     // Crea un UploadedFile object compatibile con ProcessLogo
                     $file = new UploadedFile(
                         $tempPath,
                         basename($tempPath),
-                        mime_content_type($tempPath),
+                        $mimeType,
                         null,
                         true,
                     );

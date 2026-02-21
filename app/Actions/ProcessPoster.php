@@ -2,13 +2,17 @@
 
 namespace App\Actions;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ProcessPoster
 {
-    public function execute($sourceFile): array
+    /**
+     * @return array{desktop:string, mobile:string, thumb:string}
+     */
+    public function execute(UploadedFile $sourceFile): array
     {
         $filename = Str::uuid().'.webp';
         $path = $sourceFile->getRealPath();

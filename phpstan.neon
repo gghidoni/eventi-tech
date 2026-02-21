@@ -8,7 +8,12 @@ parameters:
         - app/
 
     # Level 10 is the highest level
-    level: 5
+    level: 7
+
+    ignoreErrors:
+        # Trait usato dentro componente Volt inline in Blade, non risolvibile da PHPStan come usage classica.
+        - identifier: trait.unused
+          path: app/Livewire/Concerns/HasBookmarkToggle.php
 
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'

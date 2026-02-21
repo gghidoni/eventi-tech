@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\AddressBook;
 
+use Database\Factories\AddressBook\ProvinceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,9 @@ use Laravel\Scout\Searchable;
  */
 class Province extends Model
 {
+    /** @use HasFactory<ProvinceFactory> */
     use HasFactory;
+
     use Searchable;
 
     protected $fillable = [
@@ -23,6 +26,9 @@ class Province extends Model
         'region_id',
     ];
 
+    /**
+     * @return BelongsTo<Region, $this>
+     */
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);

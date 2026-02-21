@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\EventStatus;
 use App\Models\AddressBook\AddressBook;
 use Carbon\Carbon;
+use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,9 @@ use Laravel\Scout\Searchable;
 
 class Event extends Model
 {
+    /** @use HasFactory<EventFactory> */
     use HasFactory;
+
     use Searchable;
 
     protected $fillable = [
@@ -65,26 +68,42 @@ class Event extends Model
         return $array;
     }
 
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', EventStatus::Active->value);
     }
 
+    /**
+     * @return BelongsTo<Community, $this>
+     */
     public function community(): BelongsTo
     {
         return $this->belongsTo(Community::class);
     }
 
+    /**
+     * @return BelongsTo<AddressBook, $this>
+     */
     public function address_book(): BelongsTo
     {
         return $this->belongsTo(AddressBook::class);
     }
 
+    /**
+     * @return BelongsToMany<Tag, $this>
+     */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function bookmarks(): BelongsToMany
     {
         return $this->belongsToMany(User::class);

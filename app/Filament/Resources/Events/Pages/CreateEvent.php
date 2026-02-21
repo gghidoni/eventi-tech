@@ -31,11 +31,13 @@ class CreateEvent extends CreateRecord
                 $tempPath = Storage::disk('posters')->path($uploadedFileName);
 
                 if (file_exists($tempPath)) {
+                    $mimeType = mime_content_type($tempPath) ?: null;
+
                     // Crea un UploadedFile object compatibile con ProcessPoster
                     $file = new UploadedFile(
                         $tempPath,
                         basename($tempPath),
-                        mime_content_type($tempPath),
+                        $mimeType,
                         null,
                         true,
                     );

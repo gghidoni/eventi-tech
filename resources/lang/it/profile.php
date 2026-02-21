@@ -22,7 +22,7 @@ return [
         'save_password' => 'aggiorna password',
     ],
 
-    'success_profile'  => 'Profilo aggiornato con successo!',
+    'success_profile'   => 'Profilo aggiornato con successo!',
     'success_password'  => 'Password aggiornata con successo!',
-    'error_profile'    => 'Errore durante il salvataggio del profilo',
+    'error_profile'     => 'Errore durante il salvataggio del profilo',
 ];
