@@ -49,13 +49,13 @@ new class extends Component {
 <div class="page">
     <h1 class="text-xl">{{ __('dashboard.bookmarks.heading') }}</h1>
 
-    <div class="mt-6 inline-flex rounded-sm border border-gray-600 overflow-hidden">
+    <div class="mt-6 inline-flex rounded-sm border border-gray-600 overflow-hidden text-center">
         <a href="{{ route('dashboard.bookmarks', ['tab' => 'events']) }}" wire:navigate
-            class="px-4 py-2 text-sm {{ $tab === 'events' ? 'bg-white text-black' : 'text-white' }}">
+            class="px-4 py-2 text-sm w-1/2 {{ $tab === 'events' ? 'bg-white text-black' : 'text-white' }}">
             {{ __('dashboard.bookmarks.tabs.events') }}
         </a>
         <a href="{{ route('dashboard.bookmarks', ['tab' => 'communities']) }}" wire:navigate
-            class="px-4 py-2 text-sm {{ $tab === 'communities' ? 'bg-white text-black' : 'text-white' }}">
+            class="px-4 py-2 w-1/2 text-sm {{ $tab === 'communities' ? 'bg-white text-black' : 'text-white' }}">
             {{ __('dashboard.bookmarks.tabs.communities') }}
         </a>
     </div>
