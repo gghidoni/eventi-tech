@@ -57,3 +57,9 @@ Servizi disponibili:
 - Viste in `resources/views/livewire/`
 - Usa Form Objects per validazione complessa
 - Usa Actions per logica di business
+
+## Regola Spec Docs (obbligatoria)
+
+- Prima di proporre o integrare codice, consulta sempre le specifiche rilevanti in `docs/`.
+- Se la specifica in `docs/` manca, non è chiara o è in conflitto, fermati e chiedi chiarimenti prima di implementare.
+- In caso di conflitto tra assunzioni e documentazione, ha priorità la documentazione in `docs/`.

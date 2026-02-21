@@ -55,8 +55,8 @@
         .button {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #c1c9cf;
-            color: #2b2b2b !important;
+            background-color: #2b2b2b;
+            color: #ffffff !important;
             text-decoration: none;
             border-radius: 4px;
             font-weight: bold;
