@@ -55,9 +55,25 @@ new class extends Component
                 <img class="rounded-full w-4" src="{{ $event->community->logo_img }}" alt="">
                 <span class="text-xs font-anta opacity-80">{{ $event->community->name }}</span>
             </div>
-            <div class="flex items-center">
-                <img src="/icons/calendar-cyan.svg" alt="" class="!w-2.5 mr-2" />
-                <span class="text-white font-anta text-xs opacity-80">{{ $event->formatted_start_date }}</span>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="/icons/calendar-cyan.svg" alt="" class="!w-2.5 mr-2" />
+                    <span class="text-white font-anta text-xs opacity-80">{{ $event->formatted_start_date }}</span>
+                </div>
+                <div class="flex items-center space-x-1 mr-3">
+                    @foreach ($event->tags as $tag)
+                        <span class="rounded-full p-1"
+                            {{-- Colori dinamici dal DB: inline style evita i limiti di compilazione classi Tailwind dinamiche --}}
+                            style="background-color: {{ $tag->badge_color }}; color: {{ $tag->label_color }};">
+                            @if ($tag->icon)
+                                {{-- L'icona è uno slug Simple Icons valido salvato nel DB. --}}
+                                <img src="https://cdn.simpleicons.org/{{ rawurlencode(strtolower(trim($tag->icon))) }}/{{ ltrim($tag->label_color, '#') }}"
+                                    alt="" class="w-2.5 h-2.5 shrink-0" loading="lazy">
+                            @endif
+                        </span>
+                    @endforeach
+                </div>
+
             </div>
             @if ($event->address_book_id)
                 <div class="flex justify-between">

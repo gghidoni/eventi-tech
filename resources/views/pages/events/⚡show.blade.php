@@ -51,9 +51,14 @@ new class extends Component {
         </div>
         <div class="flex space-x-2 mt-5">
             @foreach ($event->tags as $tag)
-                <span class="text-xs font-anta px-1 py-0.5 rounded-md"
+                <span class="text-xs font-anta px-1 py-0.5 rounded-md inline-flex items-center gap-1"
                     {{-- Colori dinamici dal DB: inline style evita i limiti di compilazione classi Tailwind dinamiche --}}
                     style="background-color: {{ $tag->badge_color }}; color: {{ $tag->label_color }};">
+                    @if ($tag->icon)
+                        {{-- L'icona è uno slug Simple Icons valido salvato nel DB. --}}
+                        <img src="https://cdn.simpleicons.org/{{ rawurlencode(strtolower(trim($tag->icon))) }}/{{ ltrim($tag->label_color, '#') }}"
+                            alt="" class="w-3 h-3 shrink-0" loading="lazy">
+                    @endif
                     {{ $tag->name }}
                 </span>
             @endforeach
