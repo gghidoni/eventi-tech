@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\TagController;
 use App\Http\Middleware\IsMyCommunity;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,12 @@ Route::get('/find-tags', [TagController::class, 'findTags'])->name('find.tags');
 Route::middleware('guest')->group(function () {
     Route::livewire('/login', 'pages::auth.login')->name('login');
     Route::livewire('/register', 'pages::auth.register')->name('register');
+    Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
+        ->whereIn('provider', ['google', 'github'])
+        ->name('social.redirect');
+    Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])
+        ->whereIn('provider', ['google', 'github'])
+        ->name('social.callback');
 });
 
 Route::livewire('/thanks-register', 'pages::auth.thanks-register')->name('thanks-register');

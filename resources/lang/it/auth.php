@@ -15,6 +15,14 @@ return [
         'register_link'   => 'registrati',
         'forgot_password' => 'Password dimenticata?',
     ],
+    'social' => [
+        'or_continue_with' => 'Oppure continua con',
+        'google_button'    => 'Continua con Google',
+        'github_button'    => 'Continua con GitHub',
+        'errors'           => [
+            'generic' => 'Accesso social non riuscito. Riprova.',
+        ],
+    ],
     'forgot_password' => [
         'title'         => 'Recupera password',
         'intro'         => 'Inserisci la tua email e ti invieremo un link per reimpostare la password.',

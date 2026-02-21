@@ -35,4 +35,18 @@ return [
         ],
     ],
 
+    // Configurazione OAuth GitHub con fallback automatico su APP_URL.
+    'github' => [
+        'client_id'     => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect'      => env('GITHUB_REDIRECT_URI', rtrim((string) env('APP_URL', ''), '/').'/auth/github/callback'),
+    ],
+
+    // Configurazione OAuth Google con fallback automatico su APP_URL.
+    'google' => [
+        'client_id'     => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect'      => env('GOOGLE_REDIRECT_URI', rtrim((string) env('APP_URL', ''), '/').'/auth/google/callback'),
+    ],
+
 ];

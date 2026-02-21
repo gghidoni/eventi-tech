@@ -31,6 +31,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        // Timestamp verifica email, valorizzato anche dai login social.
+        'email_verified_at',
+        // Identificativi OAuth per login social.
+        'github_id',
+        'google_id',
         'password',
         'avatar',
         'website',

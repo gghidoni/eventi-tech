@@ -30,7 +30,7 @@ new class extends Component {
 
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -46,7 +46,7 @@ new class extends Component {
 
     protected function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -62,7 +62,7 @@ new class extends Component {
 
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }; ?>
 
@@ -80,7 +80,7 @@ new class extends Component {
         @endif
 
         <form wire:submit="login" class="space-y-4">
-            
+
             <div>
                 <label for="email" class="block text-sm font-medium mb-1">{{ __('auth.fields.email') }}</label>
                 <input type="email" id="email" wire:model="email" class="input-et" />
@@ -102,7 +102,8 @@ new class extends Component {
                     <input type="checkbox" id="remember" wire:model="remember" class="rounded border-gray-300" />
                     <label for="remember" class="ml-2 text-sm">{{ __('auth.login.remember') }}</label>
                 </div>
-                <a href="{{ route('password.request') }}" class="text-sm text-accent hover:underline">{{ __('auth.login.forgot_password') }}</a>
+                <a href="{{ route('password.request') }}"
+                    class="text-sm text-accent hover:underline">{{ __('auth.login.forgot_password') }}</a>
             </div>
 
             <button type="submit"
@@ -112,11 +113,33 @@ new class extends Component {
                 <img class="ml-3 w-3" src="/icons/right-black.svg" alt="" wire:loading.remove>
             </button>
         </form>
-
-        <p class="mt-4 text-center text-sm text-gray-600">
+        <p class="mt-3 text-center text-sm text-gray-600">
             {{ __('auth.login.not_registered') }}
-            <a href="{{ route('register') }}" class="text-accent hover:underline">{{ __('auth.login.register_link') }}</a>
+            <a href="{{ route('register') }}"
+                class="text-accent hover:underline">{{ __('auth.login.register_link') }}</a>
         </p>
+
+        <div class="mt-6">
+            <p class="text-center text-xs uppercase tracking-wide text-gray-500 mb-6">
+                {{ __('auth.social.or_continue_with') }}
+            </p>
+
+            <div class="mt-3 space-y-2">
+                <a href="{{ route('social.redirect', ['provider' => 'google']) }}"
+                    class="flex w-full items-center justify-center gap-2 rounded-md border border-[#dadce0] bg-white px-4 py-2 text-sm font-medium text-[#3c4043] hover:bg-[#f8f9fa]">
+                    {{-- Icona ufficiale Google da Simple Icons. --}}
+                    <x-simpleicon-google class="h-4 w-4 shrink-0" style="color: #4285f4;" />
+                    {{ __('auth.social.google_button') }}
+                </a>
+
+                <a href="{{ route('social.redirect', ['provider' => 'github']) }}"
+                    class="flex w-full items-center justify-center gap-2 rounded-md border border-[#57606a] bg-[#2f363d] px-4 py-2 text-sm font-medium text-white hover:bg-[#24292f]">
+                    {{-- Icona ufficiale GitHub da Simple Icons. --}}
+                    <x-simpleicon-github class="h-4 w-4 shrink-0 fill-white" />
+                    {{ __('auth.social.github_button') }}
+                </a>
+            </div>
+        </div>
 
     </div>
 </div>
