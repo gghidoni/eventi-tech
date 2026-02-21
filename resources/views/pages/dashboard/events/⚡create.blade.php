@@ -55,6 +55,8 @@ new class extends Component
 
     public $communities;
 
+    public array $selectedTags = [];
+
     public function rules()
     {
         return [
@@ -68,6 +70,8 @@ new class extends Component
             'cfp_url'      => 'sometimes|nullable|url',
             'address_line' => $this->type !== EventType::Online->value ? 'required|string|max:100' : 'nullable',
             'city'         => $this->type !== EventType::Online->value ? 'required' : 'nullable',
+            'selectedTags' => 'array|max:4',
+            'selectedTags.*' => 'integer|exists:tags,id',
         ];
     }
 
@@ -113,6 +117,13 @@ new class extends Component
             $data['end_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
             $data['community_id'] = (int) $this->selectedCommunity;
             $data['type'] = EventType::from($this->type);
+            $data['tag_ids'] = collect($this->selectedTags)
+                ->map(fn ($id) => (int) $id)
+                ->filter(fn (int $id): bool => $id > 0)
+                ->unique()
+                ->take(4)
+                ->values()
+                ->all();
 
             if (EventType::from($this->type) !== EventType::Online) {
                 $address['address_line'] = $this->address_line;
@@ -187,6 +198,19 @@ new class extends Component
                 @endforeach
             </select>
             @error('type')
+                <span class="text-pink text-xs">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Tag --}}
+        <div class="mb-5">
+            <label class="block text-sm font-medium text-gray-500 mb-[-12px]">Tag</label>
+            <livewire:select.tags name="selectedTags" wire:model.live="selectedTags" :endpoint="'http://nginx/find-tags'"
+                placeholder="Cerca tag (max 4)" :multiple="true" :max-selections="4" />
+            @error('selectedTags')
+                <span class="text-pink text-xs">{{ $message }}</span>
+            @enderror
+            @error('selectedTags.*')
                 <span class="text-pink text-xs">{{ $message }}</span>
             @enderror
         </div>

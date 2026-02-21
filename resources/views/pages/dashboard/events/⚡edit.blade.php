@@ -37,6 +37,8 @@ new class extends Component {
     #[Validate(['sometimes', 'url'])]
     public string $cfp_url = '';
 
+    public array $selectedTags = [];
+
     public $types;
 
     public function mount(Event $event)
@@ -57,6 +59,11 @@ new class extends Component {
         $this->type = $this->event->type;
 
         $this->types = array_column(EventType::cases(), 'value');
+        $this->selectedTags = $this->event->tags()
+            ->pluck('tags.id')
+            ->map(fn ($id) => (string) $id)
+            ->values()
+            ->all();
     }
 
     public function rendering($view)
@@ -67,6 +74,13 @@ new class extends Component {
     public function save(UpdateEvent $updateEventAction, ProcessPoster $processPosterAction)
     {
         $data = $this->validate();
+        validator(
+            ['selectedTags' => $this->selectedTags],
+            [
+                'selectedTags' => 'array|max:4',
+                'selectedTags.*' => 'integer|exists:tags,id',
+            ],
+        )->validate();
 
         try {
             unset($data['poster']);
@@ -74,6 +88,13 @@ new class extends Component {
             $data['website'] = $data['website'] ?: null;
             $data['tickets_url'] = $data['tickets_url'] ?: null;
             $data['cfp_url'] = $data['cfp_url'] ?: null;
+            $data['tag_ids'] = collect($this->selectedTags)
+                ->map(fn ($id) => (int) $id)
+                ->filter(fn (int $id): bool => $id > 0)
+                ->unique()
+                ->take(4)
+                ->values()
+                ->all();
 
             $data['start_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
             $data['end_date'] = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
@@ -126,6 +147,19 @@ new class extends Component {
                 @endforeach
             </select>
             @error('type')
+                <span class="text-pink text-xs">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Tag --}}
+        <div class="mb-5">
+            <label class="block text-sm font-medium text-gray-500 mb-[-12px]">Tag</label>
+            <livewire:select.tags name="selectedTags" wire:model.live="selectedTags" :endpoint="'http://nginx/find-tags'"
+                placeholder="Cerca tag (max 4)" :multiple="true" :max-selections="4" />
+            @error('selectedTags')
+                <span class="text-pink text-xs">{{ $message }}</span>
+            @enderror
+            @error('selectedTags.*')
                 <span class="text-pink text-xs">{{ $message }}</span>
             @enderror
         </div>

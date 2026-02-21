@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TagController;
 use App\Http\Middleware\IsMyCommunity;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ Route::prefix('communities')->group(function () {
 });
 
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
+Route::get('/find-tags', [TagController::class, 'findTags'])->name('find.tags');
 
 // AUTH
 Route::middleware('guest')->group(function () {

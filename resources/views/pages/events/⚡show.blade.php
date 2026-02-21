@@ -32,9 +32,13 @@ new class extends Component {
                 </a>
             </div>
             <div class="flex space-x-2 items-center">
-                <img src="/icons/location-pink.svg" alt="" class="w-4">
-                <span class="text-white font-anta text-sm">{{ $event->address_book->city->name }},
-                    {{ $event->address_book->province->code }}</span>
+                @if ($event->address_book)
+                    <img src="/icons/location-pink.svg" alt="" class="w-4">
+                    <span class="text-white font-anta text-sm">{{ $event->address_book->city->name }},
+                        {{ $event->address_book->province->code }}</span>
+                @else
+                    <span class="text-white font-anta text-sm">Online</span>
+                @endif
             </div>
         </div>
 
