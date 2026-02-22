@@ -21,4 +21,4 @@ Questa cartella contiene specifiche pratiche (basate sul codice esistente) per a
 - `backend/models.md` Accessor, relazioni, URL helper, bookmark state
 - `backend/uploads.md` Upload immagini e storage disk (`posters`, `logos`, `public/avatars`)
 - `backend/search.md` Scout/Meilisearch e ricerca eventi
-
+- `backend/privacy-cookie.md` Analisi cookie/privacy del repository e linee guida operative minime

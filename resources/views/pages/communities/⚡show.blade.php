@@ -35,37 +35,40 @@ new class extends Component {
 }; ?>
 
 <div class="page">
-    <div class="flex justify-between items-start mt-4">
+    <div class="flex items-start mt-4">
         <div class="flex space-x-4">
             <img src="{{ $community->logo_img }}" alt="" class="w-13 h-13 rounded-full">
             <h1 class="text-2xl font-anta">{{ $community->name }}</h1>
         </div>
-        @if (!$community->is_mine)
-            <img src="{{ $isCommunityFavorited ? '/icons/heart-pink-fill.svg' : '/icons/heart-pink-empty.svg' }}"
-                alt="favorite" class="w-5 cursor-pointer" wire:click="toggleCommunityFavorite">
-        @endif
     </div>
-    @if ($community->website || $community->linkedin || $community->instagram || $community->facebook)
-        <div class="mt-5 flex space-x-1.5 items-center">
-            @if ($community->website)
-                <a href="{{ $community->website }}" target="_blank">
-                    <img src="/icons/website-cyan.svg" alt="" class="w-4 mr-4">
-                </a>
-            @endif
-            @if ($community->linkedin)
-                <a href="{{ $community->linkedin }}" target="_blank">
-                    <img src="/icons/linkedin-cyan.svg" alt="" class="w-4 mr-4">
-                </a>
-            @endif
-            @if ($community->instagram)
-                <a href="{{ $community->instagram }}" target="_blank">
-                    <img src="/icons/instagram-cyan.svg" alt="" class="w-3.5 mr-4">
-                </a>
-            @endif
-            @if ($community->facebook)
-                <a href="{{ $community->facebook }}" target="_blank">
-                    <img src="/icons/facebook-cyan.svg" alt="" class="w-3.5 mr-4">
-                </a>
+    @if ($community->website || $community->linkedin || $community->instagram || $community->facebook || !$community->is_mine)
+        {{-- Posiziona il toggle preferiti in basso a destra rispetto alla riga social. --}}
+        <div class="mt-5 flex items-end justify-between">
+            <div class="flex space-x-1.5 items-center">
+                @if ($community->website)
+                    <a href="{{ $community->website }}" target="_blank">
+                        <img src="/icons/website-cyan.svg" alt="" class="w-4 mr-4">
+                    </a>
+                @endif
+                @if ($community->linkedin)
+                    <a href="{{ $community->linkedin }}" target="_blank">
+                        <img src="/icons/linkedin-cyan.svg" alt="" class="w-4 mr-4">
+                    </a>
+                @endif
+                @if ($community->instagram)
+                    <a href="{{ $community->instagram }}" target="_blank">
+                        <img src="/icons/instagram-cyan.svg" alt="" class="w-3.5 mr-4">
+                    </a>
+                @endif
+                @if ($community->facebook)
+                    <a href="{{ $community->facebook }}" target="_blank">
+                        <img src="/icons/facebook-cyan.svg" alt="" class="w-3.5 mr-4">
+                    </a>
+                @endif
+            </div>
+            @if (!$community->is_mine)
+                <img src="{{ $isCommunityFavorited ? '/icons/heart-pink-fill.svg' : '/icons/heart-pink-empty.svg' }}"
+                    alt="favorite" class="w-5 mr-3 cursor-pointer" wire:click="toggleCommunityFavorite">
             @endif
         </div>
     @endif
