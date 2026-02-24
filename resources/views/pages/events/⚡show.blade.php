@@ -76,22 +76,23 @@ new class extends Component {
                     alt="bookmark" class="w-5" wire:click="toggleBookmark">
             </div>
         @endif
-        <div class="flex flex-col mt-3 space-y-2 mb-8">
+        {{-- Griglia a 2 colonne con gap: gestisce margini orizzontali e verticali in modo stabile. --}}
+        <div class="mt-6 mb-8 grid w-full grid-cols-2 gap-2">
             @if ($event->tickets_url)
-                <a href="{{ $event->tickets_url }}" target="_blank" rel="noopener" class="flex space-x-2">
+                <a href="{{ $event->tickets_url }}" target="_blank" rel="noopener" class="flex h-11 w-full items-center justify-center space-x-2 rounded-md border border-cyan px-2 py-1">
                     <img src="/icons/tickets-cyan.svg" alt="" class="w-4">
-                    <span class="text-cyan text-sm underline">Biglietti</span>
+                    <span class="text-cyan text-xs uppercase font-anta">Biglietti</span>
                 </a>
             @endif
             @if ($event->cfp_url)
-                <a href="{{ $event->cfp_url }}" target="_blank" rel="noopener" class="flex space-x-2">
+                <a href="{{ $event->cfp_url }}" target="_blank" rel="noopener" class="flex h-11 w-full items-center justify-center space-x-2 rounded-md border border-cyan px-2 py-1">
                     <img src="/icons/cfp-cyan.svg" alt="" class="w-4">
-                    <span class="text-cyan text-sm underline">CFP</span>
+                    <span class="text-cyan text-xs uppercase font-anta">CFP</span>
                 </a>
             @endif
-            <a href="/" class="flex space-x-2" target="_blank" rel="noopener">
+            <a href="/" class="flex h-11 w-full items-center justify-center space-x-2 rounded-md border border-cyan px-2 py-1" target="_blank" rel="noopener">
                 <img src="/icons/add-calendar-cyan.svg" alt="" class="w-5">
-                <span class="text-cyan text-sm underline">Aggiungi al calendario</span>
+                <span class="text-cyan text-xs uppercase font-anta">Agg. al calendario</span>
             </a>
         </div>
 

@@ -60,7 +60,7 @@ new class extends Component
                     <img src="/icons/calendar-cyan.svg" alt="" class="!w-2.5 mr-2" />
                     <span class="text-white font-anta text-xs opacity-80">{{ $event->formatted_start_date }}</span>
                 </div>
-                <div class="flex items-center space-x-1 mr-3">
+                <div class="flex items-center space-x-1 mr-3 mb-1">
                     @foreach ($event->tags as $tag)
                         <span class="rounded-full p-1"
                             {{-- Colori dinamici dal DB: inline style evita i limiti di compilazione classi Tailwind dinamiche --}}
