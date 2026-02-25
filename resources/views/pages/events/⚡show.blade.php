@@ -55,7 +55,7 @@ new class extends Component {
         </div>
         <div class="flex space-x-2 mt-5">
             @foreach ($event->tags as $tag)
-                <span class="text-xs font-anta px-1 py-0.5 rounded-md inline-flex items-center gap-1"
+                <span class="text-xs font-anta px-1 py-1 rounded-md inline-flex items-center gap-1"
                     {{-- Colori dinamici dal DB: inline style evita i limiti di compilazione classi Tailwind dinamiche --}}
                     style="background-color: {{ $tag->badge_color }}; color: {{ $tag->label_color }};">
                     @if ($tag->icon)
@@ -77,22 +77,50 @@ new class extends Component {
             </div>
         @endif
         {{-- Griglia a 2 colonne con gap: gestisce margini orizzontali e verticali in modo stabile. --}}
-        <div class="mt-6 mb-8 grid w-full grid-cols-2 gap-2">
+        <div class="mt-6 mb-8 grid w-full grid-cols-2 gap-3">
             @if ($event->tickets_url)
-                <a href="{{ $event->tickets_url }}" target="_blank" rel="noopener" class="flex h-11 w-full items-center justify-center space-x-2 rounded-md border border-cyan px-2 py-1">
-                    <img src="/icons/tickets-cyan.svg" alt="" class="w-4">
-                    <span class="text-cyan text-xs uppercase font-anta">Biglietti</span>
+                <a href="{{ $event->tickets_url }}" target="_blank" rel="noopener" class="flex h-10 w-full items-center justify-center space-x-2 rounded-md border border-white px-2 py-1">
+                    <img src="/icons/tickets-white.svg" alt="" class="w-4">
+                    <span class="text-white text-xs uppercase font-anta">Biglietti</span>
                 </a>
             @endif
             @if ($event->cfp_url)
-                <a href="{{ $event->cfp_url }}" target="_blank" rel="noopener" class="flex h-11 w-full items-center justify-center space-x-2 rounded-md border border-cyan px-2 py-1">
-                    <img src="/icons/cfp-cyan.svg" alt="" class="w-4">
-                    <span class="text-cyan text-xs uppercase font-anta">CFP</span>
+                {{-- Countdown temporaneo CFP basato su start_date, senza nuovi campi DB. --}}
+                <a href="{{ $event->cfp_url }}" target="_blank" rel="noopener" class="flex h-10 w-full items-center justify-center space-x-2 rounded-md border border-white px-2 py-1"
+                    x-data="{
+                        target: Date.parse(@js(optional($event->start_date)->toIso8601String())),
+                        countdown: '',
+                        update() {
+                            if (Number.isNaN(this.target)) {
+                                this.countdown = '--';
+                                return;
+                            }
+
+                            const diff = this.target - Date.now();
+
+                            if (diff <= 0) {
+                                this.countdown = 'scaduto';
+                                return;
+                            }
+
+                            const totalSeconds = Math.floor(diff / 1000);
+                            const days = Math.floor(totalSeconds / 86400);
+                            const hours = Math.floor((totalSeconds % 86400) / 3600);
+                            const minutes = Math.floor((totalSeconds % 3600) / 60);
+                            const seconds = totalSeconds % 60;
+
+                            this.countdown = `${days}g ${hours}.${minutes}.${seconds}`;
+                        }
+                    }"
+                    x-init="update(); setInterval(() => update(), 1000)">
+                    <img src="/icons/mic-white.svg" alt="" class="w-4">
+                    <span class="text-white text-xs uppercase font-anta">CFP</span>
+                    <span class="text-pink text-[12px] font-anta whitespace-nowrap w-[64px]" x-text="countdown"></span>
                 </a>
             @endif
-            <a href="/" class="flex h-11 w-full items-center justify-center space-x-2 rounded-md border border-cyan px-2 py-1" target="_blank" rel="noopener">
-                <img src="/icons/add-calendar-cyan.svg" alt="" class="w-5">
-                <span class="text-cyan text-xs uppercase font-anta">Agg. al calendario</span>
+            <a href="/" class="flex h-10 w-full items-center justify-center space-x-2 rounded-md border border-white px-2 py-1" target="_blank" rel="noopener">
+                <img src="/icons/add-calendar-white.svg" alt="" class="w-5">
+                <span class="text-white text-xs uppercase font-anta">Agg. al calendario</span>
             </a>
         </div>
 
