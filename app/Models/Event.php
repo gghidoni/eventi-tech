@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Scout\Searchable;
 
@@ -108,6 +109,16 @@ class Event extends Model
     public function bookmarks(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    /**
+     * Relazione 1:1: il CFP e figlio dell'evento e usa la FK `cfps.event_id`.
+     *
+     * @return HasOne<Cfp, $this>
+     */
+    public function cfp(): HasOne
+    {
+        return $this->hasOne(Cfp::class);
     }
 
     public function getPosterImgAttribute(): string
