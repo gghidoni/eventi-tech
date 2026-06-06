@@ -4,6 +4,21 @@ Questa cartella contiene specifiche pratiche (basate sul codice esistente) per a
 
 ## Indice
 
+### Agents
+
+- `agents/README.md` Indice agentico a livelli
+- `agents/quickstart.md` Entry point operativo rapido
+- `agents/workflow.md` Sequenza di lavoro, verifiche e uso Docker/host
+- `agents/repo-map.md` Mappa repository e pattern chiave
+- `agents/tools.md` Istruzioni operative per Context7, Playwright, Lighthouse e tooling agente
+
+### Project
+
+- `project/README.md` Indice di alto livello del progetto
+- `project/intent.md` Intento prodotto, utenti e use case
+- `project/architecture.md` Struttura applicativa, flussi e confini tecnici
+- `project/technical-decisions.md` Scelte tecniche principali e tradeoff
+
 ### UI
 
 - `ui/layout.md` Layout base, font, colori, background, classi globali
@@ -12,6 +27,7 @@ Questa cartella contiene specifiche pratiche (basate sul codice esistente) per a
 - `ui/cards-panels.md` Card, glassmorphism, menu a tendina
 - `ui/async-select.md` Componenti select (DrPshtiwan livewire-async-select) e endpoint
 - `ui/date-picker.md` Date/time picker con Flatpickr + Alpine + Livewire
+- `ui/frontend-testing.md` Playwright + Lighthouse CI per smoke test, audit e debug frontend
 
 ### Backend
 

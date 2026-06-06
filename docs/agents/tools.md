@@ -1,0 +1,83 @@
+# Agent Tools
+
+## Principio
+
+Usa il tool piu alto livello che risolve il problema in modo affidabile. Evita di usare strumenti diagnostici low-level come prima scelta se esiste gia un workflow stabile nel repo.
+
+## Context7
+
+Usalo quando serve documentazione aggiornata di librerie o framework.
+
+### Best practice
+
+1. Risolvi prima il library ID corretto.
+2. Interroga solo la libreria rilevante al task.
+3. Preferisci documentazione ufficiale o primaria.
+4. Non usare Context7 per inferire il comportamento del codice locale: per quello leggi il repo.
+5. Se la doc esterna e in conflitto con `docs/` o con il codice reale del progetto, segnala il conflitto e verifica prima di implementare.
+
+### Casi tipici
+
+- Laravel / Livewire / Tailwind / Playwright / Lighthouse
+- API o opzioni di libreria non stabili nel tempo
+- best practice operative di tool di terze parti
+
+## Playwright
+
+E il runner principale per browser automation nel repo.
+
+### Usalo per
+
+- navigare l'app
+- verificare errori JS client-side
+- intercettare request fallite
+- validare flussi utente reali
+- raccogliere trace, screenshot e video
+
+### Regole pratiche
+
+- esegui contro `http://127.0.0.1:8083`
+- avvia prima `docker compose up -d`
+- usa utenti seedati per flussi autenticati
+- non dipendere da una sessione Chrome personale gia aperta
+- se fallisce il launch browser, separa subito problema ambiente da bug applicativo
+
+### Comandi
+
+```bash
+npm run frontend:install
+npm run frontend:test
+npm run frontend:test:headed
+npm run frontend:test:debug
+```
+
+Approfondimento: [../ui/frontend-testing.md](../ui/frontend-testing.md)
+
+## Lighthouse CI
+
+E il tool di audit per performance, accessibility, best practices e SEO.
+
+### Usalo per
+
+- raccogliere score di categoria
+- produrre report HTML/JSON persistiti
+- rilevare regressioni qualitative del frontend
+
+### Regole pratiche
+
+- esegui contro l'app Docker locale
+- usa asset buildati stabili
+- tratta i warning come backlog tecnico, non tutti come blocker immediati
+- conserva i report in `storage/testing/lighthouse`
+
+### Comando
+
+```bash
+npm run frontend:audit
+```
+
+## Chrome DevTools
+
+Non e il driver principale del repo.
+
+Usalo solo come supporto diagnostico o quando serve un attach a una sessione browser reale. Per test ripetibili, preferisci Playwright.

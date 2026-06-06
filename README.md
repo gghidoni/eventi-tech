@@ -8,6 +8,11 @@ Eventi Tech is a web application designed to connect tech enthusiasts with event
 
 Built with Laravel 12 and Livewire 4, the application offers a reactive, modern user experience without the complexity of a separate JavaScript framework.
 
+For repository-oriented documentation, start from:
+
+- `docs/project/README.md` for product intent, architecture, and technical decisions
+- `docs/agents/README.md` for agent workflow and operational tooling
+
 ## Features
 
 - **Event Discovery** - Browse and search tech events with filters for location and keywords
@@ -62,6 +67,10 @@ The application will be available at `http://localhost:8000`.
 # Start all services
 docker-compose up -d
 
+# Install dependencies inside container-managed volumes
+docker exec eventi-tech composer install
+docker exec eventi-tech npm install
+
 # Run migrations inside container
 docker exec eventi-tech php artisan migrate
 
@@ -77,6 +86,8 @@ docker exec eventi-tech php artisan db:seed
 | Mailpit (Email) | http://localhost:8025 |
 | Meilisearch | http://localhost:7700 |
 | PostgreSQL | localhost:5432 |
+
+For Docker-based development, `vendor/` and `node_modules/` are expected to live in Docker volumes managed by the `app` container.
 
 ## Project Structure
 
@@ -98,6 +109,13 @@ tests/
 ├── Feature/           # Feature/integration tests
 └── Unit/              # Unit tests (Actions, Models)
 ```
+
+## Documentation Map
+
+- `docs/project/*` explains what the project is, why it exists, and how it is structured
+- `docs/backend/*` documents backend patterns already present in code
+- `docs/ui/*` documents UI patterns and frontend tooling
+- `docs/agents/*` documents how an agent should work in this repository
 
 ## Development
 
