@@ -14,6 +14,7 @@ Questa sezione e pensata a livelli:
 2. [workflow.md](./workflow.md)
 3. [repo-map.md](./repo-map.md)
 4. [tools.md](./tools.md)
+5. [security.md](./security.md)
 
 ## Quando fermarsi
 

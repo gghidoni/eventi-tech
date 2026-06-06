@@ -35,6 +35,22 @@ docker exec eventi-tech composer qa
 - Larastan / PHPStan
 - suite test backend
 
+## QA Security
+
+Per verifiche di sicurezza del repo, il baseline e:
+
+```bash
+./scripts/security/run.sh
+```
+
+La suite esegue in sequenza:
+
+- `composer audit` sulle dipendenze PHP runtime
+- `npm audit --omit=dev` sulle dipendenze frontend runtime
+- `Semgrep` su codice PHP e ricerca segreti
+
+Approfondimento: [security.md](./security.md)
+
 ### Casi tipici
 
 - Laravel / Livewire / Tailwind / Playwright / Lighthouse

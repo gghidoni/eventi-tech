@@ -22,6 +22,7 @@ Entry point agentico del repository.
 - Se tocchi codice PHP, esegui sempre alla fine `docker compose exec -T app composer lint` e `docker compose exec -T app composer analyse`.
 - Se la modifica non e puramente locale o cosmetica, esegui anche `docker compose exec -T app composer test` oppure `docker compose exec -T app composer qa`.
 - Se tocchi UI o asset, verifica anche il frontend con `npm run frontend:test` e usa `npm run frontend:audit` quando serve audit qualitativo.
+- Se tocchi dipendenze, auth, upload, middleware, query raw o config sensibile, esegui anche `./scripts/security/run.sh`.
 
 ## Percorso consigliato
 
@@ -35,4 +36,5 @@ Entry point agentico del repository.
 - Workflow operativo: [docs/agents/workflow.md](docs/agents/workflow.md)
 - Mappa repo e convenzioni: [docs/agents/repo-map.md](docs/agents/repo-map.md)
 - Tooling agente: [docs/agents/tools.md](docs/agents/tools.md)
+- Security workflow: [docs/agents/security.md](docs/agents/security.md)
 - Frontend testing e audit: [docs/ui/frontend-testing.md](docs/ui/frontend-testing.md)

@@ -25,6 +25,8 @@ docker exec eventi-tech composer lint
 docker exec eventi-tech composer analyse
 docker exec eventi-tech composer test
 docker exec eventi-tech composer qa
+docker exec eventi-tech composer security
+./scripts/security/run.sh
 docker exec eventi-tech ./vendor/bin/phpstan analyse
 docker exec eventi-tech ./vendor/bin/pint
 npm run frontend:test
@@ -36,4 +38,5 @@ npm run frontend:audit
 - Devi capire il dominio o i pattern Laravel/Livewire: apri `docs/backend/*`
 - Devi toccare UI o componenti Blade/Livewire: apri `docs/ui/*`
 - Devi usare strumenti esterni o browser automation: apri [tools.md](./tools.md)
+- Devi verificare dependency risk o sicurezza applicativa: apri [security.md](./security.md)
 - Devi decidere come procedere prima di modificare codice: apri [workflow.md](./workflow.md)

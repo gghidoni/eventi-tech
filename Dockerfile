@@ -32,6 +32,8 @@ ENV PATH="/root/.composer/vendor/bin:/usr/local/lib/node_modules/npm/bin:${PATH}
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 
+RUN git config --system --add safe.directory /var/www/html
+
 RUN rm -rf /var/www/html/*
 EXPOSE 9000
 

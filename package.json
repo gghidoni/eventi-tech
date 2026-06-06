@@ -10,6 +10,7 @@
         "prebuild": "rm -f public/hot",
         "build": "vite build",
         "dev": "vite",
+        "security:audit": "npm audit --omit=dev --audit-level=high",
         "prefrontend:test": "rm -f public/hot",
         "frontend:install": "playwright install chromium",
         "frontend:test": "playwright test",
@@ -21,14 +22,8 @@
         "frontend:check": "npm run frontend:test && npm run frontend:audit"
     },
     "dependencies": {
-        "@tailwindcss/vite": "^4.3.0",
-        "autoprefixer": "^10.5.0",
         "axios": "^1.17.0",
-        "concurrently": "^9.0.1",
-        "flatpickr": "^4.6.13",
-        "laravel-vite-plugin": "^3.1.0",
-        "tailwindcss": "^4.3.0",
-        "vite": "^8.0.16"
+        "flatpickr": "^4.6.13"
     },
     "optionalDependencies": {
         "@rollup/rollup-linux-x64-gnu": "^4.61.1",
@@ -38,6 +33,12 @@
     "devDependencies": {
         "@lhci/cli": "^0.15.1",
         "@playwright/test": "^1.60.0",
-        "@tailwindcss/forms": "^0.5.11"
+        "@tailwindcss/forms": "^0.5.11",
+        "@tailwindcss/vite": "^4.3.0",
+        "autoprefixer": "^10.5.0",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^3.1.0",
+        "tailwindcss": "^4.3.0",
+        "vite": "^8.0.16"
     }
 }

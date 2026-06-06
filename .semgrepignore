@@ -1,0 +1,13 @@
+vendor/
+node_modules/
+bootstrap/cache/
+storage/
+public/build/
+public/css/filament/
+public/js/filament/
+playwright-report/
+test-results/
+.lighthouseci/
+packages/livewire-async-select/dist/
+packages/livewire-async-select/docs/
+packages/livewire-async-select/docs-src/

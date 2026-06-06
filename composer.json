@@ -66,6 +66,16 @@
         "lint": [
             "./vendor/bin/pint --test"
         ],
+        "security:php": [
+            "composer audit --locked --no-dev --format=summary"
+        ],
+        "security:frontend": [
+            "npm run security:audit"
+        ],
+        "security": [
+            "@composer security:php",
+            "@composer security:frontend"
+        ],
         "qa": [
             "@composer lint",
             "@composer analyse",
@@ -100,6 +110,16 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "policy": {
+            "advisories": {
+                "audit": "fail",
+                "block": true
+            },
+            "abandoned": {
+                "audit": "report",
+                "block": false
+            }
+        },
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true

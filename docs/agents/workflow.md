@@ -16,6 +16,7 @@
 - Se introduci un tool o un workflow nuovo, documenta anche come va usato, non solo dove vive il codice.
 - Se un test fallisce per ambiente o tooling, distinguilo chiaramente da un bug applicativo.
 - Per ogni modifica PHP, considera `Pint` e `Larastan` parte della verifica finale obbligatoria, non opzionale.
+- Per modifiche a dipendenze, auth, upload, middleware, query raw o config sensibile, considera `./scripts/security/run.sh` parte della chiusura del task.
 
 ## Quando usare Docker
 
@@ -27,6 +28,7 @@
 ## Verifica minima attesa
 
 - Backend change: `docker exec eventi-tech composer lint` + `docker exec eventi-tech composer analyse`, poi test o comando mirato nel container
+- Security-sensitive o dependency change: aggiungi `./scripts/security/run.sh`
 - UI/frontend change: almeno Playwright smoke o verifica browser equivalente
 - Tooling/docs change: prova del comando o del flusso documentato
 
