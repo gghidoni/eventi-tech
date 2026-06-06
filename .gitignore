@@ -21,3 +21,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.lighthouseci
+/playwright-report
+/test-results
+/storage/testing

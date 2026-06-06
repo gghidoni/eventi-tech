@@ -205,7 +205,7 @@ new class extends Component
         {{-- Tag --}}
         <div class="mb-5">
             <label class="block text-sm font-medium text-gray-500 mb-[-12px]">Tag</label>
-            <livewire:select.tags name="selectedTags" wire:model.live="selectedTags" :endpoint="'http://nginx/find-tags'"
+            <livewire:select.tags name="selectedTags" wire:model.live="selectedTags" :endpoint="route('find.tags')"
                 placeholder="Cerca tag (max 4)" :multiple="true" :max-selections="4" />
             @error('selectedTags')
                 <span class="text-pink text-xs">{{ $message }}</span>
@@ -275,7 +275,7 @@ new class extends Component
 
             <div style="mb-5">
                 <label for="website" class="block text-sm font-medium text-gray-500 mb-[-12px]">{{ __('dashboard.events.fields.city') }}</label>
-                <livewire:select.location name="city" wire:model="city" :endpoint="'http://nginx/find-location'"
+                <livewire:select.location name="city" wire:model="city" :endpoint="route('find')"
                     placeholder="{{ __('dashboard.events.fields.city_placeholder') }}" :extra-params="['type' => 'city']" />
                 @error('city')
                     <span class="text-pink text-xs">{{ $message }}</span>

@@ -10,7 +10,7 @@
 
     {{-- Location Search --}}
     <div style="relative w-100% mt-4 text-gray-300">
-        <livewire:select.location name="location" wire:model.live="location" :endpoint="'http://nginx/find-location'"
+        <livewire:select.location name="location" wire:model.live="location" :endpoint="route('find')"
             placeholder="{{ __('events.search.location_placeholder') }}" :extra-params="['type' => 'all']" />
     </div>
 

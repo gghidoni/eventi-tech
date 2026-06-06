@@ -4,7 +4,14 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "frontend:install": "playwright install chromium",
+        "frontend:test": "playwright test",
+        "frontend:test:headed": "playwright test --headed --project=chromium",
+        "frontend:test:ui": "playwright test --ui",
+        "frontend:test:debug": "playwright test --debug --project=chromium",
+        "frontend:audit": "lhci autorun --config=.lighthouserc.cjs",
+        "frontend:check": "npm run frontend:test && npm run frontend:audit"
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.1.11",
@@ -22,6 +29,8 @@
         "lightningcss-linux-x64-gnu": "^1.29.1"
     },
     "devDependencies": {
+        "@lhci/cli": "^0.15.1",
+        "@playwright/test": "^1.60.0",
         "@tailwindcss/forms": "^0.5.10"
     }
 }

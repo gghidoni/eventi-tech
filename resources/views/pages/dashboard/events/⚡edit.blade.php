@@ -154,7 +154,7 @@ new class extends Component {
         {{-- Tag --}}
         <div class="mb-5">
             <label class="block text-sm font-medium text-gray-500 mb-[-12px]">Tag</label>
-            <livewire:select.tags name="selectedTags" wire:model.live="selectedTags" :endpoint="'http://nginx/find-tags'"
+            <livewire:select.tags name="selectedTags" wire:model.live="selectedTags" :endpoint="route('find.tags')"
                 placeholder="Cerca tag (max 4)" :multiple="true" :max-selections="4" />
             @error('selectedTags')
                 <span class="text-pink text-xs">{{ $message }}</span>

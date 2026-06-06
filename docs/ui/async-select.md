@@ -37,10 +37,15 @@ Esempi reali:
 
 - Select location (city):
   - `resources/views/pages/dashboard/events/⚡create.blade.php`
-  - passa `:endpoint="'http://nginx/find-location'"` e `:extra-params="['type' => 'city']"`
+  - passa `:endpoint="route('find')"` e `:extra-params="['type' => 'city']"`
 - Select tags (multiple):
   - `resources/views/pages/dashboard/events/⚡create.blade.php`
-  - passa `:endpoint="'http://nginx/find-tags'"`, `:multiple="true"`, `:max-selections="4"`
+  - passa `:endpoint="route('find.tags')"`, `:multiple="true"`, `:max-selections="4"`
+
+## Best practice endpoint
+
+- usa `route(...)` o URL host-relative, non hostname interni Docker come `http://nginx/...`
+- questo evita rotture nei browser eseguiti fuori rete Docker, nei test E2E e negli audit Lighthouse
 - Select community (single, no search):
   - `resources/views/pages/dashboard/events/⚡create.blade.php`
 
@@ -52,4 +57,3 @@ Per location, il `value` e un JSON stringificato (type/id/name).
 - Parsing lato Livewire:
   - `app/Livewire/EventsSearch.php` (decodifica `location` e applica filtro)
   - `resources/views/pages/dashboard/events/⚡create.blade.php` (decodifica `city`)
-
