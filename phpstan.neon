@@ -14,6 +14,9 @@ parameters:
         # Trait usato dentro componente Volt inline in Blade, non risolvibile da PHPStan come usage classica.
         - identifier: trait.unused
           path: app/Livewire/Concerns/HasBookmarkToggle.php
+        # Trait usato dentro componenti Volt inline in Blade, non risolvibile da PHPStan come usage classica.
+        - identifier: trait.unused
+          path: app/Livewire/Concerns/HasCommunityFavoriteToggle.php
 
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'

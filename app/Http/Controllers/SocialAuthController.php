@@ -7,8 +7,9 @@ namespace App\Http\Controllers;
 use App\Actions\HandleSocialLogin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\AbstractProvider as OAuthTwoProvider;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 use Throwable;
 
@@ -46,18 +47,35 @@ class SocialAuthController extends Controller
     /**
      * Crea il driver Socialite con configurazione minima e sicura per provider.
      */
-    private function socialiteDriver(string $provider): Provider
+    private function socialiteDriver(string $provider): OAuthTwoProvider
     {
         return match ($provider) {
             // Richiediamo sempre email e profilo per identificazione utente.
-            'google' => Socialite::driver('google')
+            'google' => $this->oauthTwoDriver('google')
                 ->scopes(['openid', 'profile', 'email'])
                 ->with(['prompt' => 'select_account']),
 
             // Scope email necessario per utenti GitHub con email non pubblica.
-            'github' => Socialite::driver('github')->scopes(['user:email']),
+            'github' => $this->oauthTwoDriver('github')->scopes(['user:email']),
 
             default => abort(404),
         };
+    }
+
+    /**
+     * Restituisce un provider OAuth2 concreto per mantenere il fluent typing compatibile con Larastan.
+     *
+     * @param 'google'|'github' $provider
+     */
+    private function oauthTwoDriver(string $provider): OAuthTwoProvider
+    {
+        $driver = Socialite::driver($provider);
+
+        // Guardrail difensivo: in questo controller accettiamo solo provider OAuth2.
+        if (!$driver instanceof OAuthTwoProvider) {
+            throw new RuntimeException("Provider OAuth non supportato: {$provider}");
+        }
+
+        return $driver;
     }
 }
