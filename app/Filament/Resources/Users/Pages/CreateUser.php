@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Pages;
 
 use App\Actions\ProcessAvatar;
+use App\Filament\Concerns\HandlesSingleFileUpload;
 use App\Filament\Resources\Users\UserResource;
 use Exception;
 use Filament\Notifications\Notification;
@@ -13,6 +14,8 @@ use Log;
 
 class CreateUser extends CreateRecord
 {
+    use HandlesSingleFileUpload;
+
     protected static string $resource = UserResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -23,9 +26,13 @@ class CreateUser extends CreateRecord
                 $processor = app(ProcessAvatar::class);
 
                 // Ottieni il file caricato
-                $uploadedFileName = is_array($data['avatar_upload'])
-                    ? $data['avatar_upload'][0]
-                    : $data['avatar_upload'];
+                $uploadedFileName = $this->extractSingleUploadPath($data['avatar_upload']);
+
+                if ($uploadedFileName === null) {
+                    unset($data['avatar_upload']);
+
+                    return $data;
+                }
 
                 // Percorso completo del file temporaneo
                 $tempPath = Storage::disk('public')->path($uploadedFileName);

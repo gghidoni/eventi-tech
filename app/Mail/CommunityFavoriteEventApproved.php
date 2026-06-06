@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use RuntimeException;
 
 class CommunityFavoriteEventApproved extends Mailable
 {
@@ -28,8 +29,14 @@ class CommunityFavoriteEventApproved extends Mailable
      */
     public function envelope(): Envelope
     {
+        $community = $this->event->community;
+
+        if ($community === null) {
+            throw new RuntimeException('L\'evento notificato deve avere una community associata.');
+        }
+
         return new Envelope(
-            subject: 'Nuovo evento pubblicato da '.$this->event->community->name,
+            subject: 'Nuovo evento pubblicato da '.$community->name,
         );
     }
 

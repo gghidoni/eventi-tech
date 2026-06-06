@@ -199,7 +199,9 @@ class Event extends Model
                 return;
             }
 
-            if ((string) $event->getRawOriginal('status') === EventStatus::Active->value) {
+            $originalStatus = $event->getRawOriginal('status');
+
+            if ((is_string($originalStatus) || is_int($originalStatus)) && (string) $originalStatus === EventStatus::Active->value) {
                 return;
             }
 

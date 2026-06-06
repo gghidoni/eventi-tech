@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Communities\Pages;
 
 use App\Actions\ProcessLogo;
+use App\Filament\Concerns\HandlesSingleFileUpload;
 use App\Filament\Resources\Communities\CommunityResource;
 use Exception;
 use Filament\Notifications\Notification;
@@ -13,6 +14,8 @@ use Log;
 
 class CreateCommunity extends CreateRecord
 {
+    use HandlesSingleFileUpload;
+
     protected static string $resource = CommunityResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -23,9 +26,13 @@ class CreateCommunity extends CreateRecord
                 $processor = app(ProcessLogo::class);
 
                 // Ottieni il file caricato
-                $uploadedFileName = is_array($data['logo_upload'])
-                    ? $data['logo_upload'][0]
-                    : $data['logo_upload'];
+                $uploadedFileName = $this->extractSingleUploadPath($data['logo_upload']);
+
+                if ($uploadedFileName === null) {
+                    unset($data['logo_upload']);
+
+                    return $data;
+                }
 
                 // Percorso completo del file temporaneo
                 $tempPath = Storage::disk('logos')->path($uploadedFileName);

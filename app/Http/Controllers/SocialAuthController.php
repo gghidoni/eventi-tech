@@ -65,7 +65,7 @@ class SocialAuthController extends Controller
     /**
      * Restituisce un provider OAuth2 concreto per mantenere il fluent typing compatibile con Larastan.
      *
-     * @param 'google'|'github' $provider
+     * @param  'google'|'github'  $provider
      */
     private function oauthTwoDriver(string $provider): OAuthTwoProvider
     {

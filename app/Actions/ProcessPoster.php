@@ -5,6 +5,7 @@ namespace App\Actions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ProcessPoster
@@ -18,21 +19,21 @@ class ProcessPoster
         $path = $sourceFile->getRealPath();
 
         // 1. VERSIONE DESKTOP (1000px)
-        $desktop = Image::read($path)
+        $desktop = Image::decode($path)
             ->scale(width: 1200)
-            ->toWebp(quality: 90);
+            ->encode(new WebpEncoder(quality: 90));
         Storage::disk('posters')->put($filename, (string) $desktop);
 
         // 2. VERSIONE MOBILE (500px)
-        $mobile = Image::read($path)
+        $mobile = Image::decode($path)
             ->scale(width: 500)
-            ->toWebp(quality: 90);
+            ->encode(new WebpEncoder(quality: 90));
         Storage::disk('posters')->put('mobile/'.$filename, (string) $mobile);
 
         // 3. VERSIONE THUMBNAIL (150px)
-        $thumb = Image::read($path)
+        $thumb = Image::decode($path)
             ->scale(height: 150)
-            ->toWebp(quality: 90);
+            ->encode(new WebpEncoder(quality: 90));
         Storage::disk('posters')->put('thumbs/'.$filename, (string) $thumb);
 
         return [

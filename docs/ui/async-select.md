@@ -10,6 +10,12 @@ E componenti Livewire wrapper in:
 
 - `app/Livewire/Select/*.php`
 
+Il pacchetto e mantenuto anche come fork locale nel repo:
+
+- `packages/livewire-async-select`
+
+Questo fork e la source of truth per compatibilita framework e customizzazioni fortemente integrate nel progetto.
+
 ## Stili e JS
 
 - In head: `@asyncSelectStyles` e script `js/async-select.js`

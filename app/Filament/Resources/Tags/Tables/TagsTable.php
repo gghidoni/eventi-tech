@@ -24,7 +24,7 @@ class TagsTable
                     ->sortable(),
                 ImageColumn::make('icon')
                     ->label('Icona')
-                    ->getStateUsing(fn ($record): string => 'https://cdn.simpleicons.org/'.rawurlencode((string) $record->icon).'/'.ltrim((string) $record->label_color, '#'))
+                    ->getStateUsing(fn ($record): string => 'https://cdn.simpleicons.org/'.rawurlencode((string) $record->icon).'/'.mb_ltrim((string) $record->label_color, '#'))
                     ->size(20),
                 TextColumn::make('icon')
                     ->searchable()

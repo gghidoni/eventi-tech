@@ -11,11 +11,17 @@ Entry point agentico del repository.
 
 ## Fast Start
 
-- Stack: Laravel 12, Livewire 4, PHP 8.4, Tailwind 4, Vite 7, PostgreSQL, Meilisearch.
+- Stack: Laravel 13, Livewire 4, PHP 8.4, Tailwind 4, Vite 8, PostgreSQL 17, Meilisearch 1.44.
 - App locale Docker-first: `http://127.0.0.1:8083`
 - Container principali: `eventi-tech`, `eventi-tech-nginx`, `eventi-tech-postgres`, `eventi-tech-meilisearch`, `eventi-tech-mailpit`
 - Frontend browser tooling: `Playwright` per navigazione e smoke test, `Lighthouse CI` per audit
 - Source of truth funzionale e tecnica: `docs/`
+
+## Verifica finale obbligatoria
+
+- Se tocchi codice PHP, esegui sempre alla fine `docker compose exec -T app composer lint` e `docker compose exec -T app composer analyse`.
+- Se la modifica non e puramente locale o cosmetica, esegui anche `docker compose exec -T app composer test` oppure `docker compose exec -T app composer qa`.
+- Se tocchi UI o asset, verifica anche il frontend con `npm run frontend:test` e usa `npm run frontend:audit` quando serve audit qualitativo.
 
 ## Percorso consigliato
 

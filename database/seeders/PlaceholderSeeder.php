@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Laravel\Facades\Image;
 
 class PlaceholderSeeder extends Seeder
@@ -43,9 +44,9 @@ class PlaceholderSeeder extends Seeder
                 $targetPath = $size['folder'].$filename;
 
                 // Elaborazione con Intervention Image v3
-                $encoded = Image::read($sourceFile)
+                $encoded = Image::decode($sourceFile)
                     ->scale(width: $size['width'])
-                    ->toWebp(quality: $size['quality']);
+                    ->encode(new WebpEncoder(quality: $size['quality']));
 
                 Storage::disk('posters')->put($targetPath, (string) $encoded);
             }

@@ -234,7 +234,7 @@ class TagSeeder extends Seeder
      */
     private function pickLabelColorForBadge(string $badgeColor): string
     {
-        $hex = ltrim($badgeColor, '#');
+        $hex = mb_ltrim($badgeColor, '#');
 
         if (mb_strlen($hex) !== 6) {
             return '#FFFFFF';

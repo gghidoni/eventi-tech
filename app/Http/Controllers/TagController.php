@@ -12,8 +12,8 @@ class TagController extends Controller
 {
     public function findTags(Request $request): JsonResponse
     {
-        $selected = trim((string) $request->query('selected', ''));
-        $search = trim((string) $request->query('search', ''));
+        $selected = mb_trim((string) $request->query('selected', ''));
+        $search = mb_trim((string) $request->query('search', ''));
         $page = max((int) $request->query('page', 1), 1);
         $perPage = max(min((int) $request->query('per_page', 20), 50), 1);
 

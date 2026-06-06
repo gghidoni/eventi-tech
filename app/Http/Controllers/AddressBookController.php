@@ -15,7 +15,7 @@ class AddressBookController extends Controller
         $type = $request->get('type');
         $query = $request->get('search');
 
-        if (empty($query)) {
+        if (!is_string($query) || mb_trim($query) === '') {
             return response()->json(['data' => []]);
         }
 

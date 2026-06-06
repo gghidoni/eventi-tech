@@ -2,9 +2,9 @@
 
 ## Stack
 
-- Backend: Laravel 12, Livewire 4, PHP 8.4
-- Frontend: Tailwind 4, Vite 7, Flatpickr
-- Data: PostgreSQL 15, Meilisearch
+- Backend: Laravel 13, Livewire 4, PHP 8.4
+- Frontend: Tailwind 4, Vite 8, Flatpickr
+- Data: PostgreSQL 17, Meilisearch 1.44
 - Test: Pest, Playwright, Lighthouse CI
 
 ## Ambiente locale
@@ -21,7 +21,10 @@
 docker compose up -d
 docker exec eventi-tech composer install
 docker exec eventi-tech npm install
+docker exec eventi-tech composer lint
+docker exec eventi-tech composer analyse
 docker exec eventi-tech composer test
+docker exec eventi-tech composer qa
 docker exec eventi-tech ./vendor/bin/phpstan analyse
 docker exec eventi-tech ./vendor/bin/pint
 npm run frontend:test

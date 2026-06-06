@@ -12,6 +12,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Laravel\Facades\Image;
 
 class EventSeeder extends Seeder
@@ -255,21 +256,21 @@ class EventSeeder extends Seeder
         $filename = Str::uuid().'.webp';
 
         // 1. VERSIONE DESKTOP (1000px è perfetta, bilancia bene qualità e peso)
-        $desktop = Image::read($sourcePath)
+        $desktop = Image::decode($sourcePath)
             ->scale(width: 1200)
-            ->toWebp(quality: 90);
+            ->encode(new WebpEncoder(quality: 90));
         Storage::disk('posters')->put($filename, (string) $desktop);
 
         // 2. VERSIONE MOBILE (400px)
-        $mobile = Image::read($sourcePath)
+        $mobile = Image::decode($sourcePath)
             ->scale(width: 500)
-            ->toWebp(quality: 90);
+            ->encode(new WebpEncoder(quality: 90));
         Storage::disk('posters')->put('mobile/'.$filename, (string) $mobile);
 
         // 3. VERSIONE THUMBNAIL (150px)
-        $thumb = Image::read($sourcePath)
+        $thumb = Image::decode($sourcePath)
             ->scale(height: 150)
-            ->toWebp(quality: 90);
+            ->encode(new WebpEncoder(quality: 90));
         Storage::disk('posters')->put('thumbs/'.$filename, (string) $thumb);
 
         return [

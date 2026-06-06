@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Events\Pages;
 
 use App\Actions\ProcessPoster;
+use App\Filament\Concerns\HandlesSingleFileUpload;
 use App\Filament\Resources\Events\EventResource;
 use Exception;
 use Filament\Actions\DeleteAction;
@@ -15,6 +16,8 @@ use Log;
 
 class EditEvent extends EditRecord
 {
+    use HandlesSingleFileUpload;
+
     protected static string $resource = EventResource::class;
 
     protected function getHeaderActions(): array
@@ -34,19 +37,23 @@ class EditEvent extends EditRecord
                 /** @var \App\Models\Event $record */
                 $record = $this->record;
                 if ($record->poster) {
-                    Storage::disk('posters')->delete([
+                    Storage::disk('posters')->delete(array_values(array_filter([
                         $record->poster,
                         $record->poster_mobile,
                         $record->poster_thumb,
-                    ]);
+                    ], static fn (mixed $path): bool => is_string($path) && $path !== '')));
                 }
 
                 $processor = app(ProcessPoster::class);
 
                 // Ottieni il file caricato
-                $uploadedFileName = is_array($data['poster_upload'])
-                    ? $data['poster_upload'][0]
-                    : $data['poster_upload'];
+                $uploadedFileName = $this->extractSingleUploadPath($data['poster_upload']);
+
+                if ($uploadedFileName === null) {
+                    unset($data['poster_upload']);
+
+                    return $data;
+                }
 
                 // Percorso completo del file temporaneo
                 $tempPath = Storage::disk('posters')->path($uploadedFileName);

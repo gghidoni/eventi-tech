@@ -2,35 +2,42 @@
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
+    "engines": {
+        "node": "^20.19.0 || >=22.12.0",
+        "npm": ">=11"
+    },
     "scripts": {
+        "prebuild": "rm -f public/hot",
         "build": "vite build",
         "dev": "vite",
+        "prefrontend:test": "rm -f public/hot",
         "frontend:install": "playwright install chromium",
         "frontend:test": "playwright test",
         "frontend:test:headed": "playwright test --headed --project=chromium",
         "frontend:test:ui": "playwright test --ui",
         "frontend:test:debug": "playwright test --debug --project=chromium",
+        "prefrontend:audit": "rm -f public/hot",
         "frontend:audit": "lhci autorun --config=.lighthouserc.cjs",
         "frontend:check": "npm run frontend:test && npm run frontend:audit"
     },
     "dependencies": {
-        "@tailwindcss/vite": "^4.1.11",
-        "autoprefixer": "^10.4.20",
-        "axios": "^1.7.4",
+        "@tailwindcss/vite": "^4.3.0",
+        "autoprefixer": "^10.5.0",
+        "axios": "^1.17.0",
         "concurrently": "^9.0.1",
         "flatpickr": "^4.6.13",
-        "laravel-vite-plugin": "^2.0",
-        "tailwindcss": "^4.0.7",
-        "vite": "^7.0.4"
+        "laravel-vite-plugin": "^3.1.0",
+        "tailwindcss": "^4.3.0",
+        "vite": "^8.0.16"
     },
     "optionalDependencies": {
-        "@rollup/rollup-linux-x64-gnu": "4.9.5",
-        "@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
-        "lightningcss-linux-x64-gnu": "^1.29.1"
+        "@rollup/rollup-linux-x64-gnu": "^4.61.1",
+        "@tailwindcss/oxide-linux-x64-gnu": "^4.3.0",
+        "lightningcss-linux-x64-gnu": "^1.32.0"
     },
     "devDependencies": {
         "@lhci/cli": "^0.15.1",
         "@playwright/test": "^1.60.0",
-        "@tailwindcss/forms": "^0.5.10"
+        "@tailwindcss/forms": "^0.5.11"
     }
 }

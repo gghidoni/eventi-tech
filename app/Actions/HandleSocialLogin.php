@@ -32,14 +32,14 @@ class HandleSocialLogin
         $providerColumn = self::PROVIDER_COLUMNS[$provider] ?? throw new InvalidArgumentException('Provider OAuth non supportato.');
 
         // L'identificativo del provider e obbligatorio per collegare correttamente l'account.
-        $providerId = trim((string) $socialiteUser->getId());
+        $providerId = mb_trim((string) $socialiteUser->getId());
 
         if ($providerId === '') {
             throw new RuntimeException('ID provider non disponibile.');
         }
 
         // L'applicazione richiede una email per identificare l'utente in modo consistente.
-        $email = trim((string) $socialiteUser->getEmail());
+        $email = mb_trim((string) $socialiteUser->getEmail());
 
         if ($email === '') {
             throw new RuntimeException('Email non disponibile dal provider.');
@@ -89,7 +89,7 @@ class HandleSocialLogin
      */
     private function resolveName(SocialiteUser $socialiteUser, string $email): string
     {
-        $name = trim((string) ($socialiteUser->getName() ?? $socialiteUser->getNickname()));
+        $name = mb_trim((string) ($socialiteUser->getName() ?? $socialiteUser->getNickname()));
 
         if ($name !== '') {
             return $name;

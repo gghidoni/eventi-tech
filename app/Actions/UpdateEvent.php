@@ -23,7 +23,8 @@ class UpdateEvent
             if (is_array($tagIds)) {
                 $event->tags()->sync(
                     collect($tagIds)
-                        ->map(fn ($id): int => (int) $id)
+                        ->filter(static fn (mixed $id): bool => is_int($id) || is_string($id))
+                        ->map(static fn (int|string $id): int => (int) $id)
                         ->filter(fn (int $id): bool => $id > 0)
                         ->unique()
                         ->values()

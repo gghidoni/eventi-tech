@@ -6,6 +6,7 @@
 - `app/Enums/`: enum applicative
 - `app/Livewire/`: componenti Livewire classici
 - `app/Models/`: model Eloquent
+- `packages/`: fork locali di dipendenze applicative mantenute nel repo
 - `resources/views/livewire/`: viste componenti
 - `resources/views/pages/`: pagine Livewire single-file con prefisso `⚡`
 - `database/seeders/`: dati seed, incluse credenziali utili per E2E

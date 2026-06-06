@@ -16,6 +16,25 @@ Usalo quando serve documentazione aggiornata di librerie o framework.
 4. Non usare Context7 per inferire il comportamento del codice locale: per quello leggi il repo.
 5. Se la doc esterna e in conflitto con `docs/` o con il codice reale del progetto, segnala il conflitto e verifica prima di implementare.
 
+## QA Backend
+
+Per modifiche PHP, il baseline del repo e:
+
+- `docker exec eventi-tech composer lint`
+- `docker exec eventi-tech composer analyse`
+
+Per una passata completa:
+
+```bash
+docker exec eventi-tech composer qa
+```
+
+`composer qa` esegue in sequenza:
+
+- Pint in modalita test
+- Larastan / PHPStan
+- suite test backend
+
 ### Casi tipici
 
 - Laravel / Livewire / Tailwind / Playwright / Lighthouse

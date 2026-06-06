@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Events\Pages;
 
 use App\Actions\ProcessPoster;
+use App\Filament\Concerns\HandlesSingleFileUpload;
 use App\Filament\Resources\Events\EventResource;
 use Exception;
 use Filament\Notifications\Notification;
@@ -13,6 +14,8 @@ use Log;
 
 class CreateEvent extends CreateRecord
 {
+    use HandlesSingleFileUpload;
+
     protected static string $resource = EventResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -23,9 +26,13 @@ class CreateEvent extends CreateRecord
                 $processor = app(ProcessPoster::class);
 
                 // Ottieni il file caricato
-                $uploadedFileName = is_array($data['poster_upload'])
-                    ? $data['poster_upload'][0]
-                    : $data['poster_upload'];
+                $uploadedFileName = $this->extractSingleUploadPath($data['poster_upload']);
+
+                if ($uploadedFileName === null) {
+                    unset($data['poster_upload']);
+
+                    return $data;
+                }
 
                 // Percorso completo del file temporaneo
                 $tempPath = Storage::disk('posters')->path($uploadedFileName);

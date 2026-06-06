@@ -47,7 +47,11 @@ class TagForm
                     ->label('Colore label')
                     ->disabled()
                     ->dehydrated()
-                    ->formatStateUsing(fn (?string $state, Get $get): string => $state ?: self::pickLabelColorForBadge((string) $get('badge_color')))
+                    ->formatStateUsing(function (?string $state, Get $get): string {
+                        $badgeColor = $get('badge_color');
+
+                        return $state ?: self::pickLabelColorForBadge(is_string($badgeColor) ? $badgeColor : '#FFFFFF');
+                    })
                     ->maxLength(255),
             ]);
     }
@@ -57,7 +61,7 @@ class TagForm
      */
     private static function pickLabelColorForBadge(string $badgeColor): string
     {
-        $hex = ltrim($badgeColor, '#');
+        $hex = mb_ltrim($badgeColor, '#');
 
         if (mb_strlen($hex) !== 6) {
             return '#FFFFFF';

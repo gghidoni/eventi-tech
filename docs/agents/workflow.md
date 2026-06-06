@@ -15,6 +15,7 @@
 - Mantieni allineati codice, config e documentazione se il comportamento cambia.
 - Se introduci un tool o un workflow nuovo, documenta anche come va usato, non solo dove vive il codice.
 - Se un test fallisce per ambiente o tooling, distinguilo chiaramente da un bug applicativo.
+- Per ogni modifica PHP, considera `Pint` e `Larastan` parte della verifica finale obbligatoria, non opzionale.
 
 ## Quando usare Docker
 
@@ -25,6 +26,10 @@
 
 ## Verifica minima attesa
 
-- Backend change: test o comando mirato nel container
+- Backend change: `docker exec eventi-tech composer lint` + `docker exec eventi-tech composer analyse`, poi test o comando mirato nel container
 - UI/frontend change: almeno Playwright smoke o verifica browser equivalente
 - Tooling/docs change: prova del comando o del flusso documentato
+
+## Shortcut consigliato
+
+- Per una verifica backend completa, preferisci `docker exec eventi-tech composer qa`

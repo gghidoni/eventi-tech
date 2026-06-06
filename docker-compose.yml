@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: laravel-app:latest
+    image: eventi-tech-app:php8.4.20-node24.16
     container_name: eventi-tech
     volumes:
       - ./:/var/www/html
@@ -16,13 +16,16 @@ services:
       - eventi-tech-net
     restart: unless-stopped
     command: ["php-fpm"]
-
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+      mailpit:
+        condition: service_started
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.30.2-trixie
     container_name: eventi-tech-nginx
     volumes:
       - ./:/var/www/html
@@ -35,7 +38,7 @@ services:
       - eventi-tech-net
 
   postgres:
-    image: postgres:15
+    image: postgres:17.10-bookworm
     container_name: eventi-tech-postgres
     environment:
       POSTGRES_DB: '${DB_DATABASE}'
@@ -47,9 +50,15 @@ services:
       - eventi-tech-postgres:/var/lib/postgresql/data
     networks:
       - eventi-tech-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.30.0
     container_name: eventi-tech-mailpit
     ports:
       - "1025:1025"   # SMTP
@@ -59,14 +68,15 @@ services:
     restart: unless-stopped
 
   meilisearch:
-    image: getmeili/meilisearch:latest
+    image: getmeili/meilisearch:v1.44.0
     container_name: eventi-tech-meilisearch
     environment:
-      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-masterKey123}  # chiave master
+      MEILI_ENV: development
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-masterKey123}
     ports:
       - "7700:7700"
     volumes:
-    - eventi-tech-meili-data:/meili_data
+      - eventi-tech-meili-data:/meili_data
     networks:
       - eventi-tech-net
     restart: unless-stopped

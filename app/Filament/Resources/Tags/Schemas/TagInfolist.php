@@ -16,7 +16,7 @@ class TagInfolist
                 TextEntry::make('slug'),
                 ImageEntry::make('icon')
                     ->label('Icona')
-                    ->getStateUsing(fn ($record): string => 'https://cdn.simpleicons.org/'.rawurlencode((string) $record->icon).'/'.ltrim((string) $record->label_color, '#')),
+                    ->getStateUsing(fn ($record): string => 'https://cdn.simpleicons.org/'.rawurlencode((string) $record->icon).'/'.mb_ltrim((string) $record->label_color, '#')),
                 TextEntry::make('icon'),
                 TextEntry::make('badge_color'),
                 TextEntry::make('label_color'),

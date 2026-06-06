@@ -91,6 +91,7 @@ npm run frontend:check
 
 - punta ai servizi Docker del repo tramite `localhost:8083`
 - esegui `npm run build` prima degli audit, cosi il frontend usa asset compilati e ripetibili
+- i comandi `npm run build`, `npm run frontend:test` e `npm run frontend:audit` puliscono `public/hot` prima di partire, per evitare richieste accidentali al dev server Vite
 
 ### 2. Fallisci su errori browser veri
 

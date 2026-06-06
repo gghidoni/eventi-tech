@@ -8,7 +8,7 @@ parameters:
         - app/
 
     # Level 10 is the highest level
-    level: 7
+    level: 9
 
     ignoreErrors:
         # Trait usato dentro componente Volt inline in Blade, non risolvibile da PHPStan come usage classica.

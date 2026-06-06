@@ -34,34 +34,40 @@ class InsertCityProvinceRegion extends Command
         $file = Storage::get('comuni.json');
         $items = json_decode((string) $file, true);
 
+        if (!is_array($items)) {
+            $this->error('Il file comuni.json non contiene un array valido.');
+
+            return;
+        }
+
+        /** @var list<array{denominazione_regione:string, denominazione_provincia:string, sigla_provincia:string, denominazione_ita:string, cap:string}> $items */
         $this->output->progressStart(count($items));
 
         foreach ($items as $item) {
-            if (!Region::whereName($item['denominazione_regione'])->exists()) {
-                Region::query()->create([
-                    'name'       => $item['denominazione_regione'],
-                    'updated_at' => now(),
-                    'created_at' => now(),
-                ]);
-            }
-            if (!Province::whereName($item['denominazione_provincia'])->exists()) {
-                Province::query()->create([
-                    'name'       => $item['denominazione_provincia'],
+            $region = Region::firstOrCreate(
+                ['name' => $item['denominazione_regione']],
+                ['updated_at' => now(), 'created_at' => now()],
+            );
+
+            $province = Province::firstOrCreate(
+                ['name' => $item['denominazione_provincia']],
+                [
                     'code'       => $item['sigla_provincia'],
-                    'region_id'  => Region::whereName($item['denominazione_regione'])->first()->id,
+                    'region_id'  => $region->id,
                     'updated_at' => now(),
                     'created_at' => now(),
-                ]);
-            }
-            if (!City::whereName($item['denominazione_ita'])->exists()) {
-                City::query()->create([
-                    'name'        => $item['denominazione_ita'],
+                ],
+            );
+
+            City::firstOrCreate(
+                ['name' => $item['denominazione_ita']],
+                [
                     'cap'         => $item['cap'],
-                    'province_id' => Province::whereName($item['denominazione_provincia'])->first()->id,
+                    'province_id' => $province->id,
                     'updated_at'  => now(),
                     'created_at'  => now(),
-                ]);
-            }
+                ],
+            );
 
             $this->output->progressAdvance();
         }

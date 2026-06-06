@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\User;
-use Laravel\Socialite\Contracts\Provider as SocialiteProvider;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\AbstractProvider as SocialiteProvider;
 
 test('guests can be redirected to google oauth provider', function () {
     $provider = Mockery::mock(SocialiteProvider::class);
