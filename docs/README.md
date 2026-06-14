@@ -27,7 +27,7 @@ Questa cartella contiene specifiche pratiche (basate sul codice esistente) per a
 - `ui/cards-panels.md` Card, glassmorphism, menu a tendina
 - `ui/async-select.md` Componenti select (DrPshtiwan livewire-async-select) e endpoint
 - `ui/date-picker.md` Date/time picker con Flatpickr + Alpine + Livewire
-- `ui/frontend-testing.md` Playwright + Lighthouse CI per smoke test, audit e debug frontend
+- `ui/frontend-testing.md` Playwright + Lighthouse per smoke test, audit e debug frontend
 
 ### Backend
 

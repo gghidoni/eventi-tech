@@ -38,7 +38,7 @@ services:
       - eventi-tech-net
 
   postgres:
-    image: postgres:17.10-bookworm
+    image: postgres:18.4-bookworm
     container_name: eventi-tech-postgres
     environment:
       POSTGRES_DB: '${DB_DATABASE}'
@@ -47,7 +47,7 @@ services:
     ports:
       - '${FORWARD_DB_PORT:-5432}:5432'
     volumes:
-      - eventi-tech-postgres:/var/lib/postgresql/data
+      - eventi-tech-postgres:/var/lib/postgresql
     networks:
       - eventi-tech-net
     healthcheck:

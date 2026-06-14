@@ -21,9 +21,9 @@ Playwright e la scelta primaria per questo repo perche:
 - espone eventi utili per errori console, `pageerror` e `requestfailed`
 - registra trace, screenshot e video senza tooling aggiuntivo
 
-### Lighthouse CI come audit complementare
+### Lighthouse come audit complementare
 
-Lighthouse CI completa Playwright su aree che non conviene reinventare:
+Lighthouse completa Playwright su aree che non conviene reinventare:
 
 - performance
 - accessibility
@@ -39,7 +39,7 @@ Chrome DevTools Protocol e il layer basso di ispezione del browser. E potente pe
 Conclusione pratica:
 
 - `Playwright` per navigazione, smoke test, errori client, HTML e flussi
-- `Lighthouse CI` per punteggi e audit
+- `Lighthouse` per punteggi e audit
 - `Chrome DevTools` come supporto diagnostico, non come framework principale
 
 ## Integrazione con lo stack locale
@@ -137,7 +137,7 @@ Per questo repo resta comunque preferibile il target Docker su `8083`.
 ## File introdotti
 
 - `playwright.config.js`
-- `.lighthouserc.cjs`
+- `lighthouse.config.mjs`
 - `tests/e2e/public-pages.spec.js`
 - `tests/e2e/support/browserIssues.js`
 

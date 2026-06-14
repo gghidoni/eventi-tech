@@ -116,6 +116,6 @@ Il feedback lato utente passa spesso per:
 
 - Vite per build e dev server
 - Playwright per browser automation
-- Lighthouse CI per audit qualitativi
+- Lighthouse per audit qualitativi
 
 Questi ultimi vivono come tooling di progetto e non come pezzi strutturali del runtime applicativo.

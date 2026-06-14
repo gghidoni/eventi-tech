@@ -67,7 +67,7 @@ Scelto per:
 - rilevare errori JavaScript e request fallite
 - coprire flussi utente veri
 
-### Lighthouse CI
+### Lighthouse
 
 Scelto per:
 

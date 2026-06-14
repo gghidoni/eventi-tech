@@ -4,8 +4,8 @@
 
 - Backend: Laravel 13, Livewire 4, PHP 8.4
 - Frontend: Tailwind 4, Vite 8, Flatpickr
-- Data: PostgreSQL 17, Meilisearch 1.44
-- Test: Pest, Playwright, Lighthouse CI
+- Data: PostgreSQL 18, Meilisearch 1.44
+- Test: Pest, Playwright, Lighthouse
 
 ## Ambiente locale
 

@@ -88,7 +88,7 @@ npm run frontend:test:debug
 
 Approfondimento: [../ui/frontend-testing.md](../ui/frontend-testing.md)
 
-## Lighthouse CI
+## Lighthouse
 
 E il tool di audit per performance, accessibility, best practices e SEO.
 

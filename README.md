@@ -29,7 +29,7 @@ For repository-oriented documentation, start from:
 |----------|------------|
 | Backend | Laravel 12, PHP 8.4 |
 | Frontend | Livewire 4, Tailwind CSS 4, Vite 7 |
-| Database | PostgreSQL 15 (Docker) / SQLite (local) |
+| Database | PostgreSQL 18 (Docker) / SQLite (local) |
 | Search | Meilisearch + Laravel Scout |
 | Auth | Laravel Fortify |
 | Testing | Pest PHP 4 |

@@ -11,10 +11,10 @@ Entry point agentico del repository.
 
 ## Fast Start
 
-- Stack: Laravel 13, Livewire 4, PHP 8.4, Tailwind 4, Vite 8, PostgreSQL 17, Meilisearch 1.44.
+- Stack: Laravel 13, Livewire 4, PHP 8.4, Tailwind 4, Vite 8, PostgreSQL 18, Meilisearch 1.44.
 - App locale Docker-first: `http://127.0.0.1:8083`
 - Container principali: `eventi-tech`, `eventi-tech-nginx`, `eventi-tech-postgres`, `eventi-tech-meilisearch`, `eventi-tech-mailpit`
-- Frontend browser tooling: `Playwright` per navigazione e smoke test, `Lighthouse CI` per audit
+- Frontend browser tooling: `Playwright` per navigazione e smoke test, `Lighthouse` per audit
 - Source of truth funzionale e tecnica: `docs/`
 
 ## Verifica finale obbligatoria

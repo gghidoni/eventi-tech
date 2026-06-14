@@ -26,7 +26,7 @@ Quindi il flusso security implementato qui usa strumenti attivamente supportati 
 
 Il gate di sicurezza frontend del repo e focalizzato sul runtime reale distribuito:
 
-- le dipendenze di build e tooling (`vite`, `laravel-vite-plugin`, `tailwindcss`, `@lhci/cli`, `concurrently`) sono `devDependencies`
+- le dipendenze di build e tooling (`vite`, `laravel-vite-plugin`, `tailwindcss`, `lighthouse`, `concurrently`) sono `devDependencies`
 - il comando blocca vulnerabilita `high` o superiori solo sulle dipendenze runtime
 - gli advisory sui tool di sviluppo restano visibili con `npm audit`, ma non bloccano il flusso standard se non impattano l'app distribuita
 
