@@ -13,6 +13,8 @@ new class extends Component
 
     public string $selectedEvent = '';
 
+    public string $selectedStatus = CfpSubmissionStatus::Submitted->value;
+
     public function rendering($view): void
     {
         $view->layout('components.layouts.base', ['title' => 'Candidature']);
@@ -37,11 +39,21 @@ new class extends Component
         $this->resetPage();
     }
 
+    public function updatedSelectedStatus(): void
+    {
+        if ($this->selectedStatus !== '' && !in_array($this->selectedStatus, $this->activeStatuses(), true)) {
+            $this->selectedStatus = CfpSubmissionStatus::Submitted->value;
+        }
+
+        $this->resetPage();
+    }
+
     public function with(): array
     {
         $submissions = CfpSubmission::query()
             ->with(['user', 'cfp.event.community'])
             ->whereNotIn('status', $this->inactiveStatuses())
+            ->when($this->selectedStatus !== '', fn (Builder $query): Builder => $query->where('status', $this->selectedStatus))
             ->whereHas('cfp.event.community', fn (Builder $query): Builder => $query->where('user_id', auth()->id()))
             ->when($this->selectedEvent !== '', fn (Builder $query): Builder => $query->whereHas(
                 'cfp.event',
@@ -53,6 +65,7 @@ new class extends Component
         return [
             'events'      => $this->eventOptions(),
             'submissions' => $submissions,
+            'statuses'    => $this->statusOptions(),
         ];
     }
 
@@ -77,6 +90,29 @@ new class extends Component
         ];
     }
 
+    /**
+     * @return array<int, string>
+     */
+    private function activeStatuses(): array
+    {
+        return collect(CfpSubmissionStatus::cases())
+            ->reject(fn (CfpSubmissionStatus $status): bool => in_array($status->value, $this->inactiveStatuses(), true))
+            ->map(fn (CfpSubmissionStatus $status): string => $status->value)
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function statusOptions(): array
+    {
+        return collect(CfpSubmissionStatus::cases())
+            ->reject(fn (CfpSubmissionStatus $status): bool => in_array($status->value, $this->inactiveStatuses(), true))
+            ->mapWithKeys(fn (CfpSubmissionStatus $status): array => [$status->value => $this->statusLabel($status)])
+            ->all();
+    }
+
     private function statusLabel(CfpSubmissionStatus $status): string
     {
         return match ($status) {
@@ -91,15 +127,27 @@ new class extends Component
 }; ?>
 
 <div class="page">
-    <div class="mt-4 text-gray-300">
-        <label for="selectedEvent" class="block text-sm font-medium mb-1 text-gray-500">Evento</label>
-        <select id="selectedEvent" class="input-et select-et" wire:model.live="selectedEvent">
-            @forelse ($events as $event)
-                <option value="{{ $event->id }}">{{ $event->title }}</option>
-            @empty
-                <option value="">Nessun evento con candidature attive</option>
-            @endforelse
-        </select>
+    <div class="mt-4 grid md:grid-cols-2 text-gray-300" style="gap: 1.4375rem;">
+        <div>
+            <label for="selectedEvent" class="block text-sm font-medium mb-1 text-gray-500">Evento</label>
+            <select id="selectedEvent" class="input-et select-et" wire:model.live="selectedEvent">
+                @forelse ($events as $event)
+                    <option value="{{ $event->id }}">{{ $event->title }}</option>
+                @empty
+                    <option value="">Nessun evento con candidature attive</option>
+                @endforelse
+            </select>
+        </div>
+
+        <div>
+            <label for="selectedStatus" class="block text-sm font-medium mb-1 text-gray-500">Stato</label>
+            <select id="selectedStatus" class="input-et select-et" wire:model.live="selectedStatus">
+                <option value="">Tutti gli stati attivi</option>
+                @foreach ($statuses as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     <div class="mt-8">

@@ -229,6 +229,52 @@ test('review marks template fields added after submission', function () {
         ->assertSee("Campo aggiunto dopo l'invio della candidatura.", false);
 });
 
+test('review does not mark answered fields as added after submission', function () {
+    $organizer = User::factory()->create();
+    $speaker = User::factory()->create();
+    $community = Community::factory()->active()->forUser($organizer)->create();
+    $template = CfpTemplate::factory()->create(['community_id' => $community->id]);
+    $field = CfpTemplateField::factory()->create([
+        'cfp_template_id' => $template->id,
+        'key'             => 'level',
+        'label'           => 'Livello',
+        'type'            => CfpFieldType::Text,
+        'created_at'      => now(),
+    ]);
+    $event = Event::factory()
+        ->active()
+        ->forCommunity($community)
+        ->create([
+            'start_date' => now()->addMonth(),
+            'end_date'   => now()->addMonth()->addHours(2),
+        ]);
+    $cfp = $event->cfp()->create([
+        'cfp_template_id' => $template->id,
+        'mode'            => CfpMode::Internal,
+        'status'          => CfpStatus::Published,
+        'title'           => 'CFP live template',
+        'opens_at'        => now()->subDay(),
+        'closes_at'       => now()->addWeek(),
+    ]);
+    $submission = $cfp->submissions()->create([
+        'user_id'      => $speaker->id,
+        'title'        => 'Talk inviato',
+        'abstract'     => 'Abstract sufficientemente lungo per una submission valida.',
+        'status'       => CfpSubmissionStatus::Submitted,
+        'submitted_at' => now()->subHour(),
+    ]);
+    $submission->answers()->create([
+        'cfp_template_field_id' => $field->id,
+        'value'                 => ['value' => 'advanced'],
+    ]);
+
+    Livewire::actingAs($organizer)
+        ->test('pages::dashboard.cfps.submission', ['cfp' => $cfp, 'submission' => $submission])
+        ->assertSee('Livello')
+        ->assertSee('advanced')
+        ->assertDontSee("Campo aggiunto dopo l'invio della candidatura.", false);
+});
+
 test('organizer publishes internal cfp speaker applies and organizer reviews submission', function () {
     Mail::fake();
 
@@ -380,6 +426,50 @@ test('organizer sees active submissions filtered by preselected event', function
         ->assertOk()
         ->assertSee('Talk visibile')
         ->assertDontSee('Talk non selezionato');
+});
+
+test('organizer filters submissions by status', function () {
+    $organizer = User::factory()->create();
+    $speaker = User::factory()->create();
+    $community = Community::factory()->active()->forUser($organizer)->create();
+    $template = CfpTemplate::factory()->create(['community_id' => $community->id]);
+    $event = Event::factory()->forCommunity($community)->create(['title' => 'Evento con stati']);
+    CfpTemplateField::factory()->create(['cfp_template_id' => $template->id]);
+
+    $cfp = $event->cfp()->create([
+        'cfp_template_id' => $template->id,
+        'mode'            => CfpMode::Internal,
+        'status'          => CfpStatus::Published,
+        'title'           => 'CFP stati',
+        'opens_at'        => now()->subDay(),
+        'closes_at'       => now()->addWeek(),
+    ]);
+    $cfp->submissions()->create([
+        'user_id'      => $speaker->id,
+        'title'        => 'Talk da valutare',
+        'abstract'     => 'Abstract sufficientemente lungo per la candidatura.',
+        'status'       => CfpSubmissionStatus::Submitted,
+        'submitted_at' => now(),
+    ]);
+    $cfp->submissions()->create([
+        'user_id'      => $speaker->id,
+        'title'        => 'Talk accettato',
+        'abstract'     => 'Abstract sufficientemente lungo per la candidatura.',
+        'status'       => CfpSubmissionStatus::Accepted,
+        'submitted_at' => now()->subMinute(),
+    ]);
+
+    Livewire::actingAs($organizer)
+        ->test('pages::dashboard.communities.submissions')
+        ->assertSet('selectedStatus', CfpSubmissionStatus::Submitted->value)
+        ->assertSee('Talk da valutare')
+        ->assertDontSee('Talk accettato')
+        ->set('selectedStatus', CfpSubmissionStatus::Accepted->value)
+        ->assertSee('Talk accettato')
+        ->assertDontSee('Talk da valutare')
+        ->set('selectedStatus', '')
+        ->assertSee('Talk da valutare')
+        ->assertSee('Talk accettato');
 });
 
 test('speaker sees own active submissions', function () {

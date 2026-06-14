@@ -77,6 +77,10 @@ new class extends Component
             return false;
         }
 
+        if ($this->submission->answers->contains('cfp_template_field_id', $fieldId)) {
+            return false;
+        }
+
         return $field->created_at->greaterThan($this->submission->submitted_at);
     }
 
