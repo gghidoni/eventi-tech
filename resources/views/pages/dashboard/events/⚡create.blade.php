@@ -3,7 +3,10 @@
 use App\Actions\CreateAddressBook;
 use App\Actions\CreateEvent;
 use App\Actions\ProcessPoster;
+use App\Enums\CfpMode;
+use App\Enums\CfpStatus;
 use App\Enums\EventType;
+use App\Livewire\Concerns\ManagesEventCfpForm;
 use App\Mail\AdminNewEventNotification;
 use App\Mail\CreatedNewEvent;
 use App\Models\Event;
@@ -16,6 +19,7 @@ use Livewire\WithFileUploads;
 new class extends Component
 {
     use WithFileUploads;
+    use ManagesEventCfpForm;
 
     public $poster;
 
@@ -40,8 +44,31 @@ new class extends Component
     // #[Validate(['sometimes', 'url'])]
     public string $tickets_url = '';
 
-    // #[Validate(['sometimes', 'url'])]
-    public string $cfp_url = '';
+    public bool $has_cfp = false;
+
+    public string $cfp_mode = CfpMode::External->value;
+
+    public string $cfp_title = '';
+
+    public string $cfp_description = '';
+
+    public string $cfp_external_url = '';
+
+    public $cfp_opens_at = '';
+
+    public $cfp_closes_at = '';
+
+    public string $cfp_status = CfpStatus::Published->value;
+
+    public array $cfpStatuses = [];
+
+    public string $cfp_template_id = '';
+
+    /** @var array<int, array<string, mixed>> */
+    public array $cfp_fields = [];
+
+    /** @var array<string, string> */
+    public array $cfpFieldTypes = [];
 
     // #[Validate(['required', 'string', 'max:100'])]
     public string $address_line = '';
@@ -67,7 +94,7 @@ new class extends Component
             'end_date'     => 'required',
             'website'      => 'sometimes|nullable|url',
             'tickets_url'  => 'sometimes|nullable|url',
-            'cfp_url'      => 'sometimes|nullable|url',
+            'has_cfp'      => 'boolean',
             'address_line' => $this->type !== EventType::Online->value ? 'required|string|max:100' : 'nullable',
             'city'         => $this->type !== EventType::Online->value ? 'required' : 'nullable',
             'selectedTags' => 'array|max:4',
@@ -82,6 +109,7 @@ new class extends Component
         $this->types = array_column(EventType::cases(), 'value');
 
         $this->type = $this->types[0];
+        $this->cfpStatuses = array_column(CfpStatus::cases(), 'value');
 
         $this->communities = auth()
             ->user()
@@ -95,6 +123,7 @@ new class extends Component
             ->toArray();
 
         $this->selectedCommunity = $this->communities[0]['value'];
+        $this->initializeCfpForm();
     }
 
     public function rendering($view)
@@ -105,13 +134,18 @@ new class extends Component
     public function save(CreateEvent $createEventAction, ProcessPoster $processPosterAction, CreateAddressBook $createAddressBookAction)
     {
         $data = $this->validate();
+        $cfpPayload = $this->buildCfpPayload($this->title);
 
         try {
             unset($data['poster']);
+            unset($data['has_cfp']);
+            unset($data['cfp_external_url']);
+            unset($data['cfp_opens_at']);
+            unset($data['cfp_closes_at']);
+            unset($data['cfp_status']);
 
             $data['website'] = $data['website'] ?: null;
             $data['tickets_url'] = $data['tickets_url'] ?: null;
-            $data['cfp_url'] = $data['cfp_url'] ?: null;
 
             $data['start_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
             $data['end_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
@@ -141,6 +175,10 @@ new class extends Component
                 $data['poster_thumb'] = $processPoster['thumb'];
             }
 
+            if ($cfpPayload) {
+                $data['cfp'] = $cfpPayload;
+            }
+
             $event = $createEventAction->execute($data);
 
             $user = auth()->user();
@@ -159,6 +197,7 @@ new class extends Component
             $this->dispatch('messageSent', message: $message, success: false);
         }
     }
+
 }; ?>
 
 
@@ -301,14 +340,7 @@ new class extends Component
             @enderror
         </div>
 
-        {{-- CFP --}}
-        <div class="mb-5">
-            <label for="cfp_url" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.cfp_url') }}</label>
-            <input type="text" id="cfp_url" name="cfp_url" class="input-et" wire:model="cfp_url" />
-            @error('cfp_url')
-                <span class="text-pink text-xs">{{ $message }}</span>
-            @enderror
-        </div>
+        @include('pages.dashboard.events.partials.cfp-form')
 
         {{-- Poster con Anteprima --}}
         <div class="mb-5">

@@ -69,6 +69,14 @@ class Community extends Model
     }
 
     /**
+     * @return HasMany<CfpTemplate, $this>
+     */
+    public function cfpTemplates(): HasMany
+    {
+        return $this->hasMany(CfpTemplate::class);
+    }
+
+    /**
      * @return BelongsToMany<User, $this>
      */
     public function favoritedByUsers(): BelongsToMany

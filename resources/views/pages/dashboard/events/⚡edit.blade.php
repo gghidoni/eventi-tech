@@ -2,14 +2,19 @@
 
 use Livewire\Component;
 use App\Models\Event;
+use App\Enums\CfpMode;
+use App\Enums\CfpStatus;
 use App\Enums\EventType;
 use App\Actions\UpdateEvent;
 use App\Actions\ProcessPoster;
+use App\Livewire\Concerns\ManagesEventCfpForm;
 use Livewire\Attributes\Validate;
 use Livewire\WithFileUploads;
 
 new class extends Component {
     use WithFileUploads;
+    use ManagesEventCfpForm;
+
     public Event $event;
     public $poster;
 
@@ -34,23 +39,49 @@ new class extends Component {
     #[Validate(['sometimes', 'url'])]
     public string $tickets_url = '';
 
-    #[Validate(['sometimes', 'url'])]
-    public string $cfp_url = '';
+    public bool $has_cfp = false;
+
+    public string $cfp_mode = CfpMode::External->value;
+
+    public string $cfp_title = '';
+
+    public string $cfp_description = '';
+
+    public string $cfp_external_url = '';
+
+    public $cfp_opens_at = '';
+
+    public $cfp_closes_at = '';
+
+    public string $cfp_status = CfpStatus::Published->value;
 
     public array $selectedTags = [];
 
     public $types;
 
+    public array $cfpStatuses = [];
+
+    public string $cfp_template_id = '';
+
+    /** @var array<int, array<string, mixed>> */
+    public array $cfp_fields = [];
+
+    /** @var array<string, string> */
+    public array $cfpFieldTypes = [];
+
     public function mount(Event $event)
     {
         $this->event = $event;
+
+        if ($this->event->community->user_id !== auth()->id()) {
+            abort(403);
+        }
 
         $this->fill([
             'title'       => $this->event->title ?? '',
             'description' => $this->event->description ?? '',
             'website'     => $this->event->website ?? '',
             'tickets_url' => $this->event->tickets_url ?? '',
-            'cfp_url'     => $this->event->cfp_url ?? '',
         ]);
 
         $this->start_date = $this->event->start_date?->format('d-m-Y H:i');
@@ -59,6 +90,9 @@ new class extends Component {
         $this->type = $this->event->type;
 
         $this->types = array_column(EventType::cases(), 'value');
+        $this->cfpStatuses = array_column(CfpStatus::cases(), 'value');
+        $this->initializeCfpForm($this->event);
+
         $this->selectedTags = $this->event->tags()
             ->pluck('tags.id')
             ->map(fn ($id) => (string) $id)
@@ -81,13 +115,13 @@ new class extends Component {
                 'selectedTags.*' => 'integer|exists:tags,id',
             ],
         )->validate();
+        $cfpPayload = $this->buildCfpPayload($this->title);
 
         try {
             unset($data['poster']);
 
             $data['website'] = $data['website'] ?: null;
             $data['tickets_url'] = $data['tickets_url'] ?: null;
-            $data['cfp_url'] = $data['cfp_url'] ?: null;
             $data['tag_ids'] = collect($this->selectedTags)
                 ->map(fn ($id) => (int) $id)
                 ->filter(fn (int $id): bool => $id > 0)
@@ -106,6 +140,8 @@ new class extends Component {
                 $data['poster_thumb'] = $processPoster['thumb'];
             }
 
+            $data['cfp'] = $cfpPayload;
+
             $updateEventAction->execute($this->event, $data);
             return redirect()->route('dashboard.communities.events')->with('success', __('dashboard.events.success_updated'));
         } catch (\Exception $e) {
@@ -113,6 +149,7 @@ new class extends Component {
             return redirect()->route('dashboard.communities.events')->with('error', __('dashboard.events.error_update'));
         }
     }
+
 }; ?>
 
 
@@ -229,14 +266,7 @@ new class extends Component {
             @enderror
         </div>
 
-        {{-- CFP --}}
-        <div class="mb-5">
-            <label for="cfp_url" class="block text-sm font-medium mb-1 text-gray-500">{{ __('dashboard.events.fields.cfp_url') }}</label>
-            <input type="text" id="cfp_url" name="cfp_url" class="input-et" wire:model="cfp_url" />
-            @error('cfp_url')
-                <span class="text-pink text-xs">{{ $message }}</span>
-            @enderror
-        </div>
+        @include('pages.dashboard.events.partials.cfp-form')
 
         {{-- Poster con Anteprima --}}
         <div class="mb-5">

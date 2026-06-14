@@ -32,7 +32,6 @@ return new class extends Migration
             $table->string('poster_mobile')->nullable();
             $table->string('poster_thumb')->nullable();
             $table->string('tickets_url')->nullable();
-            $table->string('cfp_url')->nullable();
             $table->timestamps();
         });
     }

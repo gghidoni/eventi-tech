@@ -39,7 +39,6 @@ class Event extends Model
         'poster_mobile',
         'poster_thumb',
         'tickets_url',
-        'cfp_url',
     ];
 
     protected $casts = [

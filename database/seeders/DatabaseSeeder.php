@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             AddressBookSeeder::class,
             EventSeeder::class,
+            CfpSeeder::class,
             EventTagSeeder::class,
             PlaceholderSeeder::class,
         ]);

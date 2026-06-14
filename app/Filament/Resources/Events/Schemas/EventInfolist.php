@@ -36,11 +36,6 @@ class EventInfolist
                             ->placeholder('-')
                             ->url(fn ($record) => $record->tickets_url)
                             ->openUrlInNewTab(),
-                        TextEntry::make('cfp_url')
-                            ->label('CFP URL')
-                            ->placeholder('-')
-                            ->url(fn ($record) => $record->cfp_url)
-                            ->openUrlInNewTab(),
                     ])
                     ->columns(2),
 

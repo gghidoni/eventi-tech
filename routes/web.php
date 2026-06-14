@@ -13,6 +13,9 @@ Route::get('/', function () {
 
 // EVENTS
 Route::prefix('events')->group(function () {
+    Route::livewire('/{event}/cfp/apply', 'pages::events.cfp.apply')
+        ->middleware(['auth', 'verified'])
+        ->name('events.cfp.apply');
     Route::livewire('/{event}', 'pages::events.show')->name('events.show');
 });
 
@@ -56,11 +59,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('create', 'pages::dashboard.communities.create')->name('dashboard.communities.create');
             Route::livewire('{community}/edit', 'pages::dashboard.communities.edit')->name('dashboard.communities.edit')->middleware(IsMyCommunity::class);
             Route::livewire('events', 'pages::dashboard.communities.events')->name('dashboard.communities.events');
+            Route::livewire('submissions', 'pages::dashboard.communities.submissions')->name('dashboard.communities.submissions');
         });
 
         Route::prefix('events')->group(function () {
             Route::livewire('{event}/edit', 'pages::dashboard.events.edit')->name('dashboard.events.edit');
             Route::livewire('create', 'pages::dashboard.events.create')->name('dashboard.events.create');
+        });
+
+        Route::livewire('cfp-submissions', 'pages::dashboard.cfp-submissions')->name('dashboard.cfp-submissions');
+
+        Route::prefix('cfps')->group(function () {
+            Route::livewire('{cfp}/submissions/{submission}', 'pages::dashboard.cfps.submission')->name('dashboard.cfps.submission');
         });
 
     });

@@ -2,6 +2,7 @@
 
 use DrPshtiwan\LivewireAsyncSelect\Livewire\AsyncSelect;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
 test('respects min search length', function () {
@@ -31,6 +32,31 @@ test('sends extra parameters with API request', function () {
 
     // Check that extra params are set
     expect($component->get('extraParams'))->toBe(['role' => 'admin', 'status' => 'active']);
+});
+
+test('loads absolute internal endpoint through laravel without network http', function () {
+    config()->set('app.url', 'http://localhost:8083');
+
+    Route::get('/api/internal-cities', function () {
+        return response()->json([
+            'data' => [
+                ['value' => '1', 'label' => 'Milano'],
+            ],
+        ]);
+    })->name('internal-cities');
+
+    Http::fake();
+
+    $component = Livewire::test(AsyncSelect::class, [
+        'endpoint' => route('internal-cities'),
+        'autoload' => true,
+    ]);
+
+    expect($component->get('displayOptions'))->toBe([
+        ['value' => '1', 'label' => 'Milano'],
+    ]);
+
+    Http::assertNothingSent();
 });
 
 test('sends headers with API request', function () {

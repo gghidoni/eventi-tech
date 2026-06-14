@@ -14,10 +14,22 @@ class UpdateEvent
     {
         return DB::transaction(function () use ($event, $data): Event {
             $tagIds = $data['tag_ids'] ?? null;
+            $shouldSyncCfp = array_key_exists('cfp', $data);
+            $cfpData = $data['cfp'] ?? null;
 
             unset($data['tag_ids']);
+            unset($data['cfp']);
 
             $event->update($data);
+
+            if ($shouldSyncCfp) {
+                if (is_array($cfpData)) {
+                    /** @var array<string, mixed> $cfpData */
+                    (new SaveEventCfp())->execute($event, $cfpData);
+                } else {
+                    $event->cfp()->delete();
+                }
+            }
 
             // Se i tag sono presenti nel payload, sincronizziamo la pivot.
             if (is_array($tagIds)) {

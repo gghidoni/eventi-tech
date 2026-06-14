@@ -76,6 +76,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return HasMany<CfpSubmission, $this>
+     */
+    public function cfpSubmissions(): HasMany
+    {
+        return $this->hasMany(CfpSubmission::class);
+    }
+
+    /**
      * Relationship Favorite Communities
      *
      * @return BelongsToMany<Community, $this>

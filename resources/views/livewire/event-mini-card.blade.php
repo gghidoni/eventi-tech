@@ -119,6 +119,10 @@ new class extends Component
                             href="{{ $event->edit_url }}" wire:navigate>
                             {{ __('common.actions.edit') }}
                         </a>
+                        <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
+                            href="{{ route('dashboard.communities.submissions', ['event' => $event->id]) }}" wire:navigate>
+                            Candidature
+                        </a>
                     @endif
                 </div>
             </div>

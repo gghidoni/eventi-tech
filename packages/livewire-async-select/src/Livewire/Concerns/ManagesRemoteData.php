@@ -2,9 +2,11 @@
 
 namespace DrPshtiwan\LivewireAsyncSelect\Livewire\Concerns;
 
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Request as RequestFacade;
 use Throwable;
 
 trait ManagesRemoteData
@@ -41,16 +43,13 @@ trait ManagesRemoteData
         $this->errorMessage = null;
 
         try {
+            $payload = $this->fetchEndpointPayload($this->endpoint, array_merge($this->extraParams, [
+                $this->searchParam => $term,
+                'page'             => $this->page,
+                'per_page'         => $this->perPage,
+            ]));
 
-            $response = Http::acceptJson()->timeout(5)
-                ->withHeaders($this->getHeadersWithInternalAuth($this->endpoint, 'GET') ?? [])
-                ->get($this->endpoint, array_merge($this->extraParams, [
-                    $this->searchParam => $term,
-                    'page'             => $this->page,
-                    'per_page'         => $this->perPage,
-                ]));
-
-            if (!$response->successful()) {
+            if (!$payload['successful']) {
                 $this->errorMessage = 'Failed to load options. Please try again.';
                 if (!$append) {
                     $this->remoteOptionsMap = [];
@@ -59,18 +58,17 @@ trait ManagesRemoteData
                 return;
             }
 
-            $payload = $response->json();
-            $items = $this->extractOptionsFromPayload($payload);
+            $items = $this->extractOptionsFromPayload($payload['json']);
             $normalized = $this->normalizeOptions($items);
 
-            if (isset($payload['has_more'])) {
-                $this->hasMore = $payload['has_more'];
-            } elseif (isset($payload['hasMore'])) {
-                $this->hasMore = $payload['hasMore'];
-            } elseif (isset($payload['current_page'], $payload['last_page'])) {
-                $this->hasMore = $payload['current_page'] < $payload['last_page'];
-            } elseif (isset($payload['meta']['total'])) {
-                $total = $payload['meta']['total'];
+            if (is_array($payload['json']) && isset($payload['json']['has_more'])) {
+                $this->hasMore = $payload['json']['has_more'];
+            } elseif (is_array($payload['json']) && isset($payload['json']['hasMore'])) {
+                $this->hasMore = $payload['json']['hasMore'];
+            } elseif (is_array($payload['json']) && isset($payload['json']['current_page'], $payload['json']['last_page'])) {
+                $this->hasMore = $payload['json']['current_page'] < $payload['json']['last_page'];
+            } elseif (is_array($payload['json']) && isset($payload['json']['meta']['total'])) {
+                $total = $payload['json']['meta']['total'];
                 $currentCount = ($this->page * $this->perPage);
                 $this->hasMore = $currentCount < $total;
             } else {
@@ -102,23 +100,15 @@ trait ManagesRemoteData
         }
 
         try {
-            $http = Http::acceptJson()->timeout(5);
-
-            $headers = $this->getHeadersWithInternalAuth($endpoint, 'GET');
-            if (!empty($headers)) {
-                $http = $http->withHeaders($headers);
-            }
-
-            $response = $http->get($endpoint, array_merge($this->extraParams, [
+            $payload = $this->fetchEndpointPayload($endpoint, array_merge($this->extraParams, [
                 $this->selectedParam => implode(',', $values),
             ]));
 
-            if (!$response->successful()) {
+            if (!$payload['successful']) {
                 return;
             }
 
-            $payload = $response->json();
-            $items = $this->extractOptionsFromPayload($payload);
+            $items = $this->extractOptionsFromPayload($payload['json']);
             $normalized = $this->normalizeOptions($items);
 
             $this->cacheOptions($normalized);
@@ -231,24 +221,33 @@ trait ManagesRemoteData
             return true;
         }
 
-        $currentHost = Request::getHost();
-        $currentScheme = Request::getScheme();
+        return $this->isApplicationEndpoint($parsed);
+    }
 
-        $endpointHost = mb_strtolower($parsed['host'] ?? '');
-        $currentHostLower = mb_strtolower($currentHost);
+    /**
+     * @param  array<string, int|string>  $parsedEndpoint
+     */
+    protected function isApplicationEndpoint(array $parsedEndpoint): bool
+    {
+        $endpointHost = mb_strtolower((string) ($parsedEndpoint['host'] ?? ''));
 
-        if ($endpointHost !== $currentHostLower) {
+        if ($endpointHost === '') {
             return false;
         }
 
-        if (isset($parsed['scheme'])) {
-            $endpointScheme = mb_strtolower($parsed['scheme']);
-            $currentSchemeLower = mb_strtolower($currentScheme);
+        $applicationHosts = array_filter([
+            mb_strtolower(RequestFacade::getHost()),
+            mb_strtolower((string) parse_url((string) config('app.url', ''), PHP_URL_HOST)),
+        ]);
 
-            return $endpointScheme === $currentSchemeLower;
-        }
+        return in_array($endpointHost, $applicationHosts, true);
+    }
 
-        return true;
+    protected function shouldUseLaravelSubrequest(string $endpoint): bool
+    {
+        $parsed = parse_url($endpoint);
+
+        return is_array($parsed) && isset($parsed['host']) && $this->isApplicationEndpoint($parsed);
     }
 
     protected function generateInternalAuthToken(string $endpoint, string $method = 'GET', ?string $body = null): ?string
@@ -315,5 +314,80 @@ trait ManagesRemoteData
         }
 
         return $headers;
+    }
+
+    /**
+     * @param  array<string, mixed>  $params
+     * @return array{successful: bool, json: mixed}
+     */
+    private function fetchEndpointPayload(string $endpoint, array $params): array
+    {
+        if ($this->shouldUseLaravelSubrequest($endpoint)) {
+            return $this->fetchInternalEndpointPayload($endpoint, $params);
+        }
+
+        $response = Http::acceptJson()->timeout(5)
+            ->withHeaders($this->getHeadersWithInternalAuth($endpoint, 'GET'))
+            ->get($endpoint, $params);
+
+        return [
+            'successful' => $response->successful(),
+            'json'       => $response->json(),
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $params
+     * @return array{successful: bool, json: mixed}
+     */
+    private function fetchInternalEndpointPayload(string $endpoint, array $params): array
+    {
+        $currentRequest = request();
+        $server = $currentRequest->server->all();
+        $server['HTTP_ACCEPT'] = 'application/json';
+
+        foreach ($this->getHeadersWithInternalAuth($endpoint, 'GET') as $name => $value) {
+            $server['HTTP_'.mb_strtoupper(str_replace('-', '_', $name))] = (string) $value;
+        }
+
+        $request = HttpRequest::create(
+            $this->pathAndQueryFromEndpoint($endpoint),
+            'GET',
+            $params,
+            $currentRequest->cookies->all(),
+            [],
+            $server,
+        );
+
+        try {
+            if ($currentRequest->hasSession()) {
+                $request->setLaravelSession($currentRequest->session());
+            }
+        } catch (Throwable) {
+            // Some CLI/test contexts do not have a session bound to the current request.
+        }
+
+        $request->setUserResolver(fn (?string $guard = null) => Auth::guard($guard)->user());
+
+        $response = app(HttpKernel::class)->handle($request);
+
+        return [
+            'successful' => $response->isSuccessful(),
+            'json'       => json_decode($response->getContent(), true),
+        ];
+    }
+
+    private function pathAndQueryFromEndpoint(string $endpoint): string
+    {
+        $parsed = parse_url($endpoint);
+
+        if (!is_array($parsed)) {
+            return '/';
+        }
+
+        $path = (string) ($parsed['path'] ?? '/');
+        $query = isset($parsed['query']) ? '?'.$parsed['query'] : '';
+
+        return $path.$query;
     }
 }

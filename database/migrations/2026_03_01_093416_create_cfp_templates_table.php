@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\CfpSchema;
+use App\Models\Community;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cfp_options', function (Blueprint $table) {
+        Schema::create('cfp_templates', function (Blueprint $table): void {
             $table->id();
-            $table->foreignIdFor(CfpSchema::class);
-            $table->string('label');
-            $table->json('options');
+            $table->foreignIdFor(Community::class)->constrained()->cascadeOnDelete();
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cfp_options');
+        Schema::dropIfExists('cfp_templates');
     }
 };

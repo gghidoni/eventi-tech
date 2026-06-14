@@ -10,7 +10,7 @@ Punti utili per UI e query:
   - `type` -> `App\Enums\EventType`
   - `status` -> `App\Enums\EventStatus`
 - Relazioni:
-  - `community()`, `address_book()`, `tags()`, `bookmarks()`
+  - `community()`, `address_book()`, `tags()`, `bookmarks()`, `cfp()`
 - Accessor usati nelle view:
   - `poster_img`, `poster_mobile_img`, `poster_thumb_img` (con placeholder)
   - `formatted_start_date`, `formatted_datetime_start`, `formatted_datetime_end`
@@ -21,7 +21,7 @@ Punti utili per UI e query:
 
 Fonte: `app/Models/Community.php`
 
-- Relazioni: `user()`, `events()`
+- Relazioni: `user()`, `events()`, `cfpTemplates()`
 - Accessor:
   - `public_url`, `edit_url`
   - `logo_img` (fallback su ui-avatars)
@@ -31,7 +31,7 @@ Fonte: `app/Models/Community.php`
 Fonte: `app/Models/User.php`
 
 - Relazioni: `communities()`, `bookmarks()`
+- Relazioni CFP: `cfpSubmissions()`
 - Accessor:
   - `has_active_community` (basato su `CommunityStatus::Active`)
   - `avatar_img` (fallback su ui-avatars)
-

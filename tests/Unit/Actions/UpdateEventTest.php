@@ -3,8 +3,11 @@
 declare(strict_types=1);
 
 use App\Actions\UpdateEvent;
+use App\Enums\CfpMode;
+use App\Enums\CfpStatus;
 use App\Enums\EventStatus;
 use App\Enums\EventType;
+use App\Models\Cfp;
 use App\Models\Event;
 
 beforeEach(function () {
@@ -85,4 +88,48 @@ test('can update status', function () {
     $updatedEvent = $this->action->execute($event, ['status' => EventStatus::Active]);
 
     expect($updatedEvent->status)->toBe(EventStatus::Active);
+});
+
+test('creates or updates external cfp payload', function () {
+    $event = Event::factory()->create();
+
+    $this->action->execute($event, [
+        'cfp' => [
+            'mode'         => CfpMode::External,
+            'status'       => CfpStatus::Published,
+            'title'        => 'CFP - New Conference',
+            'opens_at'     => now(),
+            'closes_at'    => now()->addMonth(),
+            'external_url' => 'https://example.com/first-cfp',
+        ],
+    ]);
+
+    expect($event->fresh()->cfp->external_url)->toBe('https://example.com/first-cfp');
+
+    $this->action->execute($event, [
+        'cfp' => [
+            'mode'         => CfpMode::External,
+            'status'       => CfpStatus::Draft,
+            'title'        => 'CFP - New Conference',
+            'opens_at'     => now(),
+            'closes_at'    => now()->addMonth(),
+            'external_url' => 'https://example.com/updated-cfp',
+        ],
+    ]);
+
+    $event->refresh();
+
+    expect($event->cfp->external_url)->toBe('https://example.com/updated-cfp');
+    expect($event->cfp->status)->toBe(CfpStatus::Draft);
+});
+
+test('removes cfp when payload is null', function () {
+    $event = Event::factory()->create();
+    Cfp::factory()->for($event)->create();
+
+    $this->action->execute($event, ['cfp' => null]);
+
+    $this->assertDatabaseMissing('cfps', [
+        'event_id' => $event->id,
+    ]);
 });

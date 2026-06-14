@@ -8,6 +8,13 @@ export function trackBrowserIssues(page) {
             return;
         }
 
+        if (
+            process.env.PLAYWRIGHT_IGNORE_LOCALHOST_ASSET_FAILURES === '1'
+            && message.text().startsWith('Failed to load resource: net::ERR_CONNECTION_REFUSED')
+        ) {
+            return;
+        }
+
         issues.push(`console error: ${message.text()}`);
     });
 
@@ -17,8 +24,16 @@ export function trackBrowserIssues(page) {
 
     page.on('requestfailed', request => {
         const failure = request.failure();
+        const url = request.url();
 
-        issues.push(`request failed: ${request.method()} ${request.url()} (${failure?.errorText ?? 'unknown error'})`);
+        if (
+            process.env.PLAYWRIGHT_IGNORE_LOCALHOST_ASSET_FAILURES === '1'
+            && (url.startsWith('http://localhost:8083/storage/') || url.startsWith('http://127.0.0.1:8083/storage/'))
+        ) {
+            return;
+        }
+
+        issues.push(`request failed: ${request.method()} ${url} (${failure?.errorText ?? 'unknown error'})`);
     });
 
     return issues;

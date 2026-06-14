@@ -1,6 +1,8 @@
 <?php
 
 use App\Livewire\Concerns\HasBookmarkToggle;
+use App\Enums\CfpMode;
+use App\Enums\CfpStatus;
 use App\Models\Event;
 use Livewire\Component;
 
@@ -11,7 +13,7 @@ new class extends Component {
 
     public function mount(Event $event)
     {
-        $this->event = $event->load(['community', 'address_book.city', 'address_book.province', 'address_book.region']);
+        $this->event = $event->load(['community', 'address_book.city', 'address_book.province', 'address_book.region', 'cfp']);
         $this->initializeBookmarkState($this->event);
     }
 
@@ -84,11 +86,12 @@ new class extends Component {
                     <span class="text-white text-xs uppercase font-anta">Biglietti</span>
                 </a>
             @endif
-            @if ($event->cfp_url)
-                {{-- Countdown temporaneo CFP basato su start_date, senza nuovi campi DB. --}}
-                <a href="{{ $event->cfp_url }}" target="_blank" rel="noopener" class="flex h-10 w-full items-center justify-center space-x-2 rounded-md border border-white px-2 py-1"
+            @if ($event->cfp && $event->cfp->status === CfpStatus::Published && (($event->cfp->mode === CfpMode::External && $event->cfp->external_url) || $event->cfp->mode === CfpMode::Internal))
+                <a href="{{ $event->cfp->mode === CfpMode::External ? $event->cfp->external_url : ($event->cfp->isOpen() ? route('events.cfp.apply', $event) : '#') }}"
+                    @if ($event->cfp->mode === CfpMode::External) target="_blank" rel="noopener" @endif
+                    class="flex h-10 w-full items-center justify-center space-x-2 rounded-md border border-white px-2 py-1 {{ $event->cfp->mode === CfpMode::Internal && !$event->cfp->isOpen() ? 'opacity-60 pointer-events-none' : '' }}"
                     x-data="{
-                        target: Date.parse(@js(optional($event->start_date)->toIso8601String())),
+                        target: Date.parse(@js(optional($event->cfp->closes_at)->toIso8601String())),
                         countdown: '',
                         update() {
                             if (Number.isNaN(this.target)) {

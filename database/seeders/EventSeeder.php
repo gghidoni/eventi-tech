@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\CfpMode;
+use App\Enums\CfpStatus;
 use App\Enums\EventStatus;
 use App\Enums\EventType;
 use App\Models\AddressBook\AddressBook;
@@ -35,7 +37,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.javaancora.it',
                 'poster_source'       => 'locandina1.png',
                 'tickets_url'         => 'www.javaancora.it/tickets',
-                'cfp_url'             => 'www.javaancora.it/cfp',
+                'cfp_external_url'    => 'www.javaancora.it/cfp',
             ],
             [
                 'community_id'        => 2, // ID per "Laravel Pordenone"
@@ -48,7 +50,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.laravelprodenone.it',
                 'poster_source'       => 'locandina15.jpg',
                 'tickets_url'         => 'www.laravelprodenone.it/tickets',
-                'cfp_url'             => 'www.laravelprodenone.it/cfp',
+                'cfp_external_url'    => 'www.laravelprodenone.it/cfp',
             ],
             [
                 'community_id'        => 3, // ID per "Wordpress Meetup Firenze"
@@ -61,7 +63,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.wordpressfirenze.it',
                 'poster_source'       => 'locandina12.jpg',
                 'tickets_url'         => 'www.wordpressfirenze.it/tickets',
-                'cfp_url'             => 'www.wordpressfirenze.it/cfp',
+                'cfp_external_url'    => 'www.wordpressfirenze.it/cfp',
             ],
             [
                 'community_id'        => 1, // ID per "Java Ancona"
@@ -74,7 +76,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.phpverona.it',
                 'poster_source'       => 'locandina3.jpg',
                 'tickets_url'         => 'www.phpverona.it/tickets',
-                'cfp_url'             => 'www.phpverona.it/cfp',
+                'cfp_external_url'    => 'www.phpverona.it/cfp',
             ],
             [
                 'community_id'        => 2, // ID per "Laravel Pordenone"
@@ -87,7 +89,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.reactroma.it',
                 'poster_source'       => 'locandina4.webp',
                 'tickets_url'         => 'www.reactroma.it/tickets',
-                'cfp_url'             => 'www.reactroma.it/cfp',
+                'cfp_external_url'    => 'www.reactroma.it/cfp',
             ],
             [
                 'community_id'        => 3, // ID per "Wordpress Meetup Firenze"
@@ -100,7 +102,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.devopsnapoli.it',
                 'poster_source'       => null,
                 'tickets_url'         => 'www.devopsnapoli.it/tickets',
-                'cfp_url'             => 'www.devopsnapoli.it/cfp',
+                'cfp_external_url'    => 'www.devopsnapoli.it/cfp',
             ],
             [
                 'community_id'        => 1, // ID per "Java Ancona"
@@ -113,7 +115,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.javaancora.it',
                 'poster_source'       => 'locandina5.png',
                 'tickets_url'         => 'www.javaancora.it/tickets',
-                'cfp_url'             => 'www.javaancora.it/cfp',
+                'cfp_external_url'    => 'www.javaancora.it/cfp',
             ],
             [
                 'community_id'        => 2, // ID per "Laravel Pordenone"
@@ -126,7 +128,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.laravelprodenone.it',
                 'poster_source'       => 'locandina6.jpg',
                 'tickets_url'         => 'www.laravelprodenone.it/tickets',
-                'cfp_url'             => 'www.laravelprodenone.it/cfp',
+                'cfp_external_url'    => 'www.laravelprodenone.it/cfp',
             ],
             [
                 'community_id'        => 3, // ID per "Wordpress Meetup Firenze"
@@ -139,7 +141,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.devopsnapoli.it',
                 'poster_source'       => null,
                 'tickets_url'         => 'www.devopsnapoli.it/tickets',
-                'cfp_url'             => 'www.devopsnapoli.it/cfp',
+                'cfp_external_url'    => 'www.devopsnapoli.it/cfp',
             ],
             [
                 'community_id'        => 1, // ID per "Java Ancona"
@@ -152,7 +154,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.javaancora.it',
                 'poster_source'       => 'locandina7.jpg',
                 'tickets_url'         => 'www.javaancora.it/tickets',
-                'cfp_url'             => 'www.javaancora.it/cfp',
+                'cfp_external_url'    => 'www.javaancora.it/cfp',
             ],
             [
                 'community_id'        => 2, // ID per "Laravel Pordenone"
@@ -165,7 +167,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.laravelprodenone.it',
                 'poster_source'       => 'locandina8.jpg',
                 'tickets_url'         => 'www.laravelprodenone.it/tickets',
-                'cfp_url'             => 'www.laravelprodenone.it/cfp',
+                'cfp_external_url'    => 'www.laravelprodenone.it/cfp',
             ],
             [
                 'community_id'        => 3, // ID per "Wordpress Meetup Firenze"
@@ -178,7 +180,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.devopsnapoli.it',
                 'poster_source'       => 'locandina9.jpg',
                 'tickets_url'         => 'www.devopsnapoli.it/tickets',
-                'cfp_url'             => 'www.devopsnapoli.it/cfp',
+                'cfp_external_url'    => 'www.devopsnapoli.it/cfp',
             ],
             [
                 'community_id'        => 1, // ID per "Java Ancona"
@@ -191,7 +193,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.javaancora.it',
                 'poster_source'       => 'locandina10.jpg',
                 'tickets_url'         => 'www.javaancora.it/tickets',
-                'cfp_url'             => 'www.javaancora.it/cfp',
+                'cfp_external_url'    => 'www.javaancora.it/cfp',
             ],
             [
                 'community_id'        => 2, // ID per "Laravel Pordenone"
@@ -204,7 +206,7 @@ class EventSeeder extends Seeder
                 'website'             => 'www.laravelprodenone.it',
                 'poster_source'       => 'locandina11.jpg',
                 'tickets_url'         => 'www.laravelprodenone.it/tickets',
-                'cfp_url'             => 'www.laravelprodenone.it/cfp',
+                'cfp_external_url'    => 'www.laravelprodenone.it/cfp',
             ],
         ];
 
@@ -216,7 +218,7 @@ class EventSeeder extends Seeder
 
                 $paths = $this->processPoster($eventData['poster_source'] ?? null);
 
-                Event::query()->create([
+                $event = Event::query()->create([
                     'community_id'    => $eventData['community_id'],
                     'title'           => $eventData['title'],
                     'status'          => $eventData['status'],
@@ -230,7 +232,17 @@ class EventSeeder extends Seeder
                     'poster_mobile'   => $paths['mobile'] ?? null,
                     'poster_thumb'    => $paths['thumb'] ?? null,
                     'tickets_url'     => $eventData['tickets_url'],
-                    'cfp_url'         => $eventData['cfp_url'],
+                ]);
+
+                $event->cfp()->create([
+                    'mode'         => CfpMode::External,
+                    'status'       => CfpStatus::Published,
+                    'title'        => 'CFP - '.$event->title,
+                    'opens_at'     => now(),
+                    'closes_at'    => $event->start_date->copy()->subDay(),
+                    'external_url' => str_starts_with($eventData['cfp_external_url'], 'http')
+                        ? $eventData['cfp_external_url']
+                        : 'https://'.$eventData['cfp_external_url'],
                 ]);
             } else {
                 echo 'No address found for the event: '.$eventData['title']."\n";

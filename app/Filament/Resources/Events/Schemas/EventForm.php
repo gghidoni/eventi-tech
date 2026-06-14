@@ -51,10 +51,6 @@ class EventForm
                 TextInput::make('tickets_url')
                     ->url()
                     ->maxLength(255),
-                TextInput::make('cfp_url')
-                    ->label('CFP URL')
-                    ->url()
-                    ->maxLength(255),
 
                 // Preview dell'immagine attuale (solo in edit)
                 ViewField::make('current_poster')

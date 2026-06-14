@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\EventStatus;
 use App\Enums\EventType;
 use App\Models\AddressBook\AddressBook;
+use App\Models\Cfp;
 use App\Models\Community;
 use App\Models\Event;
 use App\Models\Tag;
@@ -44,6 +45,14 @@ describe('relationships', function () {
 
         expect($event->bookmarks)->toHaveCount(2);
         expect($event->bookmarks->first())->toBeInstanceOf(User::class);
+    });
+
+    test('has one cfp', function () {
+        $event = Event::factory()->create();
+        $cfp = Cfp::factory()->for($event)->create();
+
+        expect($event->cfp)->toBeInstanceOf(Cfp::class);
+        expect($event->cfp->id)->toBe($cfp->id);
     });
 });
 

@@ -12,10 +12,15 @@ class AddressBookController extends Controller
 {
     public function findLocation(Request $request): JsonResponse
     {
-        $type = $request->get('type');
-        $query = $request->get('search');
+        $type = $request->string('type', 'all')->toString();
+        $selected = $request->string('selected')->trim()->toString();
+        $query = $request->string('search')->trim()->toString();
 
-        if (!is_string($query) || mb_trim($query) === '') {
+        if ($selected !== '') {
+            return response()->json(['data' => $this->selectedLocationOptions($selected, $type)]);
+        }
+
+        if ($query === '') {
             return response()->json(['data' => []]);
         }
 
@@ -25,37 +30,36 @@ class AddressBookController extends Controller
         $regions = [];
 
         if ($type === 'all') {
-            $cities = City::search($query)->take(5)->get()->map(function ($city) {
-                return [
-                    'value' => json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $city->name]),
-                    'label' => $city->name,
-                    'id'    => $city->id,
-                ];
-            })->toArray();
-            $provinces = Province::search($query)->take(3)->get()->map(function ($province) {
-                return [
-                    'value' => json_encode(['type' => 'provincia', 'id' => $province->id, 'name' => $province->name]),
-                    'label' => $province->name,
-                    'id'    => $province->id,
-                ];
-            })->toArray();
-            $regions = Region::search($query)->take(2)->get()->map(function ($region) {
-                return [
-                    'value' => json_encode(['type' => 'regione', 'id' => $region->id, 'name' => $region->name]),
-                    'label' => $region->name,
-                    'id'    => $region->id,
-                ];
-            })->toArray();
+            $cities = City::query()
+                ->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($query).'%'])
+                ->orderBy('name')
+                ->limit(5)
+                ->get()
+                ->map(fn (City $city): array => $this->cityOption($city, false))
+                ->toArray();
+            $provinces = Province::query()
+                ->whereRaw('LOWER(name) LIKE ? OR LOWER(code) LIKE ?', ['%'.mb_strtolower($query).'%', '%'.mb_strtolower($query).'%'])
+                ->orderBy('name')
+                ->limit(3)
+                ->get()
+                ->map(fn (Province $province): array => $this->provinceOption($province))
+                ->toArray();
+            $regions = Region::query()
+                ->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($query).'%'])
+                ->orderBy('name')
+                ->limit(2)
+                ->get()
+                ->map(fn (Region $region): array => $this->regionOption($region))
+                ->toArray();
         } elseif ($type === 'city') {
-            $cities = City::search($query)->take(5)->get()->map(function ($city) {
-                $label = $city->name.' ('.$city->province->code.')'.', '.$city->province->region->name;
-
-                return [
-                    'value' => json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $label]),
-                    'label' => $label,
-                    'id'    => $city->id,
-                ];
-            })->toArray();
+            $cities = City::query()
+                ->with(['province.region'])
+                ->whereRaw('LOWER(name) LIKE ?', ['%'.mb_strtolower($query).'%'])
+                ->orderBy('name')
+                ->limit(5)
+                ->get()
+                ->map(fn (City $city): array => $this->cityOption($city, true))
+                ->toArray();
         }
 
         if ($cities) {
@@ -82,5 +86,82 @@ class AddressBookController extends Controller
         }
 
         return response()->json(['data' => $results]);
+    }
+
+    /**
+     * @return array<int, array{value:string, label:string, id:int}>
+     */
+    private function selectedLocationOptions(string $selected, string $type): array
+    {
+        $decoded = json_decode($selected, true);
+
+        if (!is_array($decoded) || !isset($decoded['type'], $decoded['id'])) {
+            return [];
+        }
+
+        $id = (int) $decoded['id'];
+
+        return match ($decoded['type']) {
+            'comune' => City::query()
+                ->with(['province.region'])
+                ->whereKey($id)
+                ->get()
+                ->map(fn (City $city): array => $this->cityOption($city, $type === 'city'))
+                ->values()
+                ->all(),
+            'provincia' => Province::query()
+                ->whereKey($id)
+                ->get()
+                ->map(fn (Province $province): array => $this->provinceOption($province))
+                ->values()
+                ->all(),
+            'regione' => Region::query()
+                ->whereKey($id)
+                ->get()
+                ->map(fn (Region $region): array => $this->regionOption($region))
+                ->values()
+                ->all(),
+            default => [],
+        };
+    }
+
+    /**
+     * @return array{value:string, label:string, id:int}
+     */
+    private function cityOption(City $city, bool $withProvinceInfo): array
+    {
+        $label = $withProvinceInfo
+            ? $city->name.' ('.$city->province->code.'), '.$city->province->region->name
+            : $city->name;
+
+        return [
+            'value' => (string) json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $label]),
+            'label' => $label,
+            'id'    => $city->id,
+        ];
+    }
+
+    /**
+     * @return array{value:string, label:string, id:int}
+     */
+    private function provinceOption(Province $province): array
+    {
+        return [
+            'value' => (string) json_encode(['type' => 'provincia', 'id' => $province->id, 'name' => $province->name]),
+            'label' => $province->name,
+            'id'    => $province->id,
+        ];
+    }
+
+    /**
+     * @return array{value:string, label:string, id:int}
+     */
+    private function regionOption(Region $region): array
+    {
+        return [
+            'value' => (string) json_encode(['type' => 'regione', 'id' => $region->id, 'name' => $region->name]),
+            'label' => $region->name,
+            'id'    => $region->id,
+        ];
     }
 }

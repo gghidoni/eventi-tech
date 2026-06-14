@@ -42,7 +42,6 @@ class EventFactory extends Factory
             'poster_mobile'   => null,
             'poster_thumb'    => null,
             'tickets_url'     => fake()->optional()->url(),
-            'cfp_url'         => fake()->optional()->url(),
         ];
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CfpSubmissionStatus;
 use App\Models\User;
 use Livewire\Component;
 
@@ -12,6 +13,8 @@ new class extends Component
     public ?string $currentRoute = null;
 
     public ?User $user;
+
+    public bool $hasActiveCfpSubmissions = false;
 
     public function toggleMenu()
     {
@@ -28,6 +31,12 @@ new class extends Component
         $this->user = auth()->user();
         $this->currentRoute = request()->route()?->getName();
         $this->isDashboard = str_starts_with($this->currentRoute ?? '', 'dashboard.');
+        $this->hasActiveCfpSubmissions = (bool) $this->user?->cfpSubmissions()
+            ->whereNotIn('status', [
+                CfpSubmissionStatus::Draft->value,
+                CfpSubmissionStatus::Withdrawn->value,
+            ])
+            ->exists();
     }
 };
 ?>
@@ -65,15 +74,25 @@ new class extends Component
                         @if (auth()->user()->has_active_community)
                             <li>
                                 <x-menu-item icon="users-white" label="{{ __('navigation.community') }}"
-                                    url="{{ route('dashboard.communities.index') }}" inactiveClass="text-white" :active="str_starts_with($currentRoute ?? '', 'dashboard.communities.') && $currentRoute !== 'dashboard.communities.events'" />
+                                    url="{{ route('dashboard.communities.index') }}" inactiveClass="text-white" :active="str_starts_with($currentRoute ?? '', 'dashboard.communities.') && !in_array($currentRoute, ['dashboard.communities.events', 'dashboard.communities.submissions'], true)" />
                             </li>
                             <li>
                                 <x-menu-item icon="calendar-white" label="{{ __('navigation.my_events') }}"
                                     url="{{ route('dashboard.communities.events') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.communities.events'" />
                             </li>
                             <li>
+                                <x-menu-item icon="mic-white" label="{{ __('navigation.submissions') }}"
+                                    url="{{ route('dashboard.communities.submissions') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.communities.submissions'" />
+                            </li>
+                            <li>
                                 <x-menu-item icon="plus-white" label="{{ __('navigation.new_event') }}"
                                     url="{{ route('dashboard.events.create') }}" inactiveClass="text-white" :active="in_array($currentRoute, ['dashboard.events.create', 'dashboard.events.edit'], true)" />
+                            </li>
+                        @endif
+                        @if ($hasActiveCfpSubmissions)
+                            <li>
+                                <x-menu-item icon="cfp-cyan" label="{{ __('navigation.my_submissions') }}"
+                                    url="{{ route('dashboard.cfp-submissions') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.cfp-submissions'" />
                             </li>
                         @endif
                     @endif
@@ -96,16 +115,26 @@ new class extends Component
                     </li>
                     <li>
                         <x-menu-item icon="users-white" label="{{ __('navigation.community') }}"
-                            url="{{ route('dashboard.communities.index') }}" inactiveClass="text-white" :active="str_starts_with($currentRoute ?? '', 'dashboard.communities.') && $currentRoute !== 'dashboard.communities.events'" />
+                            url="{{ route('dashboard.communities.index') }}" inactiveClass="text-white" :active="str_starts_with($currentRoute ?? '', 'dashboard.communities.') && !in_array($currentRoute, ['dashboard.communities.events', 'dashboard.communities.submissions'], true)" />
                     </li>
                     <li>
                         <x-menu-item icon="calendar-white" label="{{ __('navigation.my_events') }}"
                             url="{{ route('dashboard.communities.events') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.communities.events'" />
                     </li>
                     <li>
+                        <x-menu-item icon="mic-white" label="{{ __('navigation.submissions') }}"
+                            url="{{ route('dashboard.communities.submissions') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.communities.submissions'" />
+                    </li>
+                    <li>
                         <x-menu-item icon="plus-white" label="{{ __('navigation.new_event') }}"
                             url="{{ route('dashboard.events.create') }}" inactiveClass="text-white" :active="in_array($currentRoute, ['dashboard.events.create', 'dashboard.events.edit'], true)" />
                     </li>
+                    @if ($hasActiveCfpSubmissions)
+                        <li>
+                            <x-menu-item icon="cfp-cyan" label="{{ __('navigation.my_submissions') }}"
+                                url="{{ route('dashboard.cfp-submissions') }}" inactiveClass="text-white" :active="$currentRoute === 'dashboard.cfp-submissions'" />
+                        </li>
+                    @endif
                 </ul>
             @endif
             <!-- Menu per utenti autenticati -->

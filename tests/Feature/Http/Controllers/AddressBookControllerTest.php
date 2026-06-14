@@ -30,7 +30,11 @@ class AddressBookControllerTest extends TestCase
         $response = $this->getJson('/find-location?type=all&search=Mila');
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['data']);
+            ->assertJsonStructure(['data' => [
+                '*' => ['value', 'label', 'id'],
+            ]])
+            ->assertJsonFragment(['label' => $city->name])
+            ->assertJsonFragment(['label' => $province->name]);
     }
 
     public function test_find_location_with_city_type_includes_province_info(): void
@@ -40,7 +44,12 @@ class AddressBookControllerTest extends TestCase
         $response = $this->getJson('/find-location?type=city&search=Mila');
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['data']);
+            ->assertJsonStructure(['data' => [
+                '*' => ['value', 'label', 'id'],
+            ]])
+            ->assertJsonFragment([
+                'label' => $city->name.' ('.$city->province->code.'), '.$city->province->region->name,
+            ]);
     }
 
     public function test_find_location_returns_json_encoded_values(): void
@@ -58,6 +67,22 @@ class AddressBookControllerTest extends TestCase
             $this->assertArrayHasKey('label', $data[0]);
             $this->assertArrayHasKey('id', $data[0]);
         }
+    }
+
+    public function test_find_location_resolves_selected_city_value(): void
+    {
+        $city = City::factory()->create(['name' => 'Milano']);
+        $selected = json_encode(['type' => 'comune', 'id' => $city->id, 'name' => $city->name]);
+
+        $response = $this->getJson('/find-location?'.http_build_query([
+            'type'     => 'city',
+            'selected' => $selected,
+        ]));
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $city->id)
+            ->assertJsonPath('data.0.label', $city->name.' ('.$city->province->code.'), '.$city->province->region->name);
     }
 
     public function test_find_location_limits_results_per_type(): void

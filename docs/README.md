@@ -21,6 +21,7 @@ Questa cartella contiene specifiche pratiche (basate sul codice esistente) per a
 
 ### UI
 
+- `ui/design.md` Guida design agentica per creare pagine, componenti e stili coerenti
 - `ui/layout.md` Layout base, font, colori, background, classi globali
 - `ui/forms.md` Input/select/textarea, errori, upload file con anteprima
 - `ui/buttons-links.md` Bottoni principali e “link button” (underline)
@@ -35,6 +36,7 @@ Questa cartella contiene specifiche pratiche (basate sul codice esistente) per a
 - `backend/livewire.md` Pattern Livewire (Volt pages, componenti, eventi, layout)
 - `backend/actions.md` Actions (`execute()`), transazioni, injection in Livewire
 - `backend/models.md` Accessor, relazioni, URL helper, bookmark state
+- `backend/cfps.md` Dominio CFP, template, campi custom e candidature
 - `backend/uploads.md` Upload immagini e storage disk (`posters`, `logos`, `public/avatars`)
 - `backend/search.md` Scout/Meilisearch e ricerca eventi
 - `backend/privacy-cookie.md` Analisi cookie/privacy del repository e linee guida operative minime

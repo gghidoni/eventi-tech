@@ -43,7 +43,7 @@ class EventsTable
                 //     ->searchable(),
                 // TextColumn::make('tickets_url')
                 //     ->searchable(),
-                // TextColumn::make('cfp_url')
+                // TextColumn::make('cfp.external_url')
                 //     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

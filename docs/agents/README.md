@@ -28,11 +28,13 @@ Se le spec di `docs/` non coprono il caso, oppure sono ambigue o in conflitto, n
 - [../backend/livewire.md](../backend/livewire.md)
 - [../backend/actions.md](../backend/actions.md)
 - [../backend/models.md](../backend/models.md)
+- [../backend/cfps.md](../backend/cfps.md)
 - [../backend/uploads.md](../backend/uploads.md)
 - [../backend/search.md](../backend/search.md)
 
 ### UI
 
+- [../ui/design.md](../ui/design.md)
 - [../ui/layout.md](../ui/layout.md)
 - [../ui/forms.md](../ui/forms.md)
 - [../ui/buttons-links.md](../ui/buttons-links.md)
