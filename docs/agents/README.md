@@ -16,6 +16,20 @@ Questa sezione e pensata a livelli:
 4. [tools.md](./tools.md)
 5. [security.md](./security.md)
 
+## Accesso al database locale
+
+Quando un agente deve leggere schema o dati dal PostgreSQL locale, usa sempre il workflow MCP documentato in [mcp-postgres.md](./mcp-postgres.md).
+
+Skill associata: `$eventi-tech-db`.
+
+Non usare credenziali applicative o query dirette fuori procedura come fallback implicito.
+
+## Accesso alle email locali
+
+Quando un agente deve verificare se una mail e arrivata in Mailpit o capire che mail e, usa il workflow MCP documentato in [mcp-mailpit.md](./mcp-mailpit.md).
+
+Skill associata: `$eventi-tech-mailpit`.
+
 ## Quando fermarsi
 
 Se le spec di `docs/` non coprono il caso, oppure sono ambigue o in conflitto, non implementare per assunzione: fermati e chiarisci.

@@ -21,6 +21,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.codex/mcp-postgres.url
 /.lighthouseci
 /playwright-report
 /test-results

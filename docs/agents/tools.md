@@ -16,6 +16,35 @@ Usalo quando serve documentazione aggiornata di librerie o framework.
 4. Non usare Context7 per inferire il comportamento del codice locale: per quello leggi il repo.
 5. Se la doc esterna e in conflitto con `docs/` o con il codice reale del progetto, segnala il conflitto e verifica prima di implementare.
 
+## MCP PostgreSQL
+
+Per leggere schema o dati del PostgreSQL locale, usa il workflow dedicato in [mcp-postgres.md](./mcp-postgres.md).
+
+Regole operative:
+
+- server MCP canonico: `eventi-tech-db`
+- server custom locale in `scripts/agents/mcp-postgres-server.mjs`
+- avvio tramite `.codex/config.toml` e `./scripts/agents/run-mcp-postgres.sh`, senza container MCP dedicato e senza pacchetti npm MCP generici
+- connessione al PostgreSQL Docker esposto su `127.0.0.1:${FORWARD_DB_PORT:-5432}`
+- utente DB dedicato read-only, non utente Laravel
+- preferisci `db_tables`, `db_describe_table` e `db_sample` prima di `db_query`
+- query mirate, con limite esplicito quando leggi tabelle applicative
+- nessuna password reale in file versionati
+
+## MCP Mailpit
+
+Per verificare email locali catturate da Mailpit, usa il workflow dedicato in [mcp-mailpit.md](./mcp-mailpit.md).
+
+Regole operative:
+
+- server MCP canonico: `eventi-tech-mailpit`
+- server custom locale in `scripts/agents/mcp-mailpit-server.mjs`
+- avvio tramite `.codex/config.toml` e `./scripts/agents/run-mcp-mailpit.sh`
+- solo endpoint API Mailpit di lettura
+- evita l'endpoint summary Mailpit che marca i messaggi come letti
+- preferisci `mailpit_latest_for`, `mailpit_identify` e `mailpit_extract_links`
+- usa preview body solo quando serve davvero
+
 ## QA Backend
 
 Per modifiche PHP, il baseline del repo e:

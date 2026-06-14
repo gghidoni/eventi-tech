@@ -15,6 +15,23 @@
 - Meilisearch: `http://127.0.0.1:7700`
 - `vendor/` e `node_modules/` vivono nel container tramite volumi Docker dedicati
 
+## Lettura DB locale via MCP
+
+- Workflow canonico: [mcp-postgres.md](./mcp-postgres.md)
+- Server consigliato: `eventi-tech-db`
+- Trasporto: processo locale stdio custom, senza container MCP dedicato
+- Credenziali: solo utente PostgreSQL dedicato read-only, mai utente applicativo Laravel
+- Setup locale: `./scripts/agents/setup-mcp-postgres.sh`
+- Test: `node scripts/agents/test-mcp-postgres.mjs`
+
+## Lettura email locali via MCP
+
+- Workflow canonico: [mcp-mailpit.md](./mcp-mailpit.md)
+- Server consigliato: `eventi-tech-mailpit`
+- Trasporto: processo locale stdio custom, senza container MCP dedicato
+- API letta: Mailpit locale `http://127.0.0.1:8025`
+- Test: `node scripts/agents/test-mcp-mailpit.mjs`
+
 ## Comandi essenziali
 
 ```bash

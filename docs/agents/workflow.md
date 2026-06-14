@@ -14,6 +14,8 @@
 - Preferisci cambiare il minimo necessario.
 - Mantieni allineati codice, config e documentazione se il comportamento cambia.
 - Se introduci un tool o un workflow nuovo, documenta anche come va usato, non solo dove vive il codice.
+- Se devi leggere il DB locale, usa il workflow MCP in [mcp-postgres.md](./mcp-postgres.md) prima di fare query.
+- Se devi verificare email locali, usa il workflow MCP in [mcp-mailpit.md](./mcp-mailpit.md) prima di usare browser o curl.
 - Se un test fallisce per ambiente o tooling, distinguilo chiaramente da un bug applicativo.
 - Per ogni modifica PHP, considera `Pint` e `Larastan` parte della verifica finale obbligatoria, non opzionale.
 - Per modifiche a dipendenze, auth, upload, middleware, query raw o config sensibile, considera `./scripts/security/run.sh` parte della chiusura del task.

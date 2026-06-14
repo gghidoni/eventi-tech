@@ -1,0 +1,10 @@
+interface:
+  display_name: "Eventi Tech Mailpit"
+  short_description: "Inspect local Mailpit emails read-only"
+  default_prompt: "Use $eventi-tech-mailpit to check whether a local Mailpit email arrived and identify what it is."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "eventi-tech-mailpit"
+      description: "Local read-only Mailpit MCP server for this repository"

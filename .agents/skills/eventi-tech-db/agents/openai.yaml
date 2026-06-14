@@ -1,0 +1,10 @@
+interface:
+  display_name: "Eventi Tech DB"
+  short_description: "Read the local PostgreSQL DB efficiently"
+  default_prompt: "Use $eventi-tech-db to inspect the local PostgreSQL database before making DB-dependent decisions."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "eventi-tech-db"
+      description: "Local read-only PostgreSQL MCP server for this repository"

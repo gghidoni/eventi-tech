@@ -1,2 +1,16 @@
 [mcp_servers.context7]
 url = "https://mcp.context7.com/mcp"
+
+[mcp_servers.eventi-tech-db]
+command = "bash"
+args = ["./scripts/agents/run-mcp-postgres.sh"]
+startup_timeout_sec = 20
+tool_timeout_sec = 30
+default_tools_approval_mode = "auto"
+
+[mcp_servers.eventi-tech-mailpit]
+command = "bash"
+args = ["./scripts/agents/run-mcp-mailpit.sh"]
+startup_timeout_sec = 10
+tool_timeout_sec = 20
+default_tools_approval_mode = "auto"
