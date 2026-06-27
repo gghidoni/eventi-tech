@@ -55,5 +55,6 @@ npm run frontend:audit
 - Devi capire il dominio o i pattern Laravel/Livewire: apri `docs/backend/*`
 - Devi toccare UI o componenti Blade/Livewire: apri `docs/ui/*`
 - Devi usare strumenti esterni o browser automation: apri [tools.md](./tools.md)
+- Devi testare tutti i flussi applicativi end to end: apri [flow-audit/README.md](./flow-audit/README.md)
 - Devi verificare dependency risk o sicurezza applicativa: apri [security.md](./security.md)
 - Devi decidere come procedere prima di modificare codice: apri [workflow.md](./workflow.md)

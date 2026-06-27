@@ -15,6 +15,7 @@ Questa sezione e pensata a livelli:
 3. [repo-map.md](./repo-map.md)
 4. [tools.md](./tools.md)
 5. [security.md](./security.md)
+6. [flow-audit/README.md](./flow-audit/README.md)
 
 ## Accesso al database locale
 
@@ -29,6 +30,10 @@ Non usare credenziali applicative o query dirette fuori procedura come fallback 
 Quando un agente deve verificare se una mail e arrivata in Mailpit o capire che mail e, usa il workflow MCP documentato in [mcp-mailpit.md](./mcp-mailpit.md).
 
 Skill associata: `$eventi-tech-mailpit`.
+
+## Audit completo dei flussi
+
+Quando un agente deve testare tutti i flussi applicativi end to end, usa la mappa in [flow-audit/README.md](./flow-audit/README.md). Include baseline runtime, queue immediata con `QUEUE_CONNECTION=sync`, mappa UI/DB/email e goal operativo per Codex.
 
 ## Quando fermarsi
 
