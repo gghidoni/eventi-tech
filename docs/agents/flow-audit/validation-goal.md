@@ -1,133 +1,88 @@
 # Validation goal
 
-Questo e il goal operativo da assegnare a Codex quando deve eseguire l'audit completo dei flussi locali di Eventi Tech Livewire.
+Usa questo goal quando devi chiedere a Codex di eseguire il test completo dei flussi locali.
 
-## Obiettivo
+## Goal
 
-Esegui un audit end to end completo dell'app locale. Devi usare Playwright per la GUI, MCP PostgreSQL per controllare il database, MCP Mailpit per controllare le email, Docker/artisan per reset e seed, e i quality gate del repository per la verifica finale.
+Esegui un audit end to end completo dell'app Eventi Tech Livewire in locale, usando tutti gli strumenti disponibili: Playwright per la GUI, MCP PostgreSQL per verifiche DB, MCP Mailpit per email, Docker/artisan per reset e seed, e i comandi QA del repository. Devi testare tutti i flussi descritti in [flow-map.md](flow-map.md), partendo dalla baseline in [runtime-baseline.md](runtime-baseline.md).
 
-L'audit deve coprire tutti i flussi descritti in [flow-map.md](flow-map.md), usando la baseline in [runtime-baseline.md](runtime-baseline.md). Non limitarti agli happy path: testa autorizzazioni, errori, stati limite, flussi multiutente, notifiche, upload, admin, CFP, dashboard e ricerca.
+Durante i test imposta i job immediati: `QUEUE_CONNECTION=sync`. Dopo ogni azione che dispatcha job o notifica, ci aspettiamo che DB ed email siano gia aggiornati senza worker asincroni.
 
-## Vincoli non negoziabili
+## Istruzioni operative
 
-- Prima di agire leggi `docs/agents/README.md`, `docs/agents/quickstart.md`, `docs/agents/tools.md`, `docs/agents/mcp-postgres.md`, `docs/agents/mcp-mailpit.md`, `docs/backend/*` rilevanti, `docs/ui/frontend-testing.md`, `runtime-baseline.md` e `flow-map.md`.
-- Se le specifiche in `docs/` sono mancanti, ambigue o in conflitto, fermati e segnala il punto preciso.
-- Puoi distruggere e ricreare il DB locale, rifare seed e creare seed supplementari quando serve coprire i casi mancanti.
-- Durante l'audit i job devono essere immediati: imposta e verifica `QUEUE_CONNECTION=sync`, poi esegui `php artisan config:clear`.
-- Dopo ogni azione che dispatcha job, notifiche o email, aspettati effetti immediati su DB e Mailpit. La tabella `jobs` deve restare vuota per i job previsti in sync.
-- Non usare query DB applicative come scorciatoia: le verifiche DB dell'agente passano da MCP PostgreSQL read-only.
-- Le verifiche email passano da MCP Mailpit.
-- Usa browser context o tab separati per simulare utenti diversi.
+1. Leggi prima:
+   - `docs/agents/README.md`
+   - `docs/agents/quickstart.md`
+   - `docs/agents/tools.md`
+   - `docs/agents/mcp-postgres.md`
+   - `docs/agents/mcp-mailpit.md`
+   - `docs/backend/*` rilevanti per auth, Livewire, actions, models, CFP, upload, search e privacy
+   - `docs/ui/frontend-testing.md`
+   - `docs/agents/flow-audit/runtime-baseline.md`
+   - `docs/agents/flow-audit/flow-map.md`
+2. Avvia o verifica Docker.
+3. Ripristina un baseline ripetibile con `migrate:fresh --seed`, salvo diversa istruzione esplicita.
+4. Verifica `.env` e config: `QUEUE_CONNECTION=sync`; poi `php artisan config:clear`.
+5. Registra baseline DB e Mailpit prima di iniziare.
+6. Crea seed supplementari solo se necessari a coprire i casi non presenti nel seed base.
+7. Usa Playwright con contesti separati per guest, organizer verificato, speaker verificato, utente non verificato e admin/Filament.
+8. Per flussi multiutente usa piu tab o piu contesti, per esempio follower community, organizer e admin nello stesso scenario di approvazione evento.
+9. Dopo ogni mutazione UI verifica subito:
+   - stato UI;
+   - righe DB interessate;
+   - email attese in Mailpit;
+   - assenza di job pendenti quando queue sync e attesa.
+10. Dove trovi un comportamento diverso dalle specifiche, non normalizzarlo: documentalo come bug, rischio o conflitto docs/codice.
+11. Alla fine esegui i controlli richiesti da `AGENTS.md` in base a cosa hai toccato. Per audit UI completo includi almeno frontend test; se modifichi codice PHP esegui lint e analyse.
 
-## Preparazione
+## Copertura minima obbligatoria
 
-1. Avvia o verifica i container Docker.
-2. Esegui una baseline pulita, salvo istruzione contraria:
+Devi coprire almeno:
 
-   ```bash
-   docker compose exec -T app php artisan migrate:fresh --seed
-   docker compose exec -T app php artisan config:clear
-   ```
-
-3. Verifica che l'app risponda su `http://127.0.0.1:8083`.
-4. Verifica che Mailpit risponda su `http://127.0.0.1:8025`.
-5. Registra conteggi iniziali DB per users, communities, events, cfps, cfp_submissions, cfp_submission_answers, event_user, community_user, password_reset_tokens e jobs.
-6. Registra conteggio iniziale Mailpit.
-7. Se serve per la ricerca, reindicizza Scout/Meilisearch.
-8. Crea dati supplementari solo quando la copertura non e possibile con i seed esistenti.
-
-## Attori minimi
-
-Usa almeno questi ruoli:
-
-- guest anonimo;
-- organizer verificato con community active;
-- speaker verificato;
-- utente non verificato;
-- utente verificato senza community;
-- utente verificato con community pending, se non esiste crealo;
-- admin seed o admin creato ad hoc;
-- follower di community per testare la notifica su evento approvato.
-
-## Copertura obbligatoria
-
-Devi eseguire e verificare almeno:
-
-- home pubblica, search, location filter, tag filter, detail evento e detail community;
-- registrazione, verifica email, resend verifica, login, logout, rate limit e password reset;
-- profilo utente, upload avatar e cambio password;
+- public home, search, location, tag, detail evento e detail community;
+- registrazione, verifica email, resend, login, logout, rate limit, password reset;
+- profilo, avatar e cambio password;
 - bookmark evento e favorite community;
-- creazione community, modifica community, autorizzazioni owner/non-owner e notifiche;
-- creazione evento online, in presenza e hybrid, tag, address, poster e notifiche;
-- modifica evento, autorizzazioni owner/non-owner e gestione CFP collegata;
-- approvazione community da Filament;
-- approvazione evento da Filament e notifica immediata ai follower con queue sync;
-- accesso Filament con admin e con non-admin, documentando il comportamento locale osservato;
-- risorse admin Users, Communities, Events, Tags e geografia;
-- CFP esterna draft, published e archived;
-- CFP interna con template esistente, template derivato, copy-on-write, aggiunta/rimozione field e tutti i field type;
-- candidatura speaker valida, candidature multiple e validazioni negative;
-- email di submission a organizer e speaker;
-- lista candidature organizer, filtri, detail, 403/404, cambio status ed email di status update;
+- create/edit community e notifiche;
+- create/edit evento online, in presenza e hybrid, tag, address, poster e notifiche;
+- approvazione community ed evento da Filament;
+- notifica follower su evento approvato con queue sync;
+- accesso Filament con admin e con non-admin, evidenziando il comportamento locale osservato;
+- CFP esterna draft/published/archived;
+- CFP interna con template, copy-on-write, tutti i field type e validazioni;
+- submit candidatura speaker, email organizer/speaker e DB answers;
+- lista candidature organizer, detail, cambio status, email status update;
 - `Le mie candidature`;
+- route e casi limite non autorizzati: guest, unverified, non owner, event/submission mismatch;
 - endpoint `/find-location` e `/find-tags`;
 - upload logo, poster e avatar;
-- visibilita pubblica di stati pending, reject, terminate e community pending tramite URL diretto;
-- casi guest, unverified, non owner e mismatch submission/CFP.
+- verifica finale DB/Mailpit/report.
 
-## Regola di verifica per ogni scenario
+## Output atteso
 
-Per ogni scenario registra:
+Produci un report finale con:
 
-- azione UI eseguita in Playwright;
-- risultato visibile atteso;
-- eventuali redirect o status HTTP;
-- verifica DB MCP con tabelle e condizioni controllate;
-- verifica Mailpit MCP quando attesa email;
-- presenza o assenza di job pendenti;
-- errori console, page error o request failed;
-- eventuale differenza tra specifica, codice e runtime.
-
-## Cosa segnalare sempre
-
-Se confermati nel runtime, segnala esplicitamente:
-
-- accesso Filament non limitato a `is_admin` in local;
-- `is_admin` non usato come gate reale dell'admin panel;
-- route pubbliche evento/community senza filtro status;
-- eventi non active visibili tramite community o URL diretto;
-- create event per utente verificato senza community;
-- create event usando community pending;
-- admin seed non verificato ma capace di entrare in Filament in local;
-- CFP esterna published visibile fuori finestra temporale;
-- link calendario evento puntato a `/`;
-- assenza di cambio email nella UI profilo;
-- route 2FA presenti senza flusso UI dedicato;
-- campi 2FA sensibili esposti nel resource admin Users.
-
-## Verifica finale
-
-Alla fine esegui i quality gate coerenti con cio che hai toccato:
-
-- se hai modificato PHP: `docker compose exec -T app composer lint` e `docker compose exec -T app composer analyse`;
-- se il lavoro non e puramente documentale o locale: `docker compose exec -T app composer test` oppure `docker compose exec -T app composer qa`;
-- se hai toccato UI o asset: `npm run frontend:test`;
-- se serve audit qualitativo frontend: `npm run frontend:audit`;
-- se hai toccato auth, upload, middleware, query raw, dipendenze o config sensibile: `./scripts/security/run.sh`.
-
-## Deliverable finale
-
-Produci un report con:
-
-- matrice scenario per scenario;
-- pass/fail;
-- evidenze UI sintetiche;
-- verifiche DB eseguite;
+- scenario eseguito;
+- risultato pass/fail;
+- evidenza UI sintetica;
+- query o verifica DB usata;
 - email attese e trovate;
-- job immediati verificati;
-- bug o rischi confermati;
-- conflitti docs/codice;
-- test automatizzati mancanti;
+- bug, rischi o conflitti docs/codice;
+- test automatizzati mancanti o da aggiungere;
 - comandi QA eseguiti e risultato.
 
-Nel report distingui sempre tra requisiti documentati, comportamento letto nel codice, comportamento osservato nel runtime e inferenze dell'agente.
+Il report deve distinguere:
+
+- requisiti confermati dalle specifiche;
+- comportamento confermato dal codice;
+- comportamento osservato nel runtime;
+- inferenze dell'agente.
+
+## Stop conditions
+
+Fermati e chiedi chiarimenti solo se:
+
+- una specifica in `docs/` contraddice un'altra specifica e non c'e modo sicuro di decidere;
+- un reset DB distruggerebbe dati che l'utente ha chiesto di preservare;
+- Docker o i servizi locali non sono avviabili dopo tentativi ragionevoli;
+- MCP DB o MCP Mailpit sono indisponibili e non puoi verificare in modo equivalente.
