@@ -14,6 +14,9 @@
 - Mailpit: `http://127.0.0.1:8025`
 - Meilisearch: `http://127.0.0.1:7700`
 - `vendor/` e `node_modules/` vivono nel container tramite volumi Docker dedicati
+- Bootstrap idempotente: `./scripts/bootstrap.sh`
+- Diagnostica read-only: `./scripts/doctor.sh`
+- Contratto completo: [../infrastructure/environments.md](../infrastructure/environments.md)
 
 ## Lettura DB locale via MCP
 
@@ -42,17 +45,16 @@
 ## Comandi essenziali
 
 ```bash
-docker compose up -d
-docker exec eventi-tech composer install
-docker exec eventi-tech npm install
-docker exec eventi-tech composer lint
-docker exec eventi-tech composer analyse
-docker exec eventi-tech composer test
-docker exec eventi-tech composer qa
-docker exec eventi-tech composer security
+./scripts/bootstrap.sh
+./scripts/doctor.sh
+docker compose exec -T app composer lint
+docker compose exec -T app composer analyse
+docker compose exec -T app composer test
+docker compose exec -T app composer qa
+docker compose exec -T app composer security
 ./scripts/security/run.sh
-docker exec eventi-tech ./vendor/bin/phpstan analyse
-docker exec eventi-tech ./vendor/bin/pint
+docker compose exec -T app ./vendor/bin/phpstan analyse
+docker compose exec -T app ./vendor/bin/pint
 npm run frontend:test
 npm run frontend:audit
 ```

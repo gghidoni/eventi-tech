@@ -53,13 +53,13 @@ Regole operative:
 
 Per modifiche PHP, il baseline del repo e:
 
-- `docker exec eventi-tech composer lint`
-- `docker exec eventi-tech composer analyse`
+- `docker compose exec -T app composer lint`
+- `docker compose exec -T app composer analyse`
 
 Per una passata completa:
 
 ```bash
-docker exec eventi-tech composer qa
+docker compose exec -T app composer qa
 ```
 
 `composer qa` esegue in sequenza:

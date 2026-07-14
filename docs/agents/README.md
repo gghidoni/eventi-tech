@@ -41,6 +41,11 @@ MCP locale descritto in [mcp-context7.md](./mcp-context7.md).
 
 Quando un agente deve testare tutti i flussi applicativi end to end, usa la mappa in [flow-audit/README.md](./flow-audit/README.md). Include baseline runtime, queue immediata con `QUEUE_CONNECTION=sync`, mappa UI/DB/email e goal operativo per Codex.
 
+## Bootstrap e ambienti
+
+Il runtime locale canonico, il doctor e la distinzione tra Docker e test SQLite
+sono definiti in [../infrastructure/environments.md](../infrastructure/environments.md).
+
 ## Quando fermarsi
 
 Se le spec di `docs/` non coprono il caso, oppure sono ambigue o in conflitto, non implementare per assunzione: fermati e chiarisci.

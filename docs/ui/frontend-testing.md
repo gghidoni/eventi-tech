@@ -64,8 +64,7 @@ Questa scelta mantiene:
 ### Setup iniziale
 
 ```bash
-docker-compose up -d
-npm run build
+./scripts/bootstrap.sh
 npm run frontend:install
 ```
 

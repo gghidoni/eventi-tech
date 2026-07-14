@@ -126,3 +126,9 @@ Il feedback lato utente passa spesso per:
 - Lighthouse per audit qualitativi
 
 Questi ultimi vivono come tooling di progetto e non come pezzi strutturali del runtime applicativo.
+
+### Contratto ambiente
+
+Docker Compose e l'unico runtime locale canonico. Il bootstrap idempotente,
+PostgreSQL, Meilisearch, Mailpit e il profilo test SQLite sono specificati in
+`docs/infrastructure/environments.md`.

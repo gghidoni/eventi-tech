@@ -6,7 +6,7 @@ A modern platform for discovering and managing tech events and communities in It
 
 Eventi Tech is a web application designed to connect tech enthusiasts with events and communities in their area. Whether you're an organizer looking to promote your meetups, conferences, or workshops, or a developer searching for the next interesting event to attend, this platform provides the tools you need.
 
-Built with Laravel 12 and Livewire 4, the application offers a reactive, modern user experience without the complexity of a separate JavaScript framework.
+Built with Laravel 13 and Livewire 4, the application offers a reactive, modern user experience without the complexity of a separate JavaScript framework.
 
 For repository-oriented documentation, start from:
 
@@ -27,9 +27,9 @@ For repository-oriented documentation, start from:
 
 | Category | Technology |
 |----------|------------|
-| Backend | Laravel 12, PHP 8.4 |
-| Frontend | Livewire 4, Tailwind CSS 4, Vite 7 |
-| Database | PostgreSQL 18 (Docker) / SQLite (local) |
+| Backend | Laravel 13, PHP 8.4 |
+| Frontend | Livewire 4, Tailwind CSS 4, Vite 8 |
+| Database | PostgreSQL 18 (Docker); SQLite only for fast tests |
 | Search | Meilisearch + Laravel Scout |
 | Auth | Laravel Fortify |
 | Testing | Pest PHP 4 |
@@ -40,54 +40,34 @@ For repository-oriented documentation, start from:
 
 ### Prerequisites
 
-- PHP 8.4+
-- Composer
-- Node.js 18+
-- Docker & Docker Compose (optional, for PostgreSQL/Meilisearch)
+- Docker with Compose v2
+- `curl`
 
-### Local Setup (SQLite)
+### Canonical Docker setup
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd eventi-tech-livewire
+# Idempotent, non-destructive bootstrap
+./scripts/bootstrap.sh
 
-# Install dependencies and setup
-composer setup
+# Optional demo data and search import on an empty database
+./scripts/bootstrap.sh --seed
 
-# Start development server
-composer dev
-```
-
-The application will be available at `http://localhost:8000`.
-
-### Docker Setup (PostgreSQL)
-
-```bash
-# Start all services
-docker-compose up -d
-
-# Install dependencies inside container-managed volumes
-docker exec eventi-tech composer install
-docker exec eventi-tech npm install
-
-# Run migrations inside container
-docker exec eventi-tech php artisan migrate
-
-# Seed the database (optional)
-docker exec eventi-tech php artisan db:seed
+# Read-only environment diagnostics
+./scripts/doctor.sh
 ```
 
 **Available services:**
 
 | Service | URL |
 |---------|-----|
-| Application | http://localhost:8083 |
-| Mailpit (Email) | http://localhost:8025 |
-| Meilisearch | http://localhost:7700 |
-| PostgreSQL | localhost:5432 |
+| Application | http://127.0.0.1:8083 |
+| Mailpit (Email) | http://127.0.0.1:8025 |
+| Meilisearch | http://127.0.0.1:7700 |
+| PostgreSQL | 127.0.0.1:5432 |
 
-For Docker-based development, `vendor/` and `node_modules/` are expected to live in Docker volumes managed by the `app` container.
+`vendor/` and `node_modules/` live in Docker volumes managed by the `app`
+service. SQLite is deliberately limited to the fast Pest profile. See
+`docs/infrastructure/environments.md` for the complete contract.
 
 ## Project Structure
 
@@ -123,37 +103,37 @@ tests/
 
 ```bash
 # Run all tests
-composer test
+docker compose exec -T app composer test
 
 # Or directly with Pest
-./vendor/bin/pest
+docker compose exec -T app ./vendor/bin/pest
 
 # Run specific test suite
-./vendor/bin/pest --testsuite=Unit
-./vendor/bin/pest --testsuite=Feature
+docker compose exec -T app ./vendor/bin/pest --testsuite=Unit
+docker compose exec -T app ./vendor/bin/pest --testsuite=Feature
 ```
 
 ### Code Quality
 
 ```bash
 # Static analysis with PHPStan (level 5)
-./vendor/bin/phpstan analyse
+docker compose exec -T app composer analyse
 
 # Code formatting with Pint
-./vendor/bin/pint
+docker compose exec -T app composer lint
 ```
 
 ### Useful Commands
 
 ```bash
-# Start development environment (server, queue, logs, vite)
-composer dev
+# Re-run the idempotent environment bootstrap
+./scripts/bootstrap.sh
 
 # Import Italian cities, provinces, and regions
-php artisan app:insert-city-province-region
+docker compose exec -T app php artisan app:insert-city-province-region
 
 # Index models for Meilisearch
-php artisan scout:import "App\Models\Event"
+docker compose exec -T app php artisan scout:import "App\Models\Event"
 ```
 
 ## License

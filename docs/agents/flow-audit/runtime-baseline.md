@@ -12,7 +12,8 @@ Questa baseline descrive lo stato da preparare prima di eseguire la mappa in [fl
 Avvio minimo:
 
 ```bash
-docker compose up -d
+./scripts/bootstrap.sh --seed
+./scripts/doctor.sh
 ```
 
 Reset canonico per un audit ripetibile:

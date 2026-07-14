@@ -43,19 +43,22 @@ Tradeoff:
 - esiste un layer in piu da mantenere e indicizzare
 - bisogna distinguere bene tra record indicizzati e query finali dell'app
 
-## Perche PostgreSQL in Docker e SQLite nei test/local minimal
+## Perche PostgreSQL in Docker e SQLite nei test
 
-PostgreSQL copre il runtime vicino alla realta locale Docker.
-SQLite semplifica invece il ciclo testistico o setup piu leggeri.
+PostgreSQL e il database dell'unico runtime locale supportato, avviato tramite
+Docker Compose. SQLite e riservato alla suite Pest rapida ed ermetica.
 
 Vantaggi:
 
-- ambiente locale piu realistico
+- un solo contratto locale riproducibile
 - test piu veloci e semplici
 
 Tradeoff:
 
 - alcune differenze tra engine vanno tenute a mente
+- la suite SQLite non sostituisce lo smoke integration PostgreSQL
+
+Approfondimento: `docs/infrastructure/environments.md`.
 
 ## Perche Playwright e Lighthouse
 

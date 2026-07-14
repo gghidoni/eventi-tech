@@ -22,18 +22,18 @@
 
 ## Quando usare Docker
 
-- Per PHP, Artisan, Composer, Pest, PHPStan e Pint: preferisci `docker exec eventi-tech ...`
+- Per PHP, Artisan, Composer, Pest, PHPStan e Pint: usa `docker compose exec -T app ...`
 - Le dipendenze `vendor/` e `node_modules/` devono vivere nel container, non condivise con l'host
 - Per Playwright e Lighthouse: preferisci esecuzione host-side contro `http://127.0.0.1:8083`
 - Per asset Vite buildati: assicurati che l'app non stia puntando a `public/hot` se vuoi audit o smoke test stabili
 
 ## Verifica minima attesa
 
-- Backend change: `docker exec eventi-tech composer lint` + `docker exec eventi-tech composer analyse`, poi test o comando mirato nel container
+- Backend change: `docker compose exec -T app composer lint` + `docker compose exec -T app composer analyse`, poi test o comando mirato nel container
 - Security-sensitive o dependency change: aggiungi `./scripts/security/run.sh`
 - UI/frontend change: almeno Playwright smoke o verifica browser equivalente
 - Tooling/docs change: prova del comando o del flusso documentato
 
 ## Shortcut consigliato
 
-- Per una verifica backend completa, preferisci `docker exec eventi-tech composer qa`
+- Per una verifica backend completa, preferisci `docker compose exec -T app composer qa`

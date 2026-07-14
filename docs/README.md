@@ -41,3 +41,7 @@ Questa cartella contiene specifiche pratiche (basate sul codice esistente) per a
 - `backend/search.md` Scout/Meilisearch e ricerca eventi
 - `backend/privacy-cookie.md` Analisi cookie/privacy del repository e linee guida operative minime
 - `backend/authorization.md` Matrice ruoli, visibilita pubblica, ownership dashboard e accesso Filament
+
+### Infrastructure
+
+- `infrastructure/environments.md` Profili ambiente, bootstrap, doctor e fresh-checkout smoke
