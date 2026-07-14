@@ -6,10 +6,12 @@ use App\Enums\CfpMode;
 use App\Enums\CfpStatus;
 use App\Enums\EventStatus;
 use App\Models\Cfp;
+use App\Models\Community;
 use App\Models\Event;
 
 test('event page shows published external cfp link', function () {
-    $event = Event::factory()->active()->create();
+    $community = Community::factory()->active()->create();
+    $event = Event::factory()->active()->forCommunity($community)->create();
     Cfp::factory()->for($event)->create([
         'mode'         => CfpMode::External,
         'status'       => CfpStatus::Published,
@@ -25,7 +27,8 @@ test('event page shows published external cfp link', function () {
 });
 
 test('event page hides draft external cfp link', function () {
-    $event = Event::factory()->create(['status' => EventStatus::Active]);
+    $community = Community::factory()->active()->create();
+    $event = Event::factory()->forCommunity($community)->create(['status' => EventStatus::Active]);
     Cfp::factory()->for($event)->create([
         'mode'         => CfpMode::External,
         'status'       => CfpStatus::Draft,

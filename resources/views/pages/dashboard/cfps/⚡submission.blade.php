@@ -26,15 +26,12 @@ new class extends Component
     {
         $this->cfp = $cfp->load(['event.community', 'fields']);
 
-        if ($this->cfp->event->community->user_id !== auth()->id()) {
-            abort(403);
-        }
-
         if ($submission->cfp_id !== $this->cfp->id) {
             abort(404);
         }
 
         $this->submission = $submission->load(['user', 'answers.field']);
+        $this->authorize('review', $this->submission);
         $this->status = $this->submission->status->value;
         $this->statuses = collect(CfpSubmissionStatus::cases())
             ->reject(fn (CfpSubmissionStatus $status): bool => $status === CfpSubmissionStatus::Draft)
@@ -44,6 +41,8 @@ new class extends Component
 
     public function saveStatus(UpdateCfpSubmissionStatus $action): void
     {
+        $this->authorize('updateStatus', $this->submission);
+
         $this->validate([
             'status' => ['required', 'in:submitted,under_review,accepted,rejected,withdrawn'],
         ]);

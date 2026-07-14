@@ -23,6 +23,8 @@ trait HasBookmarkToggle
             return redirect()->route('verification.notice');
         }
 
+        $this->authorize('bookmark', $this->event);
+
         try {
             $isBookmarked = $action->execute(auth()->user(), $this->event->id);
             $this->isBookmarked = $isBookmarked;

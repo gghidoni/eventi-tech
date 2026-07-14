@@ -22,6 +22,7 @@ new class extends Component {
     {
         return [
             'events' => $this->community->events()
+                ->publiclyVisible()
                 ->with(['address_book.city', 'address_book.province'])
                 ->latest()
                 ->paginate(5),

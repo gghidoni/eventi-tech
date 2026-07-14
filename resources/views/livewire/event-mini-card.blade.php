@@ -31,17 +31,33 @@ new class extends Component
 
 <div class="flex mb-5 w-full glass-card px-3 pt-3 pb-3 shadow-lg h-34">
 
-    <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
+    @if ($event->isPubliclyVisible())
+        <a href="{{ $event->public_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
+    @elseif (auth()->user()?->can('update', $event))
+        <a href="{{ $event->edit_url }}" class="w-22 rounded-md flex-shrink-0" wire:navigate>
+    @else
+        <div class="w-22 rounded-md flex-shrink-0">
+    @endif
         <picture>
             <source media="(min-width: 1024px)" srcset="{{ $event->poster_mobile_img }}">
 
             <img src="{{ $event->poster_thumb_img }}" alt="{{ $event->title }}"
                 class="h-18 w-18 object-cover object-top-left rounded-md bg-gray-700" loading="lazy" />
         </picture>
-    </a>
+    @if ($event->isPubliclyVisible() || auth()->user()?->can('update', $event))
+        </a>
+    @else
+        </div>
+    @endif
 
     <div class="flex flex-col justify-between pr-2 w-full">
-        <a href="{{ $event->public_url }}" wire:navigate>
+        @if ($event->isPubliclyVisible())
+            <a href="{{ $event->public_url }}" wire:navigate>
+        @elseif (auth()->user()?->can('update', $event))
+            <a href="{{ $event->edit_url }}" wire:navigate>
+        @else
+            <div>
+        @endif
             <div class="flex flex-col">
                 <div class="text-[10px] text-white opacity-70 flex space-x-1">
                     <span>{{ trans('titles.event.type.' . $event->type->value) }}</span>
@@ -49,7 +65,11 @@ new class extends Component
                 <h3 class="font-anta leading-[18px] line-clamp-2 font-bold" title="{{ $event->title }}">
                     {{ $event->title }}</h3>
             </div>
-        </a>
+        @if ($event->isPubliclyVisible() || auth()->user()?->can('update', $event))
+            </a>
+        @else
+            </div>
+        @endif
         <div class="">
             <div class="flex items-center space-x-1 mb-1 mt-1.5 ml-[-2px]">
                 <img class="rounded-full w-4" src="{{ $event->community->logo_img }}" alt="">
@@ -98,10 +118,12 @@ new class extends Component
             <div class="absolute right-0 top-6.5 mt-1 w-48 glass-panel z-10"
                 wire:click.outside="closeMenu">
                 <div class="py-1">
-                    <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
-                        href="{{ $event->public_url }}" wire:navigate>
-                        {{ __('common.actions.open') }}
-                    </a>
+                    @can('viewPublic', $event)
+                        <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
+                            href="{{ $event->public_url }}" wire:navigate>
+                            {{ __('common.actions.open') }}
+                        </a>
+                    @endcan
                     @if (!$event->is_mine)
                         @if (!$isBookmarked)
                             <span class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
@@ -115,10 +137,12 @@ new class extends Component
                             </span>
                         @endif
                     @else
-                        <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
-                            href="{{ $event->edit_url }}" wire:navigate>
-                            {{ __('common.actions.edit') }}
-                        </a>
+                        @can('update', $event)
+                            <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
+                                href="{{ $event->edit_url }}" wire:navigate>
+                                {{ __('common.actions.edit') }}
+                            </a>
+                        @endcan
                         <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
                             href="{{ route('dashboard.communities.submissions', ['event' => $event->id]) }}" wire:navigate>
                             Candidature

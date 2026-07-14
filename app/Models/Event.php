@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\CommunityStatus;
 use App\Enums\EventStatus;
 use App\Jobs\NotifyCommunityFollowersOfApprovedEvent;
 use App\Models\AddressBook\AddressBook;
@@ -76,6 +77,25 @@ class Event extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', EventStatus::Active->value);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopePubliclyVisible(Builder $query): Builder
+    {
+        return $query
+            ->where('status', EventStatus::Active->value)
+            ->whereHas('community', fn (Builder $community): Builder => $community->where('status', CommunityStatus::Active->value));
+    }
+
+    public function isPubliclyVisible(): bool
+    {
+        $this->loadMissing('community');
+
+        return $this->status === EventStatus::Active
+            && $this->community?->isPubliclyVisible() === true;
     }
 
     /**

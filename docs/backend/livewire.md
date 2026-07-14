@@ -55,3 +55,15 @@ Fonte:
 - In Blade: `{{ $events->links('livewire.custom-pagination') }}`
 - View: `resources/views/livewire/custom-pagination.blade.php`
 
+## Confine autorizzativo
+
+- Le proprieta pubbliche dei componenti sono input non attendibili.
+- ID e model selezionati dalla UI vengono risolti nuovamente e autorizzati con
+  una Policy prima di letture riservate o scritture.
+- `mount()` protegge l'ingresso iniziale; ogni metodo di mutazione ripete
+  `authorize()` immediatamente prima di invocare l'Action applicativa.
+- Ownership e visibilita non vanno duplicate con `abort(403)` o affidate agli
+  accessor `is_mine`.
+
+Le ability e la semantica `403`/`404` sono definite in
+`docs/backend/authorization.md`.

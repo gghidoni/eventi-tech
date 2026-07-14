@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
                 'instagram'         => 'https://instagram.com/giannig',
                 'is_admin'          => true,
                 'password'          => bcrypt('password'),
-                'email_verified_at' => null,
+                'email_verified_at' => now(),
                 'updated_at'        => now(),
                 'created_at'        => now(),
             ],

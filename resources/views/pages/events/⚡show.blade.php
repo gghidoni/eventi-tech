@@ -86,7 +86,7 @@ new class extends Component {
                     <span class="text-white text-xs uppercase font-anta">Biglietti</span>
                 </a>
             @endif
-            @if ($event->cfp && $event->cfp->status === CfpStatus::Published && (($event->cfp->mode === CfpMode::External && $event->cfp->external_url) || $event->cfp->mode === CfpMode::Internal))
+            @if ($event->cfp && $event->cfp->status === CfpStatus::Published && (($event->cfp->mode === CfpMode::External && $event->cfp->external_url) || ($event->cfp->mode === CfpMode::Internal && !$event->is_mine)))
                 <a href="{{ $event->cfp->mode === CfpMode::External ? $event->cfp->external_url : ($event->cfp->isOpen() ? route('events.cfp.apply', $event) : '#') }}"
                     @if ($event->cfp->mode === CfpMode::External) target="_blank" rel="noopener" @endif
                     class="flex h-10 w-full items-center justify-center space-x-2 rounded-md border border-white px-2 py-1 {{ $event->cfp->mode === CfpMode::Internal && !$event->cfp->isOpen() ? 'opacity-60 pointer-events-none' : '' }}"

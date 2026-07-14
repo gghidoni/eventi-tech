@@ -17,15 +17,13 @@ test.describe('Seeded CFP public visibility', () => {
     });
 
     test('draft and archived external CFPs stay hidden on event pages', async ({ page }) => {
-        let issues = trackBrowserIssues(page);
+        const response = await page.goto('/events/3');
 
-        await page.goto('/events/3');
-
+        expect(response?.status()).toBe(404);
         await expect(page.locator('body')).not.toContainText('https://cfp.example.test/draft-hidden');
         await expect(page.getByRole('link', { name: /cfp/i })).toHaveCount(0);
-        await expectNoBrowserIssues(page, issues);
 
-        issues = trackBrowserIssues(page);
+        const issues = trackBrowserIssues(page);
 
         await page.goto('/events/11');
 

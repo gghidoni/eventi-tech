@@ -318,7 +318,7 @@ Atteso UI:
 
 - lista mostra solo community dell'utente;
 - edit propria consente aggiornamento dati;
-- edit altrui viene bloccato da middleware `IsMyCommunity`;
+- edit altrui viene bloccato da `CommunityPolicy`;
 - non verificato viene bloccato da `verified`.
 
 Verifica DB:
@@ -329,7 +329,7 @@ Verifica DB:
 
 Casi limite:
 
-- community pending puo essere pubblicamente raggiungibile con URL noto: verificare e segnalare;
+- community pending con URL noto restituisce `404` anche all'owner;
 - owner non verificato con community active seed non puo accedere alle dashboard routes fino a verifica.
 
 ## 5. Evento organizer
@@ -869,16 +869,46 @@ Per ogni email controllare:
 
 Questi punti devono entrare nel report finale dell'audit se confermati:
 
-- accesso Filament in local non limitato a `is_admin`;
-- `is_admin` non sembra essere gate applicativo dell'admin panel;
-- route pubblica evento non filtra status;
-- route pubblica community non filtra status;
-- lista eventi su community pubblica puo mostrare eventi non active;
-- create event route assume almeno una community e puo fallire per utente verificato senza community;
-- create event puo permettere community pending se l'utente la possiede;
-- admin seed e non verificato, ma puo accedere a Filament in local;
 - CTA external CFP published non sembra controllare open/close date;
 - link calendario evento punta a `/`;
 - UI profilo non espone cambio email;
 - route Fortify 2FA esistono ma non c'e flusso UI dedicato;
 - resource admin Users espone campi 2FA sensibili.
+- il security gate segnala advisory runtime gia presenti nel lockfile: quattro
+  advisory Composer medium (`guzzlehttp/guzzle`, `guzzlehttp/psr7`,
+  `phpseclib/phpseclib`) e uno npm high (`form-data`).
+
+### Rilievi architetturali aperti
+
+I punti seguenti derivano dalla review statica di repository e documentazione.
+Sono problemi architetturali o infrastrutturali da risolvere, non singoli bug UI.
+La priorita indica l'ordine consigliato di approfondimento:
+
+- `P0`: rischio immediato per sicurezza o avvio affidabile dell'applicazione;
+- `P1`: rischio elevato per consistenza, affidabilita operativa o qualita delle release;
+- `P2`: rischio progressivo per manutenibilita, scalabilita o allineamento documentale.
+
+| Priorita | Problema | Evidenza statica | Obiettivo architetturale |
+| --- | --- | --- | --- |
+| P0 | Autorizzazione e visibilita non hanno un confine uniforme (implementato, chiusura formale sospesa) | La mitigazione e implementata tramite Policy, gate Filament, scope pubblici e ri-autorizzazione Livewire; test PHP ed E2E sono verdi. Il rilievo resta elencato finche il security gate complessivo non torna verde, come richiesto dalla Definition of Done del task. | Risolvere gli advisory di dipendenza registrati sopra, rieseguire `./scripts/security/run.sh` e quindi rimuovere formalmente questo rilievo. |
+| P0 | Il bootstrap e il contratto ambiente non sono riproducibili da checkout pulito | `bootstrap/providers.php` registra `App\Providers\VoltServiceProvider`, ma la classe non e presente nel repository. Le docs dichiarano Docker/PostgreSQL/Meilisearch come percorso canonico, mentre `.env.example` usa SQLite e non dichiara la configurazione Scout/Meilisearch necessaria. | Rendere esplicito e verificabile un unico contratto di bootstrap/configurazione per locale, test e produzione. |
+| P1 | Il confine transazionale non include DB, file, email e indice di ricerca | Nei flussi evento indirizzi e immagini vengono creati prima della transazione che salva l'evento; le email partono dopo il commit ma nella stessa request. Scout ha `after_commit=false`. Errori intermedi possono produrre dati, file o feedback utente incoerenti. | Definire un application service che coordini la transazione DB e side effect after-commit, con compensazione o cleanup per i file e operazioni idempotenti. |
+| P1 | Queue e notifiche non hanno una semantica operativa unica | `QUEUE_CONNECTION` usa `database` come default, ma `docker-compose.yml` non definisce un worker. Alcune mail sono sincrone, altre passano da job; `Event::booted()` dispatcha il job dalla lifecycle del model e le connessioni queue hanno `after_commit=false`. | Stabilire worker, retry, failed job, idempotenza e dispatch after-commit come parte del runtime, separando i side effect dai model. |
+| P1 | L'integrita referenziale del database e applicata in modo disomogeneo | Diverse migration storiche usano `foreignIdFor()` senza `constrained()` per eventi, community, address book e gerarchia geografica. La pivot `event_tag` non ha FK o vincolo univoco composto, mentre il dominio CFP recente usa vincoli espliciti. | Portare le invarianti strutturali nel database con FK, strategie on-delete e unicita coerenti, verificando prima i dati esistenti su PostgreSQL. |
+| P1 | La pipeline standard non verifica l'architettura runtime reale | `phpunit.xml` usa SQLite in-memory, queue sync e Scout null. La CI principale non esegue Larastan, security scan, Playwright, PostgreSQL/Meilisearch integration test o i test del package locale. Il workflow lint esegue Pint in modalita modificante invece di usarlo come gate read-only. | Aggiungere livelli CI distinti: feedback rapido SQLite, integrazione PostgreSQL/Meilisearch e gate di qualita/security/frontend. |
+| P1 | Manca una topologia operativa di produzione | La documentazione descrive solo l'ambiente locale. Non sono definiti deploy, migration/rollback, worker, scheduler, object storage, backup/restore, TLS, secret management, readiness, metriche, alerting o disaster recovery. Sessioni, cache e queue convergono di default sul database applicativo. | Documentare e validare una topologia production minima con responsabilita, persistenza, recovery e osservabilita esplicite. |
+| P2 | I confini del monolite sono convenzioni, non moduli applicativi enforceable | Pagine Livewire estese coordinano validazione, mapping, upload, persistenza, email ed errori. Alcune Action istanziano direttamente altre Action; i model espongono URL, dipendono da `auth()` e generano job. | Consolidare il monolite per moduli di dominio e mantenere Livewire come adapter UI, senza introdurre microservizi. |
+| P2 | Il ciclo di vita di Meilisearch non e definito | L'import dopo reset e manuale, non esistono una policy di rebuild/freshness o un fallback documentato. Il servizio Compose non ha healthcheck e l'app dipende solo dal suo stato `started`. | Definire inizializzazione, reindicizzazione, health/readiness, gestione degli errori e aspettative di consistenza tra PostgreSQL e indice. |
+| P2 | Documentazione e configurazione mostrano drift | Il README indica Laravel 12 e Vite 7, mentre Composer, package.json e docs agentiche indicano Laravel 13 e Vite 8. Le note di audit descrivono rischi importanti, ma mancano decisioni formali su autorizzazione, consistenza, deployment e requisiti non funzionali. | Allineare gli entry point e trasformare le invarianti architetturali in specifiche verificabili e decision record. |
+
+Piano del primo rilievo P0: [`tasks/authorization-visibility-boundary.md`](../../../tasks/authorization-visibility-boundary.md).
+
+### Verifica e aggiornamento dei rilievi
+
+Per ogni punto architetturale:
+
+1. confermare l'evidenza nel runtime Docker e nel PostgreSQL locale quando applicabile;
+2. collegare eventuali bug concreti emersi durante la flow audit;
+3. aprire un task di implementazione separato con acceptance criteria e verifiche richieste;
+4. mantenere il punto in questa sezione finche l'obiettivo architetturale non e verificato;
+5. quando risolto, rimuoverlo da questa lista e registrare la decisione stabile in `docs/project/technical-decisions.md` o nella spec tecnica pertinente.

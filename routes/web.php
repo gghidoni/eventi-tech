@@ -4,7 +4,7 @@ use App\Http\Controllers\AddressBookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\TagController;
-use App\Http\Middleware\IsMyCommunity;
+use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,11 +16,15 @@ Route::prefix('events')->group(function () {
     Route::livewire('/{event}/cfp/apply', 'pages::events.cfp.apply')
         ->middleware(['auth', 'verified'])
         ->name('events.cfp.apply');
-    Route::livewire('/{event}', 'pages::events.show')->name('events.show');
+    Route::livewire('/{event}', 'pages::events.show')
+        ->can('viewPublic', 'event')
+        ->name('events.show');
 });
 
 Route::prefix('communities')->group(function () {
-    Route::livewire('/{community}', 'pages::communities.show')->name('communities.show');
+    Route::livewire('/{community}', 'pages::communities.show')
+        ->can('viewPublic', 'community')
+        ->name('communities.show');
 });
 
 Route::get('/find-location', [AddressBookController::class, 'findLocation'])->name('find');
@@ -57,14 +61,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('communities')->group(function () {
             Route::livewire('/', 'pages::dashboard.communities.index')->name('dashboard.communities.index');
             Route::livewire('create', 'pages::dashboard.communities.create')->name('dashboard.communities.create');
-            Route::livewire('{community}/edit', 'pages::dashboard.communities.edit')->name('dashboard.communities.edit')->middleware(IsMyCommunity::class);
+            Route::livewire('{community}/edit', 'pages::dashboard.communities.edit')
+                ->can('update', 'community')
+                ->name('dashboard.communities.edit');
             Route::livewire('events', 'pages::dashboard.communities.events')->name('dashboard.communities.events');
             Route::livewire('submissions', 'pages::dashboard.communities.submissions')->name('dashboard.communities.submissions');
         });
 
         Route::prefix('events')->group(function () {
-            Route::livewire('{event}/edit', 'pages::dashboard.events.edit')->name('dashboard.events.edit');
-            Route::livewire('create', 'pages::dashboard.events.create')->name('dashboard.events.create');
+            Route::livewire('{event}/edit', 'pages::dashboard.events.edit')
+                ->can('update', 'event')
+                ->name('dashboard.events.edit');
+            Route::livewire('create', 'pages::dashboard.events.create')
+                ->can('create', Event::class)
+                ->name('dashboard.events.create');
         });
 
         Route::livewire('cfp-submissions', 'pages::dashboard.cfp-submissions')->name('dashboard.cfp-submissions');

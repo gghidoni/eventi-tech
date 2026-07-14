@@ -3,16 +3,18 @@
 declare(strict_types=1);
 
 use App\Actions\ToggleBookmark;
+use App\Models\Community;
 use App\Models\Event;
 use App\Models\User;
 
 beforeEach(function () {
     $this->action = new ToggleBookmark();
     $this->user = User::factory()->create();
+    $this->community = Community::factory()->active()->create();
 });
 
 test('adds bookmark to event', function () {
-    $event = Event::factory()->create();
+    $event = Event::factory()->active()->forCommunity($this->community)->create();
 
     $result = $this->action->execute($this->user, $event->id);
 
@@ -22,7 +24,7 @@ test('adds bookmark to event', function () {
 });
 
 test('removes existing bookmark from event', function () {
-    $event = Event::factory()->create();
+    $event = Event::factory()->active()->forCommunity($this->community)->create();
 
     // First add the bookmark
     $this->user->bookmarks()->attach($event->id);
@@ -37,7 +39,7 @@ test('removes existing bookmark from event', function () {
 });
 
 test('toggles bookmark multiple times correctly', function () {
-    $event = Event::factory()->create();
+    $event = Event::factory()->active()->forCommunity($this->community)->create();
 
     // Toggle on
     $result1 = $this->action->execute($this->user, $event->id);
@@ -60,7 +62,7 @@ test('throws exception for non-existent event', function () {
 })->throws(InvalidArgumentException::class, 'Event not found');
 
 test('user can bookmark multiple events', function () {
-    $events = Event::factory()->count(3)->create();
+    $events = Event::factory()->count(3)->active()->forCommunity($this->community)->create();
 
     foreach ($events as $event) {
         $this->action->execute($this->user, $event->id);

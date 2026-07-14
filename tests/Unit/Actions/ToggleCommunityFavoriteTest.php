@@ -12,7 +12,7 @@ beforeEach(function () {
 });
 
 test('adds favorite to community', function () {
-    $community = Community::factory()->create();
+    $community = Community::factory()->active()->create();
 
     $result = $this->action->execute($this->user, $community->id);
 
@@ -22,7 +22,7 @@ test('adds favorite to community', function () {
 });
 
 test('removes existing favorite from community', function () {
-    $community = Community::factory()->create();
+    $community = Community::factory()->active()->create();
 
     $this->user->favoriteCommunities()->attach($community->id);
     expect($this->user->favoriteCommunities)->toHaveCount(1);
@@ -35,7 +35,7 @@ test('removes existing favorite from community', function () {
 });
 
 test('user can favorite multiple communities', function () {
-    $communities = Community::factory()->count(3)->create();
+    $communities = Community::factory()->count(3)->active()->create();
 
     foreach ($communities as $community) {
         $this->action->execute($this->user, $community->id);

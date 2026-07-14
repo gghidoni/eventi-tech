@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\CommunityStatus;
 use Database\Factories\CommunityFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -82,6 +83,20 @@ class Community extends Model
     public function favoritedByUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopePubliclyVisible(Builder $query): Builder
+    {
+        return $query->where('status', CommunityStatus::Active->value);
+    }
+
+    public function isPubliclyVisible(): bool
+    {
+        return $this->status === CommunityStatus::Active;
     }
 
     public function getPublicUrlAttribute(): string

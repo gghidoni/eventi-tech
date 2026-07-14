@@ -66,7 +66,7 @@ Tutti gli utenti seed usano password `password`.
 | Organizer verificato | `andrea.rossi@email.it` | email verificata, `is_admin=false` | owner community `Java Ancona`, community active |
 | Speaker verificata | `anna.verdi@email.it` | email verificata, `is_admin=false` | candidata CFP nei seed |
 | Organizer non verificato | `marco.bianchi@email.it` | email non verificata, `is_admin=false` | owner `Laravel Pordenone` active e `Wordpress Meetup Firenze` pending |
-| Admin seed | `gianni.ghidoni@email.it` | email non verificata, `is_admin=true` | riceve notifiche admin, accesso dashboard app bloccato da `verified` |
+| Admin seed | `gianni.ghidoni@email.it` | email verificata, `is_admin=true` | riceve notifiche admin e accede a Filament |
 
 Per test completi crea dati supplementari se il seed corrente non basta:
 
@@ -117,9 +117,10 @@ Queste osservazioni sono importanti per interpretare i risultati.
 - Nel runtime analizzato i container erano attivi e Mailpit era vuoto.
 - Il DB locale puo essere sporco da audit Playwright precedenti. Per una verifica canonica eseguire sempre `migrate:fresh --seed`.
 - Il tool MCP PostgreSQL diretto puo non vedere il socket Docker dal sandbox; in quel caso usare lo script repo MCP con Docker access e mantenere query read-only.
-- In ambiente local, Filament consente l'accesso anche a utenti che non implementano `FilamentUser`. Il modello `User` non implementa `FilamentUser`; quindi un utente non admin valido puo entrare in `/admin`. Questo va testato e segnalato come comportamento di sicurezza, non assunto come requisito corretto.
-- `is_admin` oggi e usato per notifiche admin e campi utente, ma non e il gate effettivo dell'accesso Filament in local.
-- Le route pubbliche `events.show` e `communities.show` usano route model binding senza filtro status. Un evento pending/reject/terminate con URL noto puo risultare visibile anche se la home ricerca solo eventi active.
+- Il modello `User` implementa `FilamentUser`: `/admin` richiede sia
+  `is_admin=true` sia email verificata, anche in ambiente local.
+- Le route pubbliche `events.show` e `communities.show` applicano le Policy di
+  visibilita. Risorse non active con URL noto restituiscono `404`.
 
 ## Checklist prima di partire
 

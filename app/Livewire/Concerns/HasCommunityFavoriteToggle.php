@@ -23,6 +23,8 @@ trait HasCommunityFavoriteToggle
             return redirect()->route('verification.notice');
         }
 
+        $this->authorize('favorite', $this->community);
+
         try {
             $isCommunityFavorited = $action->execute(auth()->user(), $this->community->id);
             $this->isCommunityFavorited = $isCommunityFavorited;

@@ -32,14 +32,18 @@ new class extends Component
             <div class="absolute right-0 top-7.5 mt-1 w-48 glass-panel z-10"
                 wire:click.outside="closeMenu">
                 <div class="py-1">
-                    <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
-                        href="{{ $community->public_url }}">
-                        Apri
-                    </a>
-                    <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
-                        href="{{ $community->edit_url }}">
-                        Modifica
-                    </a>
+                    @can('viewPublic', $community)
+                        <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
+                            href="{{ $community->public_url }}">
+                            Apri
+                        </a>
+                    @endcan
+                    @can('update', $community)
+                        <a class="block px-4 py-2 text-xs text-gray-200 hover:bg-white/10 hover:text-white cursor-pointer"
+                            href="{{ $community->edit_url }}">
+                            Modifica
+                        </a>
+                    @endcan
                 </div>
             </div>
         @endif

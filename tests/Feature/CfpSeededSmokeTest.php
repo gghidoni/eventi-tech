@@ -74,8 +74,7 @@ test('seeded cfp data covers templates submissions visibility and dashboard writ
 
     $draftExternal = Event::query()->where('title', 'Introduzione a Gutenberg e Blocchi Personalizzati, titolo lungo per vedere se si tronca')->firstOrFail();
     $this->get(route('events.show', $draftExternal))
-        ->assertOk()
-        ->assertDontSee('https://cfp.example.test/draft-hidden');
+        ->assertNotFound();
 
     $archivedExternal = Event::query()
         ->where('title', 'Laravel 10: Nuove Funzionalità e Best Practices e proviamo anche un titolo più lungo direi, ottimo così.')

@@ -39,6 +39,7 @@ new class extends Component {
     public function mount(Community $community)
     {
         $this->community = $community;
+        $this->authorize('update', $this->community);
 
         $this->fill($this->community->only(['name', 'description', 'website', 'linkedin', 'instagram', 'facebook', 'phone']));
     }
@@ -50,6 +51,8 @@ new class extends Component {
 
     public function save(UpdateCommunity $updateCommunityAction, ProcessLogo $processLogoAction)
     {
+        $this->authorize('update', $this->community);
+
         $data = $this->validate();
 
         try {

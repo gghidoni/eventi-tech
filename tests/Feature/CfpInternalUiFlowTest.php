@@ -337,6 +337,11 @@ test('organizer publishes internal cfp speaker applies and organizer reviews sub
     $this->get(route('events.show', $event))
         ->assertOk()
         ->assertSee('CFP')
+        ->assertDontSee(route('events.cfp.apply', $event));
+
+    $this->actingAs($speaker)->get(route('events.show', $event))
+        ->assertOk()
+        ->assertSee('CFP')
         ->assertSee(route('events.cfp.apply', $event));
 
     $levelField = $event->cfp->fields->firstWhere('key', 'level');

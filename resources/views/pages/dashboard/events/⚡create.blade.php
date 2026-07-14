@@ -9,6 +9,7 @@ use App\Enums\EventType;
 use App\Livewire\Concerns\ManagesEventCfpForm;
 use App\Mail\AdminNewEventNotification;
 use App\Mail\CreatedNewEvent;
+use App\Models\Community;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -105,15 +106,18 @@ new class extends Component
     public function mount(Event $event)
     {
         $this->event = $event;
+        $this->authorize('create', Event::class);
 
         $this->types = array_column(EventType::cases(), 'value');
 
         $this->type = $this->types[0];
         $this->cfpStatuses = array_column(CfpStatus::cases(), 'value');
 
-        $this->communities = auth()
-            ->user()
-            ->communities->map(
+        $this->communities = auth()->user()
+            ->communities()
+            ->publiclyVisible()
+            ->get()
+            ->map(
                 fn ($community) => [
                     'value' => (string) $community->id,
                     'label' => $community->name,
@@ -122,7 +126,7 @@ new class extends Component
             )
             ->toArray();
 
-        $this->selectedCommunity = $this->communities[0]['value'];
+        $this->selectedCommunity = $this->communities[0]['value'] ?? null;
         $this->initializeCfpForm();
     }
 
@@ -133,6 +137,9 @@ new class extends Component
 
     public function save(CreateEvent $createEventAction, ProcessPoster $processPosterAction, CreateAddressBook $createAddressBookAction)
     {
+        $community = Community::query()->findOrFail((int) $this->selectedCommunity);
+        $this->authorize('createEvent', $community);
+
         $data = $this->validate();
         $cfpPayload = $this->buildCfpPayload($this->title);
 
@@ -149,7 +156,7 @@ new class extends Component
 
             $data['start_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->start_date);
             $data['end_date'] = Carbon\Carbon::createFromFormat('d-m-Y H:i', $this->end_date);
-            $data['community_id'] = (int) $this->selectedCommunity;
+            $data['community_id'] = $community->id;
             $data['type'] = EventType::from($this->type);
             $data['tag_ids'] = collect($this->selectedTags)
                 ->map(fn ($id) => (int) $id)

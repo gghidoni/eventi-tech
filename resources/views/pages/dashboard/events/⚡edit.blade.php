@@ -72,10 +72,7 @@ new class extends Component {
     public function mount(Event $event)
     {
         $this->event = $event;
-
-        if ($this->event->community->user_id !== auth()->id()) {
-            abort(403);
-        }
+        $this->authorize('update', $this->event);
 
         $this->fill([
             'title'       => $this->event->title ?? '',
@@ -107,6 +104,8 @@ new class extends Component {
 
     public function save(UpdateEvent $updateEventAction, ProcessPoster $processPosterAction)
     {
+        $this->authorize('update', $this->event);
+
         $data = $this->validate();
         validator(
             ['selectedTags' => $this->selectedTags],

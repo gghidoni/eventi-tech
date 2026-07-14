@@ -28,7 +28,7 @@ new class extends Component {
             )
             ->toArray();
 
-        $this->selectedCommunity = $this->communities[0]['value'];
+        $this->selectedCommunity = $this->communities[0]['value'] ?? null;
     }
 
     public function with(): array
@@ -36,8 +36,10 @@ new class extends Component {
         $events = [];
 
         if ($this->selectedCommunity) {
-            $events = Community::find($this->selectedCommunity)
-                ->events()
+            $community = Community::findOrFail($this->selectedCommunity);
+            $this->authorize('view', $community);
+
+            $events = $community->events()
                 ->with(['address_book.city', 'address_book.province'])
                 ->latest()
                 ->paginate(8);

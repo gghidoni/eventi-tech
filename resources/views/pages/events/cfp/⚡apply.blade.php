@@ -2,8 +2,6 @@
 
 use App\Actions\SubmitCfpApplication;
 use App\Enums\CfpFieldType;
-use App\Enums\CfpMode;
-use App\Enums\CfpStatus;
 use App\Models\Cfp;
 use App\Models\Event;
 use Livewire\Component;
@@ -31,13 +29,11 @@ new class extends Component
         $this->event = $event->load(['community', 'cfp.fields']);
         $cfp = $this->event->cfp;
 
-        if (!$cfp || $cfp->mode !== CfpMode::Internal || $cfp->status !== CfpStatus::Published) {
+        if (!$cfp) {
             abort(404);
         }
 
-        if (!$cfp->isOpen()) {
-            abort(403);
-        }
+        $this->authorize('apply', $cfp);
 
         $this->cfp = $cfp;
 
@@ -52,6 +48,8 @@ new class extends Component
 
     public function submit(SubmitCfpApplication $action)
     {
+        $this->authorize('apply', $this->cfp);
+
         $action->execute(
             $this->cfp,
             auth()->user(),

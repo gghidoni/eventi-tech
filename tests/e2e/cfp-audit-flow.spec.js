@@ -41,6 +41,7 @@ test.describe('CFP audit flow', () => {
         const eventTitle = `Audit CFP Event ${now}`;
         const cfpTitle = `Audit CFP ${now}`;
         const proposalTitle = `Audit Proposal ${now}`;
+        const eventId = '10';
 
         const organizerContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
         const organizerPage = await organizerContext.newPage();
@@ -48,13 +49,23 @@ test.describe('CFP audit flow', () => {
 
         await login(organizerPage, 'andrea.rossi@email.it');
 
-        await organizerPage.goto('/dashboard/events/create');
+        await organizerPage.goto('/dashboard/events/10/edit');
+        const cfpToggle = organizerPage.locator('input[wire\\:model\\.live="has_cfp"]');
+
+        if (await cfpToggle.isChecked()) {
+            await cfpToggle.uncheck();
+            await organizerPage.getByRole('button', { name: /^salva$/i }).click();
+            await organizerPage.waitForURL(/\/dashboard\/communities\/events/);
+            await organizerPage.goto('/dashboard/events/10/edit');
+        }
+
         await organizerPage.locator('#title').fill(eventTitle);
         await organizerPage.locator('#description').fill('Evento creato da Playwright per audit end-to-end del flusso CFP interno custom.');
         await organizerPage.locator('#type').selectOption('online');
         await setDatepickerValue(organizerPage, 'input[wire\\:model="start_date"]', '15-07-2026 10:00');
         await setDatepickerValue(organizerPage, 'input[wire\\:model="end_date"]', '15-07-2026 12:00');
         await organizerPage.locator('#website').fill('https://event.example.test');
+        await organizerPage.locator('#tickets_url').fill('https://event.example.test/tickets');
 
         await organizerPage.locator('input[wire\\:model\\.live="has_cfp"]').check();
         await organizerPage.locator('#cfp_mode').selectOption('internal');
@@ -82,12 +93,6 @@ test.describe('CFP audit flow', () => {
 
         await organizerPage.getByRole('button', { name: /^salva$/i }).click();
         await organizerPage.waitForURL(/\/dashboard\/communities\/events/);
-        await expect(organizerPage.getByText(eventTitle)).toBeVisible();
-
-        const eventCard = organizerPage.locator('.glass-card').filter({ hasText: eventTitle }).first();
-        const eventHref = await eventCard.locator('a').first().getAttribute('href');
-        const eventId = eventHref?.match(/\/events\/(\d+)/)?.[1];
-        expect(eventId, 'created event id is available from CFP URL').toBeTruthy();
         await organizerContext.close();
 
         const guestContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -139,10 +144,7 @@ test.describe('CFP audit flow', () => {
         const reviewPage = await reviewContext.newPage();
         const reviewIssues = trackBrowserIssues(reviewPage);
         await login(reviewPage, 'andrea.rossi@email.it');
-        await reviewPage.goto('/dashboard/communities/events');
-        const reviewCard = reviewPage.locator('.glass-card').filter({ hasText: eventTitle }).first();
-        await reviewCard.locator('img[alt="event menu"]').click();
-        await reviewCard.getByRole('link', { name: /candidature/i }).click();
+        await reviewPage.goto(`/dashboard/communities/submissions?event=${eventId}`);
         await expect(reviewPage.getByText(proposalTitle)).toBeVisible();
         await reviewPage.getByText(proposalTitle).click();
         await expect(reviewPage.getByText('speaker@example.test')).toBeVisible();

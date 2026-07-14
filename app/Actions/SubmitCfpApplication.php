@@ -15,6 +15,7 @@ use App\Models\CfpSubmission;
 use App\Models\CfpTemplateField;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -27,6 +28,8 @@ class SubmitCfpApplication
      */
     public function execute(Cfp $cfp, User $user, array $data, array $answers): CfpSubmission
     {
+        Gate::forUser($user)->authorize('apply', $cfp);
+
         $cfp->loadMissing('fields');
         $this->ensureSubmittable($cfp);
 

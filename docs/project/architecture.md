@@ -44,6 +44,13 @@ Le pagine principali usano `Route::livewire()` con namespace `pages::...`.
 
 Approfondimento: `docs/backend/routing.md`
 
+### Autorizzazione e visibilita
+
+Policy Laravel condivise definiscono visibilita pubblica, ownership dashboard,
+accesso alle CFP e gate del backoffice Filament.
+
+Approfondimento: `docs/backend/authorization.md`
+
 ### Pages Livewire single-file
 
 Molte pagine sono file Blade con classe anonima integrata e markup nello stesso file.
