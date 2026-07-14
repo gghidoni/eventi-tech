@@ -19,6 +19,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate Docker Environment Contract
+        run: docker compose --env-file .env.example config --quiet
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -33,7 +36,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Node Dependencies
-        run: npm i
+        run: npm ci
 
       - name: Add Flux Credentials Loaded From ENV
         run: composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
