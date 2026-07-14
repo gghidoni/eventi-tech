@@ -24,10 +24,9 @@ COPY --from=node-bin /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 RUN ln -s /usr/local/lib/node_modules /usr/local/bin/node_modules \
     && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm-cli.js \
-    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx-cli.js \
-    && composer global require laravel/installer
+    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx-cli.js
 
-ENV PATH="/root/.composer/vendor/bin:/usr/local/lib/node_modules/npm/bin:${PATH}"
+ENV PATH="/usr/local/lib/node_modules/npm/bin:${PATH}"
 
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
