@@ -8,6 +8,10 @@ Usa il tool piu alto livello che risolve il problema in modo affidabile. Evita d
 
 Usalo quando serve documentazione aggiornata di librerie o framework.
 
+Il setup canonico del repository usa il wrapper locale documentato in
+[mcp-context7.md](./mcp-context7.md). Non configurare in parallelo il server
+HTTP/OAuth remoto con lo stesso nome.
+
 ### Best practice
 
 1. Risolvi prima il library ID corretto.

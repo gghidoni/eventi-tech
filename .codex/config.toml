@@ -1,5 +1,7 @@
 [mcp_servers.context7]
-url = "https://mcp.context7.com/mcp"
+command = "bash"
+args = [".codex/bin/context7-mcp.sh"]
+startup_timeout_sec = 40
 
 [mcp_servers.eventi-tech-db]
 command = "bash"

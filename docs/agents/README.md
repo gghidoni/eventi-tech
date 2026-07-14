@@ -14,8 +14,9 @@ Questa sezione e pensata a livelli:
 2. [workflow.md](./workflow.md)
 3. [repo-map.md](./repo-map.md)
 4. [tools.md](./tools.md)
-5. [security.md](./security.md)
-6. [flow-audit/README.md](./flow-audit/README.md)
+5. [mcp-context7.md](./mcp-context7.md)
+6. [security.md](./security.md)
+7. [flow-audit/README.md](./flow-audit/README.md)
 
 ## Accesso al database locale
 
@@ -30,6 +31,11 @@ Non usare credenziali applicative o query dirette fuori procedura come fallback 
 Quando un agente deve verificare se una mail e arrivata in Mailpit o capire che mail e, usa il workflow MCP documentato in [mcp-mailpit.md](./mcp-mailpit.md).
 
 Skill associata: `$eventi-tech-mailpit`.
+
+## Documentazione esterna via Context7
+
+Quando serve documentazione aggiornata di librerie o framework, usa il server
+MCP locale descritto in [mcp-context7.md](./mcp-context7.md).
 
 ## Audit completo dei flussi
 
@@ -50,6 +56,7 @@ Se le spec di `docs/` non coprono il caso, oppure sono ambigue o in conflitto, n
 - [../backend/cfps.md](../backend/cfps.md)
 - [../backend/uploads.md](../backend/uploads.md)
 - [../backend/search.md](../backend/search.md)
+- [../backend/authorization.md](../backend/authorization.md)
 
 ### UI
 

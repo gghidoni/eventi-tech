@@ -32,6 +32,13 @@
 - API letta: Mailpit locale `http://127.0.0.1:8025`
 - Test: `node scripts/agents/test-mcp-mailpit.mjs`
 
+## Documentazione esterna via Context7
+
+- Workflow canonico: [mcp-context7.md](./mcp-context7.md)
+- Server: `context7`
+- Trasporto: processo locale stdio avviato da `.codex/bin/context7-mcp.sh`
+- Credenziale: `CONTEXT7_API_KEY` nell'ambiente o nel `.env` locale non versionato
+
 ## Comandi essenziali
 
 ```bash
