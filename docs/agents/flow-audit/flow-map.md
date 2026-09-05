@@ -904,6 +904,8 @@ Piano del primo rilievo P0: [`tasks/authorization-visibility-boundary.md`](../..
 
 Task concluso del secondo rilievo P0: [`tasks/reproducible-bootstrap-environment-contract.md`](../../../tasks/reproducible-bootstrap-environment-contract.md).
 
+Piano del primo rilievo P1: [`tasks/event-write-consistency-boundary.md`](../../../tasks/event-write-consistency-boundary.md).
+
 ### Verifica e aggiornamento dei rilievi
 
 Per ogni punto architetturale:
